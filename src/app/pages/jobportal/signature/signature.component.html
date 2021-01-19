@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    
+  </head>
+  <body>
+
+    <div class="main-block">
+      <h1>Admin Confirmation</h1>
+      <form action="/">
+
+        <h4>Crewing Executive</h4>
+        <label id="icon" for="name" style="padding-right:16px"><i class="fas fa-user"></i></label>
+        <input type="text" name="name" id="executiveName" placeholder="Name" required/>
+
+        <label id="icon" for="name"><i class='fas fa-signature'></i></label>
+        <input type="file" id="executiveSign" placeholder="Signature"  required/>
+
+         <br/>
+         <br/>
+         <br/>
+         
+
+        <h4>Crewing Manager</h4>
+        <label id="icon" for="name" style="padding-right:16px"><i class="fas fa-user"></i></label>
+        <input type="text" name="name" id="managerName" placeholder="Name" required/>
+
+        <label id="icon" for="name"><i class='fas fa-signature'></i></label>
+        <input type="file" id="managerSign" placeholder="Signature" required/>
+
+        <div class="btn-block">
+            <button type="submit" (click)="onSubmit()">Submit</button>
+          </div>
+      </form>
+    </div>
+  </body>

@@ -1,0 +1,70 @@
+/* fix table actions font size */
+::ng-deep .nb-theme-default .ng2-smart-actions {
+  font-size: 1rem !important;
+}
+
+::ng-deep
+  .nb-theme-default
+  ng2-smart-table
+  .ng2-smart-actions
+  a.ng2-smart-action {
+  font-size: 1rem !important;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+::ng-deep .nb-theme-default .ng2-smart-action.ng2-smart-action-add-add {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-default .ng2-smart-action.ng2-smart-action-add-create {
+  font-size: 0.75rem !important;
+}
+
+::ng-deep .nb-theme-default .ng2-smart-action.ng2-smart-action-add-cancel {
+  font-size: 0.75rem !important;
+}
+
+::ng-deep .nb-theme-default .ng2-smart-actions .ng2-smart-action-edit-edit {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-default .ng2-smart-actions .ng2-smart-action-delete-delete {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-default .ng2-smart-actions .ng2-smart-action-edit-save {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-default .ng2-smart-actions .ng2-smart-action-edit-cancel {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-dark .ng2-smart-action.ng2-smart-action-add-add {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-dark .ng2-smart-action.ng2-smart-action-add-create {
+  font-size: 0.75rem !important;
+}
+
+::ng-deep .nb-theme-dark .ng2-smart-action.ng2-smart-action-add-cancel {
+  font-size: 0.75rem !important;
+}
+
+::ng-deep .nb-theme-dark .ng2-smart-actions .ng2-smart-action-edit-edit {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-dark .ng2-smart-actions .ng2-smart-action-delete-delete {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-dark .ng2-smart-actions .ng2-smart-action-edit-save {
+  font-size: 1rem !important;
+}
+
+::ng-deep .nb-theme-dark .ng2-smart-actions .ng2-smart-action-edit-cancel {
+  font-size: 1rem !important;
+}

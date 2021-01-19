@@ -1,0 +1,12 @@
+<div class="row">
+  <!--<nb-card>
+    <nb-card-body>Testing for the Admin Module <b>Imo No</b> Page.</nb-card-body>
+  </nb-card>-->
+  <ng2-smart-table
+    [settings]="settings"
+    [source]="source"
+    (deleteConfirm)="onDeleteConfirm($event)"
+    (editConfirm)="onSaveConfirm($event)"
+    (createConfirm)="onCreateConfirm($event)"
+  ></ng2-smart-table>
+</div>

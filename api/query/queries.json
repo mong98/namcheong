@@ -1,0 +1,379 @@
+{
+    "getDocument" : "SELECT * FROM [JobPortal].[dbo].[Document]",
+    "addDocument" :"INSERT INTO [JobPortal].[dbo].[Document] ([Document]) VALUES (@Document); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteDocument" : "DELETE FROM [JobPortal].[dbo].[Document] WHERE [Id] = @Id",
+    "updateDocument" : "UPDATE [JobPortal].[dbo].[Document] SET [Document] = @Document, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
+
+    "getIMONo" : "SELECT * FROM [JobPortal].[dbo].[IMONo] ORDER BY [dbo].[IMONo].[Id]",
+    "getVessel" : "SELECT [VesselID], [HullNo] FROM [JobPortal].[dbo].[v_VesselType]",
+    "addIMONo" :"INSERT INTO [JobPortal].[dbo].[IMONo] ([IMONo], [Vessel], [CreatedDate]) VALUES (@IMONo, @Vessel, GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteIMONo" : "DELETE FROM [JobPortal].[dbo].[IMONo] WHERE [Id] = @Id",
+    "updateIMONo" : "UPDATE [JobPortal].[dbo].[IMONo] SET [IMONo] = @IMONo, [Vessel] = @Vessel, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
+
+    "getVesselType" : "SELECT [Id], [VesselName], [VesselType] FROM [JobPortal].[dbo].[Vessel]",
+    "addVessel" :"INSERT INTO [JobPortal].[dbo].[Vessel] ([VesselName], [VesselType], [CreatedBy], [CreatedDate]) VALUES (@VesselName, @VesselType, N'88', GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteVessel" : "DELETE FROM [JobPortal].[dbo].[Vessel] WHERE [Id] = @Id",
+    "updateVessel" : "UPDATE [JobPortal].[dbo].[Vessel] SET [VesselName] = @VesselName, [VesselType] = @VesselType, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
+
+    "getContactLists" : "SELECT * FROM [JobPortal].[dbo].[ContactUs] ORDER BY ID",
+    "addContactLists" : "INSERT INTO [JobPortal].[dbo].[ContactUs] ( [Name], [Email], [ContactNo], [Message], [Status], [SubmitDate], [UpdatedDate], [UpdatedBy], [Remark]) VALUES (@Name, @Email, @ContactNo, @Message, 'New', GETDATE(), GETDATE(), @Name, NULL)",
+
+    "getPosition" : "SELECT [Id], [Position] FROM [JobPortal].[dbo].[Position]",
+    "addPosition" :"INSERT INTO [JobPortal].[dbo].[Position] ([Position], [CreatedDate]) VALUES (@Position, GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deletePosition" : "DELETE FROM [JobPortal].[dbo].[Position] WHERE [Id] = @Id",
+    "updatePosition" : "UPDATE [JobPortal].[dbo].[Position] SET [Position] = @Position, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
+
+    "getRace" : "SELECT [Id], [TableField] AS [Race] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Race'",
+    "addRace" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('Race', @Race); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteRace" : "DELETE FROM [JobPortal].[dbo].[SystemTable] WHERE [Id] = @Id",
+    "updateRace" : "UPDATE [JobPortal].[dbo].[SystemTable] SET [TableField] = @Race WHERE [Id] = @Id",
+
+    "getReligion" : "SELECT [Id], [TableField] AS [Religion] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Religion'",
+    "addReligion" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('Religion', @Religion); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteReligion" : "DELETE FROM [JobPortal].[dbo].[SystemTable] WHERE [Id] = @Id",
+    "updateReligion" : "UPDATE [JobPortal].[dbo].[SystemTable] SET [TableField] = @Religion WHERE [Id] = @Id",
+
+    "getRelationship" : "SELECT [Id], [TableField] AS [Relationship] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Relationship'",
+    "addRelationship" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('Relationship', @Relationship); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteRelationship" : "DELETE FROM [JobPortal].[dbo].[SystemTable] WHERE [Id] = @Id",
+    "updateRelationship" : "UPDATE [JobPortal].[dbo].[SystemTable] SET [TableField] = @Relationship WHERE [Id] = @Id",
+
+    "authenticateUserApp" : "SELECT [Id], [Name], [Email], [LoginEmail], [Password] FROM [JobPortal].[dbo].[Applicant] WHERE [LoginEmail] = @LoginEmail",
+    "getUser" : "SELECT [UserID], [UserName], [Password], [Email] FROM [Namcheong].[dbo].[tblUser] WHERE [UserName] = @UserName AND [Password] = @Password",
+    "deleteUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [Deleted] = 1 WHERE [Id] = @Id",
+    "updateUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [LoginEmail] = @LoginEmail, [Name] = @Name, [Email] = @Email, [Password] = @Password WHERE [Id] = @Id",
+    "getLoginAdmin" : "SELECT [UserID], [UserName], [Password], [Email] FROM [Namcheong].[dbo].[tblUser] WHERE [UserName] = @UserName",
+    "getEmailAdmin" : "SELECT [UserID] FROM [Namcheong].[dbo].[tblUser] WHERE [Email] = @Email",
+    "addAdmin" :"INSERT INTO [Namcheong].[dbo].[tblUser] ([UserName], [Password], [Email], [StatusID], [DepartmentID], [FirstName], [LastName], [CreatedOn], [ModifiedOn]) VALUES (@UserName, @Password, @Email, @StatusID, @DepartmentID, @FirstName, @LastName, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY() AS [UserID]",
+    "updatePasswordAdmin" : "UPDATE [Namcheong].[dbo].[tblUser] SET [Password] = @Password WHERE [Email] = @Email",
+    "getLoginUser" : "SELECT [Id], [Name], [Password], [Email], [LoginEmail] FROM [JobPortal].[dbo].[Applicant] WHERE [LoginEmail] = @LoginEmail",
+    "getEmailUser" : "SELECT [Id] FROM [JobPortal].[dbo].[Applicant] WHERE [LoginEmail] = @LoginEmail",
+    "addUser" :"INSERT INTO [JobPortal].[dbo].[Applicant] ([Name], [Password], [Email], [LoginEmail], [DtCreated], [DtUpdated]) VALUES (@Name, @Password, @LoginEmail, @LoginEmail, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
+    "updatePasswordUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [Password] = @Password WHERE [LoginEmail] = @LoginEmail",
+
+    "getState" : "SELECT [Id], [TableField] AS [State] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='State'",
+    "addState" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('State', @State); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteState" : "DELETE FROM [JobPortal].[dbo].[SystemTable] WHERE [Id] = @Id",
+    "updateState" : "UPDATE [JobPortal].[dbo].[SystemTable] SET [TableField] = @State WHERE [Id] = @Id",
+
+    "getCharterer" : "SELECT [Id], [TableField] AS [Charterer] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Charterer'",
+    "getCompetency" : "SELECT [Id], [TableField] AS [Competency] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Competency'",
+    "getWorking" : "SELECT [Id], [TableField] AS [Working] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Working'",
+    "getGender" : "SELECT [Id], [TableField] AS [Gender] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Gender'",
+    "getEducation" : "SELECT [Id], [TableField] AS [Education] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Education'",
+    "getDynamicPos" : "SELECT [Id], [TableField] AS [DynamicPos] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='DynamicPos'",
+    "getNameById" : "SELECT * FROM [JobPortal].[dbo].[SystemTable] WHERE id=@id",
+
+    "getCountry" : "SELECT [Id], [TableField] AS [Country] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Country'",
+    "addCountry" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('Country', @Country); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteCountry" : "DELETE FROM [JobPortal].[dbo].[SystemTable] WHERE [Id] = @Id",
+    "updateCountry" : "UPDATE [JobPortal].[dbo].[SystemTable] SET [TableField] = @Country WHERE [Id] = @Id",
+
+    "getAllowance" : "SELECT [Id], [TableField] AS [Allowance] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Allowance' ORDER BY SeqNo",
+    "addAllowance" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('Allowance', @Allowance); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteAllowance" : "DELETE FROM [JobPortal].[dbo].[SystemTable] WHERE [Id] = @Id",
+    "updateAllowance" : "UPDATE [JobPortal].[dbo].[SystemTable] SET [TableField] = @Allowance WHERE [Id] = @Id",
+
+    "getPortOfRegistry" : "SELECT [Id], [TableField] AS [PortOfRegistry] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Port of Registry' ORDER BY SeqNo",
+    "addPortOfRegistry" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('Port of Registry', @PortOfRegistry); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deletePortOfRegistry" : "DELETE FROM [JobPortal].[dbo].[SystemTable] WHERE [Id] = @Id",
+    "updatePortOfRegistry" : "UPDATE [JobPortal].[dbo].[SystemTable] SET [TableField] = @PortOfRegistry WHERE [Id] = @Id",
+
+    "getAppliedOpenVacancy":"SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [LoginEmail] = @LoginEmail",
+    "getOpenVacancy" : "SELECT [OV].[Id], [OV].[DateEnd], [OV].[HullNo], [OV].[Qualification], [PS].[Id] AS PSId, [PS].[Position] FROM [JobPortal].[dbo].[OpenVacancy] AS [OV] INNER JOIN [JobPortal].[dbo].[Position] AS [PS] ON [OV].[Position] = [PS].[Id]",
+    "addOpenVacancy" :"INSERT INTO [JobPortal].[dbo].[OpenVacancy] ([Position], [DateEnd], [HullNo], [Qualification]) VALUES (@Position, @DateEnd, @HullNo, @Qualification); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteOpenVacancy" : "DELETE FROM [JobPortal].[dbo].[OpenVacancy] WHERE [Id] = @Id",
+    "updateOpenVacancy" : "UPDATE [JobPortal].[dbo].[OpenVacancy] SET [Position] = @Position, [DateEnd] = @DateEnd, [HullNo] = @HullNo, [Qualification] = @Qualification WHERE [Id] = @Id",
+
+    "getDocumentCheckList" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile] FROM [JobPortal].[dbo].[PositionDocument] ORDER BY CAST(DocumentID as int)",
+    "getDocumentCheckListById" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile] FROM [JobPortal].[dbo].[PositionDocument] WHERE [PositionId] = @Id ORDER BY CAST(DocumentID as int)",
+    "updateDocumentCheckList" : "UPDATE [JobPortal].[dbo].[PositionDocument] SET [DocNo] = @DocNo, [Chk] = @Chk, [DtIssue] = @DtIssue, [DtExpiry] = @DtExpiry, [DocType] = @DocType, [DocFile] = @DocFile, [UpdatedDate] = GETDATE() WHERE [PositionID] = @PositionID AND [DocumentID] = @DocumentID",
+
+    "getManagerList": [
+		"SELECT DISTINCT UsersTbl.[UserID], UsersTbl.[FirstName], UsersTbl.[LastName], UsersTbl.[Email], UsersTbl.[SuperiorID] ",
+		"FROM [Namcheong].[dbo].[tblUser] AS UsersTbl ",
+		"INNER JOIN ",
+		"(SELECT ManagerTbl.SuperiorID AS ManagerID  FROM [Namcheong].[dbo].[tblUser] AS ManagerTbl) manager ",
+		"ON UsersTbl.UserID = ManagerID ",
+		"WHERE UserID <> 1"
+    ],
+    "generalMedicalAnswer": "SELECT * FROM [JobPortal].[dbo].[ApplicantMedicalAnswer] WHERE [LoginEmail] = @LoginEmail AND [QuestionId] = @QuestionId AND [ApplyID] = @ApplyID",
+	"getUserModule": "SELECT * FROM [JobPortal].[dbo].[AccessModule]",
+	"getAdminDetails": "SELECT * FROM [JobPortal].[dbo].[UserConfigure] WHERE [UserName] = @Id",
+	"getUserIdConfigure": "SELECT [Id] AS [UserConfigureID], [UserID], [UserName],[Signature],[SignatureAdmin],[ManagerId],[ManagerName] FROM [JobPortal].[dbo].[UserConfigure]",
+	"getUserIdConfigureById": "SELECT [AMU].[Id], [AMU].[ModuleID], [AMU].[UserConfigureID], [AMU].[Chk], [AM].[Module], [AM].[SubModule], [UC].[UserID], [UC].[UserName],[UC].[SignatureAdmin], [UC].[Signature], [UC].[ManagerId], [UC].[ManagerName] FROM [JobPortal].[dbo].[AccessModuleUser] AS [AMU] INNER JOIN [JobPortal].[dbo].[AccessModule] AS [AM] ON [AMU].[ModuleID] = [AM].[Id] INNER JOIN [JobPortal].[dbo].[UserConfigure] AS [UC] ON [AMU].[UserConfigureID] = CAST([UC].[Id] as varchar(100)) WHERE [UC].[Id] = @UserConfigureID",
+	"addUserIdConfigure": "INSERT INTO [JobPortal].[dbo].[UserConfigure] ([UserID], [UserName], [Name], [CreatedBy], [CreatedDate], [UpdatedBy], [UpdatedDate], [ManagerId], [ManagerName]) VALUES (@UserID, @UserName, @Name, @CreatedBy, GETDATE(), @UpdatedBy, GETDATE(), @ManagerId, @ManagerName); SELECT SCOPE_IDENTITY() AS [UserConfigureID]",
+	"deleteUserIdConfigure": "DELETE FROM [JobPortal].[dbo].[UserConfigure] WHERE [Id] = @UserConfigureID; DELETE FROM [JobPortal].[dbo].[AccessModuleUser] WHERE [UserConfigureId] = @UserConfigureID;",
+	"updateUserIdConfigure": "UPDATE [JobPortal].[dbo].[UserConfigure] SET [UserID] = @UserID, [UserName] = @UserName, [ManagerId] = @ManagerId, [ManagerName] = @ManagerName WHERE [Id] = @Id; UPDATE [JobPortal].[dbo].[AccessModuleUser] SET [Chk] = @Chk WHERE [UserConfigureID] = @UserConfigureID;",
+
+    "getIssuingAuthority" : "SELECT [Id], [Name], [Description] FROM [JobPortal].[dbo].[IssuingAuthority]",
+    "addIssuingAuthority" :"INSERT INTO [JobPortal].[dbo].[IssuingAuthority] ([Name], [Description], [CreatedDate]) VALUES (@Name, @Description, GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
+    "deleteIssuingAuthority" : "DELETE FROM [JobPortal].[dbo].[IssuingAuthority] WHERE [Id] = @Id",
+    "updateIssuingAuthority" : "UPDATE [JobPortal].[dbo].[IssuingAuthority] SET [Name] = @Name, [Description] = @Description, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
+
+    "getMatrix" : "SELECT DISTINCT Matrix FROM Matrix",
+    "addMatrix" : "INSERT INTO [JobPortal].[dbo].[Matrix] ([Matrix]) VALUES (@MatrixName)",
+    "removeMatrix" : "DELETE FROM [JobPortal].[dbo].[Matrix] WHERE [Matrix] = @MatrixName",
+    "getVesselName": "SELECT [VesselName], [VesselCode] FROM [JobPortal].[dbo].[IMONo]",
+    "getMatrixTemplate" : "SELECT DISTINCT * FROM [JobPortal].[dbo].[MatrixDetail] M1 INNER JOIN (SELECT DISTINCT SeqNo FROM MatrixDetail )M2 on M1.SeqNo = M2.SeqNo ORDER BY M1.Matrix, M1.SeqNo",
+    "getMatrixData" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE ([ContractPeriodFrom] between @ContractDate and GETDATE()) AND [NameofVessel]=@VesselName",
+    "addMatrixTemplate" : "INSERT INTO [JobPortal].[dbo].[MatrixDetail] ([Matrix], [Item], [ItemDesc], [SeqNo]) VALUES (@MatrixName, @Item, @ItemDesc, @SeqNo)",
+    "removeMatrixTemplate" : "DELETE FROM [JobPortal].[dbo].[MatrixDetail] WHERE [Matrix] = @MatrixName",
+
+    "getMatrixField" : "SELECT DISTINCT [Item], [ItemDesc] FROM MatrixItem ORDER BY [ItemDesc]",
+
+    "getApplicantApply" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE ApplyStatus='Offered'",
+    "getApplicant" : "SELECT [Id], [ApplyPosition], [ApplyPositionID], [LoginEmail], [Name], [MiddleName], [LastName], [ApplyDtApplication], [ApplyStatus] FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE SubmitFlag='Y'",
+    "getCurrency": "SELECT [Id], [TableField] AS [Currency] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Currency' ORDER BY SeqNo",
+    "getApplicantStatus": "SELECT [Id], [TableField] AS [ApplicantStatus] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Applicant Status' ORDER BY SeqNo",
+    "getApplicantById" : "SELECT * FROM v_ApplicantApply WHERE Id=@Id",
+    "getApplicantByLoginEmailApplyPosition" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE [LoginEmail]=@LoginEmail AND ApplyPositionID=@ApplyPositionID AND ApplyStatus<>'Offered'",
+    "getApplicantApplyByLoginEmail" : "SELECT TOP 1 * FROM [ApplicantApply] WHERE [LoginEmail]=@LoginEmail ORDER BY DtApplication DESC, ID DESC",
+    "getApplicantByLoginEmail" : "Select * FROM [Applicant] where [LoginEmail]=@LoginEmail",
+    "getApplicantApplyById" : "SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [Id]=@Id",
+    "getApplicantDocumentById" : "Select * FROM [JobPortal].[dbo].[ApplicantDocument] where [ApplyID]=@ApplyID",   
+    "deleteApplicantDocument" : "DELETE FROM [JobPortal].[dbo].[ApplicantDocument] WHERE PositionID=@PositionID AND UserID=@UserID AND ApplyID=@ApplyID; ",
+    "addApplicantDocument" : ["INSERT INTO [JobPortal].[dbo].[ApplicantDocument] (UserID, ApplyID, Position, Document, PositionID, "
+                                , "DocumentID, DocNo, DtIssue, DtExpiry, type, FilePath, FileName, FileExtension, "
+                                , "Charterer, ChartererOthers, DynamicPositionCertType, DynamicPositionCertFileName, Grade, IssuingAuthority) "
+                                , "VALUES (@UserID, @ApplyID, @Position, @Document, @PositionID, "
+                                , "@DocumentID, @DocNo, @DtIssue, @DtExpiry, @type, @FilePath, @FileName, @FileExtension, "
+                                , "@Charterer, @ChartererOthers, @DynamicPositionCertType, @DynamicPositionCertFileName, @Grade, @IssuingAuthority)"],
+    "getApplicantDocument" : ["SELECT dbo.[ApplicantDocument].[Id] as Id, dbo.[Document].[ID] as DocumentID, dbo.[PositionDocument].[Document] as Document, dbo.PositionDocument.Chk, dbo.PositionDocument.DocNo as DocNo, dbo.PositionDocument.DtExpiry as DtExpiry, dbo.PositionDocument.DtIssue as DtIssue, "
+                                , "dbo.PositionDocument.[Document] AS Document, dbo.PositionDocument.Position, dbo.PositionDocument.[DocType] AS DocType, dbo.PositionDocument.[DocFile] AS DocFile, " 
+                                , "ApplicantDocument.DocNo as [ApplicantDocNo], "
+                                , "ApplicantDocument.dtIssue as [ApplicantDocDtIssue], "
+                                , "ApplicantDocument.dtExpiry as [ApplicantDocDtExpiry], "
+                                , "ApplicantDocument.Type as [ApplicantDocType], "
+                                , "ApplicantDocument.FileName as [ApplicantDocFileName], "
+                                , "ApplicantDocument.FilePath as [ApplicantDocFile], "
+                                , "ApplicantDocument.FileExtension as [FileExtension], "
+                                , "ApplicantDocument.FilePath,ApplicantDocument.FileName as [FileNamePath],CASE WHEN ISNULL(ApplicantDocument.FileName,'')='' THEN 'No File Chosen' ELSE 'Click View for the file' END as [FileText], "
+                                , "ApplicantDocument.Charterer as [Charterer], ApplicantDocument.ChartererOthers as [ChartererOthers], "
+                                , "ApplicantDocument.DynamicPositionCertType as [DynamicPositionCertType], "
+                                , "ApplicantDocument.DynamicPositionCertFileName as [DynamicPositionCertFileName], "
+                                , "ApplicantDocument.Grade as [Grade], "
+                                , "ApplicantDocument.IssuingAuthority as [IssuingAuthority] "
+                                , "FROM  dbo.PositionDocument RIGHT OUTER JOIN dbo.[Document] ON dbo.PositionDocument.[DocumentID] = dbo.[Document].[ID]  "
+                                , "LEFT JOIN ApplicantDocument ON dbo.PositionDocument.[DocumentID] = dbo.[ApplicantDocument].[DocumentID]  AND  "
+                                , "dbo.PositionDocument.[PositionID] = dbo.[ApplicantDocument].[PositionID] "
+                                , "AND ApplicantDocument.UserID=@LoginEmail AND ApplyId=@Id"
+                                , "WHERE dbo.[PositionDocument].PositionID=@PositionID AND dbo.PositionDocument.Chk='Y' "],
+    "getApplicantNextOfKin" : " SELECT *, (year(getdate()) - year(NOKDOB)) as Age  FROM [JobPortal].[dbo].[ApplicantNOK] WHERE UserID = @UserID ORDER BY SeqNo",
+    "addApplicantNextOfKin" : ["INSERT INTO [JobPortal].[dbo].[ApplicantNOK] (UserID, NOKName, NOKMiddleName, NOKLastName, NOKRelationship, NOKOccupaction, NOKContactNumber, NOKAge, NOKGender, NOKDOB, NOKHandicap, NOKEmployment, SeqNo) "
+                                , "VALUES (@UserID, @NOKName, @NOKMiddleName, @NOKLastName, @NOKRelationship, @NOKOccupaction, @NOKContactNumber, @NOKAge, @NOKGender, @NOKDOB, @NOKHandicap, @NOKEmployment, @SeqNo); "
+                                , "SELECT SCOPE_IDENTITY() AS [Id]"],
+    "deleteApplicantNextOfKin" : "DELETE FROM [ApplicantNOK] WHERE Id=@Id",
+    "updateApplicantNextOfKin" : ["UPDATE [ApplicantNOK] SET NOKName = @NOKName, "
+                                , "NOKRelationship = @NOKRelationship, NOKEmployment = @NOKEmployment, "
+                                , "NOKAge = @NOKAge, NOKHandicap = @NOKHandicap "
+                                , "WHERE UserID = @UserID AND Id=@Id "],
+	"getApplicantCertificates" : " SELECT *, (year(getdate()) - year(NOKDOB)) as Age  FROM [JobPortal].[dbo].[ApplicantNOK] WHERE UserID = @UserID ORDER BY SeqNo",
+    "addApplicantCertificates" : ["INSERT INTO [JobPortal].[dbo].[ApplicantNOK] (UserID, NOKName, NOKRelationship, NOKOccupaction, NOKContactNumber, NOKDOB, SeqNo) "
+                                , "VALUES (@UserID, @NOKName, @NOKRelationship, @NOKOccupaction, @NOKContactNumber, @NOKDOB, @SeqNo); "
+                                , "SELECT SCOPE_IDENTITY() AS [Id]"],
+    "deleteApplicantCertificate" : "DELETE FROM [ApplicantNOK] WHERE Id=@Id",
+    "updateApplicantCertificate" : ["UPDATE [ApplicantNOK] SET NOKName = @NOKName, "
+                                , "NOKRelationship = @NOKRelationship, NOKOccupaction = @NOKOccupaction, "
+                                , "NOKContactNumber = @NOKContactNumber, NOKDOB = @NOKDOB "
+                                , "WHERE UserID = @UserID AND Id=@Id "],																																							   
+	"getApplicantDropdownId" : ["SELECT [STAllowance].[id] AS [AllowanceId], [STPortOfRegistry].[id] AS [PORId], "
+                                , "[STApplicantStatus].[id] AS [ApplyStatusId], [IMONoTbl].[Id] AS [ImonoId], [VesselType].[VesselID] AS [VesselId]  "
+                                , "FROM v_ApplicantApply"
+                                , "LEFT JOIN [dbo].[SystemTable] AS [STAllowance] "
+                                , "ON [STAllowance].[TableField] = [v_ApplicantApply].[TypesofAllowance] "
+                                , "LEFT JOIN [dbo].[SystemTable] AS [STPortOfRegistry] "
+                                , "ON [STPortOfRegistry].[TableField] = [v_ApplicantApply].[PortofRegistry] "
+                                , "LEFT JOIN [dbo].[SystemTable] AS [STApplicantStatus] "
+                                , "ON [STApplicantStatus].[TableField] = [v_ApplicantApply].[ApplyStatus] "
+                                , "LEFT JOIN [JobPortal].[dbo].[IMONo] AS [IMONoTbl] "
+                                , "ON [IMONoTbl].[IMONo] = [v_ApplicantApply].[IMONo] "
+                                , "LEFT JOIN [dbo].[v_VesselType] AS [VesselType] "
+                                , "ON [VesselType].[HullNo] = [v_ApplicantApply].[NameofVessel] "
+                                , "WHERE [v_ApplicantApply].[Id] = @Id "],
+    "updateApplicant" : ["UPDATE [ApplicantApply] SET OfferPosition = @ApplyPosition, DailyRate = @DailyRate, StandbyRate = @StandbyRate,"
+                            , "Allowance = @Allowance, TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth,"
+                            , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo,"
+                            , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry,"
+                            , "Status = @Status, "
+                            , "Currency = @Currency "
+                            , "WHERE Id=@Id "],
+    "updateConfirmApplicant" : ["DECLARE @ConfirmNo int; DECLARE @SerialNumber varchar(100); "
+                                , "SET @ConfirmNo = (SELECT top 1 ConfirmNo FROM  [JobPortal].[dbo].[v_ApplicantApply] "
+                                , "WHERE year(ConfirmDt)=YEAR(getdate()) AND month(ConfirmDt)=MONTH(getdate()) AND day(ConfirmDt)=Day(getdate()) "
+                                , "ORDER BY ConfirmNo desc) "
+                                , "IF @@ROWCOUNT > 0 "
+                                , "IF (@ConfirmNo = 99) "
+                                , "SET @ConfirmNo = 1 "
+                                , "ELSE IF(@ConfirmNo < 99) " 
+                                , "SET @ConfirmNo = @ConfirmNo + 1 "
+                                , "ELSE "
+                                , "SET @ConfirmNo = 1 "
+                                , "SET @SerialNumber = '88-' + CAST(YEAR(getdate()) AS varchar) + CAST(MONTH(getdate()) AS varchar) + CAST(Day(getdate()) AS varchar) + '-' + CAST(@ConfirmNo AS varchar) "
+                                , "UPDATE [JobPortal].[dbo].[ApplicantApply] "
+                                , "SET OfferPosition = @OfferPosition, "
+                                , "DailyRate = @DailyRate, StandbyRate = @StandbyRate, Allowance = @Allowance, "
+                                , "TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth, "
+                                , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
+                                , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry, "
+                                , "Status = 'Offered', Currency = @Currency, ConfirmNo = @ConfirmNo, SerialNumber = @SerialNumber, "
+                                , "ConfirmFlag = '1', GenDoc = '0', ConfirmBy = '88', ConfirmByName = 'admin', ConfirmDt = GetDate() "
+                                , "WHERE Id=@Id "],
+
+    "saveAsDraftApplication" : ["UPDATE [Applicant]"
+                                , "SET Name = @Name"
+                                , ", MiddleName = @MiddleName"
+                                , ", LastName = @LastName"
+                                , ", Email = @Email"
+                                , ", Gender = @Gender"
+                                , ", IC = @IC"
+                                , ", Education = @Education"
+                                , ", Passport = @Passport"
+                                , ", Passport_DtIssue = @Passport_DtIssue"
+                                , ", Passport_DtExpiry = @Passport_DtExpiry"
+                                , ", SubsePassport = @SubsePassport"
+                                , ", SubsePassport_DtIssue = @SubsePassport_DtIssue"
+                                , ", SubsePassport_DtExpiry = @SubsePassport_DtExpiry"
+                                , ", SeamanBookNo = @SeamanBookNo"
+                                , ", SeamanBook_DtIssue = @SeamanBook_DtIssue"
+                                , ", SeamanBook_DtExpiry = @SeamanBook_DtExpiry"
+                                , ", SeamanCardNo = @SeamanCardNo"
+                                , ", SeamanCard_DtIssue = @SeamanCard_DtIssue"
+                                , ", SeamanCard_DtExpiry = @SeamanCard_DtExpiry"
+                                , ", ValidityDate = @ValidityDate"
+                                , ", DOB = @DOB"
+                                , ", PlaceofBirth = @PlaceofBirth"
+                                , ", CountryOfOrigin = @CountryOfOrigin"
+                                , ", MaritalStatus = @MaritalStatus"
+                                , ", Nationality = @Nationality"
+                                , ", NationalityOthers = @NationalityOthers"
+                                , ", Race = @Race"
+                                , ", RaceOthers = @RaceOthers"
+                                , ", Religion = @Religion"
+                                , ", ReligionOthers = @ReligionOthers"
+                                , ", PermanentAddress = @PermanentAddress"
+                                , ", PermanentAddress2 = @PermanentAddress2"
+                                , ", PermanentAddress3 = @PermanentAddress3"
+                                , ", PPostcode = @PPostcode"
+                                , ", PCity = @PCity"
+                                , ", PState = @PState"
+                                , ", PStateOthers = @PStateOthers"
+                                , ", PCountry = @PCountry"
+                                , ", Residentialaddress = @Residentialaddress"
+                                , ", Residentialaddress2 = @Residentialaddress2"
+                                , ", Residentialaddress3 = @Residentialaddress3"
+                                , ", RPostcode = @RPostcode"
+                                , ", RCity = @RCity"
+                                , ", RState = @RState"
+                                , ", RStateOthers = @RStateOthers"
+                                , ", RCountry = @RCountry"
+                                , ", Contact_MobileCtryCode = @Contact_MobileCtryCode"
+                                , ", Contact_Mobile = @Contact_Mobile"
+                                , ", RepatriationHomePort = @RepatriationHomePort"
+                                , ", EmergencyContactName = @EmergencyContactName"
+                                , ", EmergencyContactMiddleName = @EmergencyContactMiddleName"
+                                , ", EmergencyContactLastName = @EmergencyContactLastName"
+                                , ", EmergencyContactRelationship = @EmergencyContactRelationship"
+                                , ", EmergencyContact_Address = @EmergencyContact_Address"
+                                , ", EmergencyContact_Address2 = @EmergencyContact_Address2"
+                                , ", EmergencyContact_Address3 = @EmergencyContact_Address3"
+                                , ", EmergencyContact_City = @EmergencyContact_City"
+                                , ", EmergencyContact_Postcode = @EmergencyContact_Postcode"
+                                , ", EmergencyContact_State = @EmergencyContact_State"
+                                , ", EmergencyContact_Country = @EmergencyContact_Country"
+                                , ", EmergencyContact_HouseCtryCode = @EmergencyContact_HouseCtryCode"
+                                , ", EmergencyContact_House = @EmergencyContact_House"
+                                , ", EmergencyContact_MobileCtryCode = @EmergencyContact_MobileCtryCode"
+                                , ", EmergencyContact_Mobile = @EmergencyContact_Mobile"
+                                , ", Ref1Name = @Ref1Name"
+                                , ", Ref1Company = @Ref1Company"
+                                , ", Ref1Designation = @Ref1Designation"
+                                , ", Ref1Contact = @Ref1Contact"
+                                , ", Ref2Name = @Ref2Name"
+                                , ", Ref2Company = @Ref2Company"
+                                , ", Ref2Designation = @Ref2Designation"
+                                , ", Ref2Contact = @Ref2Contact"
+                                , ", IncomeTaxNo = @IncomeTaxNo"
+                                , ", DtUpdated = GetDate()"
+                                , "WHERE [LoginEmail]=@LoginEmail"],
+    "submitApplication" : ["UPDATE [JobPortal].[dbo].ApplicantApply "
+                                , "SET Position=@Position ,"
+                                , "DtApplication=getdate() ,"
+                                , "Status='New' , "
+                                , "SubmitFlag='Y' ,"
+                                , "SubmitBy=@LoginEmail ,"
+                                , "SubmitDt=getdate() "
+                                , "WHERE [LoginEmail]=@LoginEmail "
+                                , "AND PositionID=@PositionID"],
+    "addApplication" : ["INSERT INTO [JobPortal].[dbo].[ApplicantApply] "
+                                , "(Position, PositionID, DtApplication, LoginEmail, Status, SubmitFlag, SubmitBy, SubmitDt) "
+                                , "VALUES (@Position, @PositionID, getdate(), @LoginEmail, @Status, @SubmitFlag, @SubmitBy, @SubmitDt)"],
+    "updateApplication" : "UPDATE [JobPortal].[dbo].ApplicantApply SET Position=@Position, DtApplication=getdate(), Status='New', SubmitFlag='N' WHERE [LoginEmail]=@LoginEmail AND PositionID=@PositionID",
+    "registerApplicant" : "INSERT INTO [Applicant] (LoginEmail, Name, Password, Status, DtCreated) VALUES (@LoginEmail, @Name, @Password, 'Active', GetDate())",
+    
+    "getApplicantMedicalReportQuestion" : "SELECT * FROM [dbo].[ApplicantMedicalQuestion]",
+    "getApplicantMedicalReportAnswerById" : "SELECT * FROM [dbo].[ApplicantMedicalAnswer] WHERE ApplyID = @ApplyID",
+    "updateApplicantMedicalReportAnswerById" : ["UPDATE [JobPortal].[dbo].[ApplicantMedicalAnswer] "
+        , "SET [Answer]=@Answer, [Description]=@Description, [FilePath]=@FilePath, [AnsCheckupDt]=@AnsCheckupDt, [AnsExpiryDt]=@AnsExpiryDt "
+        , "WHERE QuestionId=@QuestionId AND ApplyID=@ApplyID AND LoginEmail=@LoginEmail"],
+    "addApplicantMedicalReportAnswer" : ["INSERT INTO [JobPortal].[dbo].[ApplicantMedicalAnswer] "
+    , "(ApplyID, LoginEmail, Type, QuestionId, Answer, Description, FilePath, AnsCheckupDt, AnsExpiryDt) "
+    , "VALUES(@ApplyID, @LoginEmail, @Type, @QuestionId, @Answer, @Description, @FilePath, @AnsCheckupDt, @AnsExpiryDt)"],
+
+
+    "getApplicantGeneralQuestion" : "SELECT * FROM [dbo].[ApplicantGeneralQuestion]",
+    "getApplicantGeneralAnswerById" : "SELECT * FROM [dbo].[ApplicantGeneralAnswer] WHERE ApplyID = @ApplyID",
+    "updateApplicantGeneralAnswerById" : ["UPDATE [JobPortal].[dbo].[ApplicantGeneralAnswer] "
+                                            , "SET [Answer]=@Answer, [Description]=@Description, [FilePath]=@FilePath "
+                                            , "WHERE QuestionId=@QuestionId AND ApplyID=@ApplyID AND LoginEmail=@LoginEmail"],
+    "addApplicantGeneralAnswer" : ["INSERT INTO [JobPortal].[dbo].[ApplicantGeneralAnswer] "
+                                    , "(ApplyID, LoginEmail, Type, QuestionId, Answer, Description, FilePath) "
+                                    , "VALUES(@ApplyID, @LoginEmail, @Type, @QuestionId, @Answer, @Description, @FilePath)"],
+    "deleteSignatureFile" : "UPDATE [JobPortal].[dbo].[UserConfigure] SET Signature=NULL WHERE Id = @Id",
+    "deleteDocumentFile" : "UPDATE [JobPortal].[dbo].[ApplicantDocument] SET FileName=NULL WHERE Id = @Id",
+    "updateFile" : "UPDATE [JobPortal].[dbo].[UserConfigure] SET Signature=@Signature WHERE Id = @Id",
+    "getSignatureFileName" : "SELECT Signature FROM [JobPortal].[dbo].[UserConfigure] WHERE Id = @Id",
+    "getDocumentFileName" : "SELECT FileName FROM [JobPortal].[dbo].[ApplicantDocument] WHERE Id = @Id",
+    "updateDocumentPath" : "UPDATE [JobPortal].[dbo].[ApplicantDocument] SET [FileName] = @FileName WHERE [DocumentID] = @DocumentID AND [UserID]=@UserID",
+    "updateApplicantProfile" : "UPDATE [JobPortal].[dbo].[Applicant] SET [FileName] = @FileName WHERE LoginEmail=@LoginEmail",
+    "updateApplicantCV" : "UPDATE [JobPortal].[dbo].[Applicant] SET [FileNameCV] = @FileName WHERE LoginEmail=@LoginEmail",
+    "updateApplicantEducation" : "UPDATE [JobPortal].[dbo].[Applicant] SET [EducationFileName] = @FileName WHERE LoginEmail=@LoginEmail",
+
+
+    "getApplication" : "SELECT * FROM [JobPortal].[dbo].[Applicant] WHERE [LoginEmail] = @LoginEmail",
+    
+    "getApplicationDocuments" : "SELECT * FROM [JobPortal].[dbo].[ApplicantDocument] WHERE [UserID] = @LoginEmail AND [ApplyID] = @ApplyID",
+
+    "getApplicationDocumentsTest" : "SELECT * FROM [JobPortal].[dbo].[ApplicantDocument] WHERE [UserID] = @LoginEmail",
+
+    "getApplicantApplyAllStatus":"SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+
+    "getApplicantApplyTest":"SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [LoginEmail] = @LoginEmail",
+
+    "getPassport" : "SELECT UserID,Document,DocumentID,DtIssue,DtExpiry FROM [JobPortal].[dbo].[ApplicantDocument] WHERE [UserID] = @LoginEmail AND [ApplyID] = @ApplyID AND [Document] = @Document",
+
+    "getPMU" : "SELECT UserID,Document,DocumentID,DtIssue,DtExpiry FROM [JobPortal].[dbo].[ApplicantDocument] WHERE [UserID] = @LoginEmail AND [ApplyID] = @ApplyID AND [Document] = @Document",
+
+    "getMarine" : "SELECT UserID,Document,DocumentID,DtIssue,DtExpiry FROM [JobPortal].[dbo].[ApplicantDocument] WHERE [UserID] = @LoginEmail AND [ApplyID] = @ApplyID AND [Document] = @Document",
+
+    "getApplicantNOK":"SELECT * FROM [JobPortal].[dbo].[ApplicantNOK] WHERE [UserID] = @LoginEmail",
+
+    "getAllVessel" : "SELECT * FROM [JobPortal].[dbo].[IMONo]",
+
+    "getSignature" : "SELECT * FROM [JobPortal].[dbo].[UserConfigure] WHERE [UserID] = @UserID",
+
+    "updateCV" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileCV] = @FileCV WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+    "updateCVDate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileCVCreateDt] = @FileCVCreateDt WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+    
+    "updateAFE" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileAFE] = @FileAFE WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+    "updateAFEDate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileAFECreateDt] = @FileAFECreateDt WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+
+    "updateSEA" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileSEA] = @FileSEA  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+    "updateSEADate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileSEACreateDt] = @FileSEACreateDt  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+    "updategenDoc" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [GenDoc] = @GenDoc  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+
+    "generalAnswer": "SELECT * FROM [JobPortal].[dbo].[ApplicantGeneralAnswer] WHERE [LoginEmail] = @LoginEmail AND [QuestionId] = @QuestionId AND [ApplyID] = @ApplyID",
+    "getSignatureAdminFileName": "SELECT SignatureAdmin FROM [JobPortal].[dbo].[UserConfigure] WHERE Id = @Id",
+    "updateAdminFile": "UPDATE [JobPortal].[dbo].[UserConfigure] SET SignatureAdmin=@SignatureAdmin WHERE Id = @Id",
+    "deleteSignatureAdminFile": "UPDATE [JobPortal].[dbo].[UserConfigure] SET SignatureAdmin=NULL WHERE Id = @Id"
+}

@@ -1,0 +1,888 @@
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { ApplicantService } from '../../services/applicant.service'
+import { PositionService } from '../../services/position.service'
+import { ImoNoService } from '../../services/imono.service'
+import { PortOfRegistryService } from '../../services/portofregistry.service'
+import { AllowanceService } from '../../services/allowance.service'
+import { IssuingAuthorityService } from '../../services/issuingauthority.service'
+import { UserIdConfigService } from '../../services/useridconfigure.service'
+import { RelationshipService } from '../../services/relationship.service'
+import { BaseService } from '../../services/base.service'
+
+import { Injectable } from '@angular/core'
+import { Subscription } from 'rxjs'
+import {
+  Applicant,
+  ApplicantDocument,
+  ApplicantStatus,
+  ApplicantNextOfKin,
+  ApplicantDropdownId,
+  Currency,
+} from '../../interfaces/applicant'
+import { Position } from '../../interfaces/position'
+import { ImoNo, VesselType } from '../../interfaces/imono'
+import { PortOfRegistry } from '../../interfaces/portofregistry'
+import { Allowance } from '../../interfaces/allowance'
+import { Router, ActivatedRoute } from '@angular/router'
+import { IssuingAuthority } from '../../interfaces/issuingauthority'
+import { environment } from '../../../environments/environment'
+
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog'
+import { SignatureComponent } from './signature/signature.component'
+
+@Injectable({
+  providedIn: 'root',
+})
+@Component({
+  selector: 'ngx-view-applicant',
+  templateUrl: './view-applicant.html',
+  styleUrls: ['./view-applicant.scss'],
+})
+export class ViewApplicantComponent implements OnInit, OnDestroy {
+  data: any = []
+  applicant: any = []
+  applicantStatus: any = []
+  positions: any = []
+  imonos: any = []
+  vessels: any = []
+  portsOfRegistry: any = []
+  currencies: any = []
+  allowances: any = []
+  genderlist: any = []
+  relationshiplist: any = []
+  positionid: string
+  daily_rate: string
+  standby_rate: string
+  allowance_amount: string
+  contract_period: string
+  issuingAuthority: any = []
+  standbyRates: any = []
+  signature: string
+  signatureAdmin: string
+  adminDetails: any = []
+
+  _subscription: Subscription
+
+  constructor(
+    private signatureService: UserIdConfigService,
+    private relationshipService: RelationshipService,
+    private service: ApplicantService,
+    private positionService: PositionService,
+    private imoNoService: ImoNoService,
+    private portOfRegistryService: PortOfRegistryService,
+    private activatedRoute: ActivatedRoute,
+    private allowanceService: AllowanceService,
+    private issuingAuthorityService: IssuingAuthorityService,
+    private router: Router,
+    private dialog: MatDialog,
+    private baseService:BaseService
+  ) {
+    const navigation = this.router.getCurrentNavigation()
+    this.standbyRates = [
+      { Id: 1, Rate: '0.5x daily rate' },
+      { Id: 2, Rate: '1.0x daily rate' },
+    ]
+  }
+
+  ngOnInit(): void {
+    this.applicant.next_of_kin = []
+    this.applicant.applicant_dropdown = []
+    this.applicant.applicant_documents = []
+    const applicantId = this.activatedRoute.snapshot.params.Id
+    this.getAllowances()
+    this.getCurrency()
+    this.getGender()
+    this.getRelationships()
+    //this.getApplicantById(135)
+    //this.getApplicantById(1274)
+    this.getApplicantById(applicantId)
+    this.getPositions()
+    this.getImoNo()
+    this.getVesselType()
+    this.getApplicantStatus()
+    this.getPortsOfRegistry()
+    this.getIssuingAuthorities()
+    this.getAdminId()
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe()
+    }
+  }
+
+  getIssuingAuthorities() {
+    this._subscription = this.issuingAuthorityService
+      .getAllIssuingAuthorities()
+      .subscribe(
+        (result: any) => {
+          this.issuingAuthority = result
+          this._refreshIssuingAuthorityData()
+        },
+        (err) => alert('Failed to load issuing authorities')
+      )
+  }
+
+  _refreshIssuingAuthorityData() {
+    this.issuingAuthority.map((item: IssuingAuthority, index: number) => {
+      return {
+        No: index + 1,
+        Id: item.Id,
+        Name: item.Name,
+        Description: item.Description,
+      }
+    })
+  }
+
+  getCurrency() {
+    this.service.getCurrency().subscribe(
+    (result: any) => {
+      this.currencies = result
+      this._refreshCurrencyData()
+    },
+      (err) => alert('Failed to load Currency')
+    )
+  }
+
+  _refreshCurrencyData() {
+    console.log("check currency")
+    console.log(this.currencies)
+    this.currencies.map((item: Currency) => {
+      return {
+        Id: item.Id,
+        Currency: item.Currency
+      }
+    })
+  }
+
+  viewFile(filePath) {
+    console.log('filePath: ', filePath)
+    if (filePath && filePath.length > 0) {
+      window.open(`${environment.documentPathPrefix}/` + filePath, '_blank')
+    }
+  }
+
+  getApplicantById(Id) {
+    this.service.getApplicantById(Id).subscribe(
+      (result) => {
+        this.data = result
+        this.applicant = result
+       
+        this._refreshData()
+      },
+      (err) => alert('Failed to load applicant')
+    )
+  }
+
+  getApplicantDocument(Id, LoginEmail, PositionID) {
+    this.applicant.applicant_documents = []
+    this.service
+      .getApplicantDocument(
+        '?Id=' + Id + '&LoginEmail=' + LoginEmail + '&PositionID=' + PositionID
+      )
+      .subscribe(
+        (result) => {
+          this.applicant.applicant_documents = result
+          this._refreshApplicantDocument()
+        },
+        (err) => alert('Failed to load applicant')
+      )
+  }
+
+  _refreshApplicantDocument() {
+    this.applicant.applicant_documents.map((item: ApplicantDocument) => {
+      return {
+        DocumentID: item.DocumentID,
+        Document: item.Document,
+        Chk: item.Chk,
+        DocNo: item.DocNo,
+        DtExpiry: new Date(item.DtExpiry),
+        DtIssue: new Date(item.DtIssue),
+        Position: item.Position,
+        ChkDocType: item.DocType,
+        ChkDocFile: item.DocFile,
+        ApplicantDocNo: item.ApplicantDocNo,
+        ApplicantDocDtIssue: item.ApplicantDocDtIssue,
+        ApplicantDocDtExpiry: item.ApplicantDocDtExpiry,
+        ApplicantDocType: item.ApplicantDocType,
+        ApplicantDocFileName: item.ApplicantDocFileName,
+        ApplicantDocFile: item.ApplicantDocFile,
+        FilePath: item.FilePath,
+        FileNamePath: item.FileNamePath,
+        FileText: item.FileText,
+      }
+    })
+    //this.applicant.applicant_documents.DocDtIssue=new Date(this.applicant.applicant_documents.DocDtIssue);
+    //this.applicant.applicant_documents.DocDtExpiry=new Date(this.applicant.applicant_documents.DocDtExpiry);
+  }
+
+  getPositions() {
+    this.positionService.getAllPositions().subscribe(
+      (result) => {
+        this.positions = result
+        this._refreshPositionData()
+      },
+      (err) => alert('Failed to load positions')
+    )
+  }
+
+  getApplicantStatus() {
+    this.service.getApplicantStatus().subscribe(
+      (result: any) => {
+        this.applicantStatus = result
+        this._refreshApplicantStatusData()
+      },
+      (err) => alert('Failed to load Applicant Status')
+    )
+  }
+
+  _refreshApplicantStatusData() {
+    this.applicantStatus.map((item: ApplicantStatus) => {
+      return {
+        Id: item.Id,
+        IMONo: item.ApplicantStatus,
+      }
+    })
+  }
+
+  getImoNo() {
+    this.imoNoService.getAllImoNos().subscribe(
+      (result: any) => {
+        this.imonos = result
+        this._refreshImoNoData()
+      },
+      (err) => alert('Failed to load IMO No')
+    )
+  }
+
+  _refreshImoNoData() {
+    this.imonos.map((item: ImoNo) => {
+      return {
+        Id: item.Id,
+        IMONo: item.IMONo,
+        VesselName: item.VesselName,
+      }
+    })
+  }
+
+  getApplicantDropdown(Id) {
+    this.applicant.applicant_dropdown = []
+    //console.log("inside getApplicantDropdownId: ", this.applicant.applicant_dropdown)
+    this.service.getApplicantDropdown(Id).subscribe(
+      (result) => {
+        this.applicant.applicant_dropdown = result[0]
+        //console.log("this.applicant.applicant_dropdown: ", this.applicant.applicant_dropdown)
+        this._refreshApplicantDropdownData()
+      },
+      (err) => alert('Failed to load applicant dropdown ids')
+    )
+  }
+
+  _refreshApplicantDropdownData() {}
+
+  getPortsOfRegistry() {
+    this.portOfRegistryService.getAllPortsOfRegistry().subscribe(
+      (result) => {
+        this.portsOfRegistry = result
+        this._refreshPortOfRegistryData()
+      },
+      (err) => alert('Failed to load ports of registry')
+    )
+  }
+
+  _refreshPortOfRegistryData() {
+    this.portsOfRegistry.map((item: PortOfRegistry, index: number) => {
+      return {
+        No: index + 1,
+        Id: item.Id,
+        PortOfRegistry: item.PortOfRegistry,
+      }
+    })
+  }
+
+  getVesselType() {
+    this.imoNoService.getAllVessels().subscribe(
+      (result: any) => {
+        this.vessels = result
+        this._refreshVesselData()
+      },
+      (err) => alert('Failed to load Vessel Type')
+    )
+  }
+
+  _refreshVesselData() {
+    this.vessels.map((item: VesselType) => {
+      return {
+        VesselId: item.VesselId,
+        HullNo: item.HullNo,
+      }
+    })
+  }
+
+  getApplicantNextOfKin(LoginEmail) {
+    this.applicant.next_of_kin = []
+    this.service.getApplicantNextOfKin(LoginEmail).subscribe(
+      (result: any) => {
+        this.applicant.next_of_kin = result
+        this._refreshNextOfKinData()
+      },
+      (err) => alert('Failed to load Next Of Kin')
+    )
+  }
+
+  _refreshNextOfKinData() {
+    this.applicant.next_of_kin.map((item: ApplicantNextOfKin) => {
+      //let relationshipObj = this.relationshiplist.find(i => i.value == item.NOKRelationship)
+      item.NOKGender = this.mapGenderToName(item.NOKGender)
+      item.NOKRelationship = this.mapRelationshipToName(item.NOKRelationship)
+      return {
+        // Id: item.Id,
+        // ApplyID: item.ApplyID,
+        // UserID: item.UserID,
+        // NOKName: item.NOKName,
+        NOKRelationship: item.NOKRelationship,
+        // NOKOccupaction: item.NOKOccupaction,
+        // NOKAge: item.NOKAge,
+        // NOKContactNumber: item.NOKContactNumber,
+        // NOKDOB: item.NOKDOB,
+        // Age: item.NOKAge,
+        Id: item.Id,
+        ApplyID: item.ApplyID,
+        UserID: item.UserID,
+        // Added by Hakim on 12 Jan 2021 - Start
+        // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
+        NOKName: item.NOKName,
+        NOKMiddlename: item.NOKMiddleName,
+        NOKLastname: item.NOKLastName,
+        // Added by Hakim on 12 Jan 2021 - End
+        //NOKRelationship: relationshipObj != null ? relationshipObj.title : "", // Update by Hakim on 14 Jan 2021
+        NOKOccupaction: item.NOKOccupaction,
+        //NOKGender: item.NOKGender == "1" ? "Male" : "Female", // Update by Hakim on 14 Jan 2021
+        NOKGender: item.NOKGender,
+        NOKAge: item.NOKAge,
+        NOKContactNumber: item.NOKContactNumber,
+        NOKDOB: item.NOKDOB,
+        // Updated by Hakim on 12 Jan 2021 - Start
+        // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
+        NOKHandicap: item.NOKHandicap,
+        NOKEmployment: item.NOKEmployment,
+        // Added by Hakim on 12 Jan 2021 - End  
+        No: item.SeqNo
+      }
+    })
+  }
+
+  mapStandByRateToId(id) {
+    console.log("map mapStandByRateToId")
+    console.log(id)
+    console.log(this.standbyRates)
+    for (var i =0; i < this.standbyRates.length; i++) {
+      var item = this.standbyRates[i]
+      if (item.Id == id) {
+        console.log("check mapStandByRateToId")
+        console.log(item.Rate)
+        //this.applicant.CurrencyID = item.Id;
+        return item.Rate
+      }
+    }
+  }
+
+  getGender() {
+    this._subscription = this.service.getGender().subscribe(
+      (result: any) => {
+        this.genderlist = result
+        console.log("check gender")
+        console.log(this.genderlist)
+        //this._refreshCountryData()
+      },
+      (err) => alert('Failed to load Gender')
+    )
+  }
+
+  getRelationships() {
+    this._subscription = this.relationshipService.getAllRelationships().subscribe(
+      (result: any) => {
+        this.relationshiplist = result
+        console.log("check relationship")
+        console.log(this.relationshiplist)
+      },
+      (err) => alert('Failed to load relationships')
+    )
+  }
+
+  mapRelationshipToName(id) {
+    console.log("map relationshiplist")
+    console.log(id)
+    console.log(this.relationshiplist)
+    for (var i =0; i < this.relationshiplist.length; i++) {
+      var item = this.relationshiplist[i]
+      if (item.Id == id) {
+        console.log("check name relationshiplist")
+        console.log(item.Relationship)
+        //this.applicant.CurrencyID = item.Id;
+        return item.Relationship
+      }
+    }
+  }
+
+  mapGenderToName(id) {
+    console.log("map gender")
+    console.log(id)
+    console.log(this.genderlist)
+    for (var i =0; i < this.genderlist.length; i++) {
+      var item = this.genderlist[i]
+      if (item.Id == id) {
+        console.log("check name gender")
+        console.log(item.Gender)
+        //this.applicant.CurrencyID = item.Id;
+        return item.Gender
+      }
+    }
+  }
+
+  mapCurrencyToId(name) {
+    console.log("map currency")
+    console.log(name)
+    console.log(this.currencies)
+    for (var i =0; i < this.currencies.length; i++) {
+      var item = this.currencies[i]
+      if (item.Currency == name) {
+        console.log("check id currency")
+        console.log(item.Id)
+        //this.applicant.CurrencyID = item.Id;
+        return item.Id
+      }
+    }
+  }
+
+  mapCurrencyToName(id) {
+    console.log("map currency id")
+    console.log(id)
+    console.log(this.currencies)
+    for (var i =0; i < this.currencies.length; i++) {
+      var item = this.currencies[i]
+      if (item.Id == id) {
+        console.log("check id currency")
+        console.log(item.Currency)
+        //this.applicant.CurrencyID = item.Id;
+        return item.Currency
+      }
+    }
+  }
+
+  _refreshData() {
+    console.log("check refresh applicant")
+    //this.applicant.CurrencyID = '98';
+    //console.log(this.standbyRates)
+    //this.applicant.StandbyRate = this.standbyRates
+    console.log(this.applicant)
+    this.applicant.CurrencyID = this.mapCurrencyToId(this.applicant.Currency) 
+    this.applicant.GenderName = this.mapGenderToName(this.applicant.Gender)
+    //this.applicant.EmergencyContactRelationship = this.mapRelationshipToName(this.applicant.EmergencyContactRelationship)
+    //this.standbyRates = this.standby_rate
+    /*this.source.load(
+      this.applicant.map((item: Applicant, index: number) => {
+        return {
+          No: index + 1,
+          ApplyPosition: item.ApplyPosition,
+          ApplyPositionID: item.ApplyPositionID,
+          ApplyDtApplication: item.ApplyDtApplication,
+          LoginEmail: item.LoginEmail,
+          Name: item.Name,
+          Gender: item.Gender,
+          IC: item.IC,
+          Passport: item.Passport,
+          ValidityDate: item.ValidityDate,
+          DOB: item.DOB,
+          PlaceofBirth: item.PlaceofBirth,
+          CountryOfOrigin: item.CountryOfOrigin,
+          MaritalStatus: item.MaritalStatus,
+          Nationality: item.Nationality,
+          NationalityOthers: item.NationalityOthers,
+          Race: item.Race,
+          Raceothers: item.Raceothers,
+          Religion: item.Religion,
+          Religionothers: item.Religionothers,
+          PermanentAddress: item.PermanentAddress,
+          PPostCode: item.PPostCode,
+          PState: item.PState,
+          PStateOthers: item.PStateOthers,
+          Residentialaddress: item.Residentialaddress,
+          RPostCode: item.RPostCode,
+          RState: item.RState,
+          RStateOthers: item.RStateOthers,
+          Contact_MobileCtryCode: item.Contact_MobileCtryCode,
+          Contact_MobileAreaCode: item.Contact_MobileAreaCode,
+          Contact_Mobile: item.Contact_Mobile,
+          Contact_HouseCtryCode: item.Contact_HouseCtryCode,
+          Contact_HouseAreaCode: item.Contact_HouseAreaCode,
+          Contact_House: item.Contact_House,
+          RepatriationHomePort: item.RepatriationHomePort,
+          EmergencyContactName: item.EmergencyContactName,
+          EmergencyContactRelationship: item.EmergencyContactRelationship,
+          EmergencyContact_MobileCtryCode: item.EmergencyContact_MobileCtryCode,
+          EmergencyContact_MobileAreaCode: item.EmergencyContact_MobileAreaCode,
+          EmergencyContact_Mobile: item.EmergencyContact_Mobile,
+          EmergencyContact_HouseCtryCode: item.EmergencyContact_HouseCtryCode,
+          EmergencyContact_HouseAreaCode: item.EmergencyContact_HouseAreaCode,
+          EmergencyContact_House: item.EmergencyContact_House,
+          OfferPosition: item.OfferPosition ? item.OfferPosition: item.ApplyPosition,
+          DailyRate: item.DailyRate,
+          StandbyRate: item.StandbyRate,
+          Allowance: item.Allowance,
+          TypesofAllowance: item.TypesofAllowance,
+          ContractPeriodFromInMth: item.ContractPeriodFromInMth,
+          ContractPeriodFrom: new Date(item.ContractPeriodFrom),
+          ContractPeriodTo: new Date(item.ContractPeriodTo),
+          NameofVessel: item.NameofVessel,
+          IMONo: item.IMONo,
+          PortofRegistry: item.PortofRegistry,
+          ApplyStatus: item.ApplyStatus,
+          Ref1Name: item.Ref1Name,
+          Ref1Company: item.Ref1Company,
+          Ref1Designation: item.Ref1Designation,
+          Ref1Contact: item.Ref1Contact,
+          Ref2Name: item.Ref2Name,
+          Ref2Company: item.Ref2Company,
+          Ref2Designation: item.Ref2Designation,
+          Ref2Contact: item.Ref2Contact,
+          FileName: item.FileName,
+          FilePath: item.FilePath,
+          FileNameCV: item.FileNameCV,
+          FilePathCV: item.FilePathCV,
+          ApplyLoginEmail: item.ApplyLoginEmail,
+          ApplyConfirmFlag: item.ApplyConfirmFlag,
+          IncomeTaxNo: item.IncomeTaxNo,*/
+    /*ConfirmNo: item.NationalityOthers,
+          ConfirmBy: item.NationalityOthers,
+          ConfirmByName: item.NationalityOthers,
+          SerialNumber: item.NationalityOthers,
+          ConfirmDt: Date
+          GenDoc: item.NationalityOthers,
+          ConfirmFlag: item.NationalityOthers,
+          FileAFECreateDt: Date
+          FileCVCreateDt: Date
+          FileSEACreateDt: Date
+          FileAFEEndDt: Date
+          FileCVEndDt: Date
+          FileSEAEndDt: Date
+          SubmitFlag: item.SubmitFlag,
+          FileAFE: item.FileAFE,
+          FileCV: item.FileCV,
+          FileSEA: item.FileSEA,
+          ApplyLoginEmail: item.ApplyLoginEmail,
+          DtApplication: Date
+          SeamanCardNo: string
+          SeamanCard_DtIssue: Date
+          SeamanCard_DtExpiry: Date
+          SeamanBookNo: string
+          SeamanBook_DtIssue: Date
+          SeamanBook_DtExpiry: Date
+          COCNo: string
+          COC_DtIssue: Date
+          COC_DtExpiry: Date
+          CORNo: string
+          COR_DtIssue: Date
+          COR_DtExpiry: Date
+          SignatureBy1: string
+          SignDt1: Date
+          SignatureBy2: string
+          SignDt2: Date
+          DtCreated: Date
+          DtUpdated: Date
+          ForgotPasswordFlag: string
+          ForgotPasswordCode: string
+          ForgotPasswordDtExpiry: Date*/
+    /*}
+      })*/
+    //)
+    //if(this.applicant.length >= 1) {
+    // this.applicant = this.applicant[0]
+    this.getApplicantNextOfKin(this.applicant.LoginEmail)
+    //console.log("applicant_documents: ", this.applicant.Id, " email: ", this.applicant.LoginEmail, " ApplyPositionID: ", this.applicant.ApplyPositionID)
+    this.getApplicantDocument(
+      this.applicant.Id,
+      this.applicant.LoginEmail,
+      this.applicant.ApplyPositionID
+    )
+    this.getApplicantDropdown(this.applicant.Id)
+    //}
+  }
+
+  _refreshPositionData() {
+    this.positions.map((item: Position) => {
+      return {
+        Id: item.Id,
+        Position: item.Position,
+      }
+    })
+  }
+
+  getAllowances() {
+    this._subscription = this.allowanceService.getAllAllowances().subscribe(
+      (result: any) => {
+        this.allowances = result
+        this._refreshAllowanceData()
+      },
+      (err) => alert('Failed to load allowances')
+    )
+  }
+
+  _refreshAllowanceData() {
+    this.allowances.map((item: Allowance, index: number) => {
+      return {
+        No: index + 1,
+        Id: item.Id,
+        Allowance: item.Allowance,
+      }
+    })
+  }
+
+  currencyOnChange(value) {
+    console.log("currency on change")
+    this.applicant.Currency = this.mapCurrencyToName(value)
+    console.log(value)
+  }
+
+  onCancel(event) {
+    if (
+      window.confirm(
+        'Do you really want to Cancel? Please update to save the changes.'
+      )
+    ) {
+      this.router.navigate(['pages/jobportal/applicant'])
+    } else {
+      event.confirm.reject()
+    }
+  }
+
+  onSaveSanitize() {
+    // sanitize all data, convert id back to number
+  }
+
+  mapAllowanceIdToString(AllowanceIdToMap) {
+    for (var i = 0; i < this.allowances.length; i++) {
+      var item = this.allowances[i]
+      if (item.Id == AllowanceIdToMap) {
+        return item.Allowance
+      }
+    }
+  }
+
+  mapImonoIdToString(ImonoIdToMap) {
+    for (var i = 0; i < this.imonos.length; i++) {
+      var item = this.imonos[i]
+      if (item.Id == ImonoIdToMap) {
+        return item.IMONo
+      }
+    }
+  }
+
+  mapVesselIdToString(VesselIdToMap) {
+    for (var i = 0; i < this.vessels.length; i++) {
+      var item = this.vessels[i]
+      if (item.VesselID == VesselIdToMap) {
+        return item.HullNo
+      }
+    }
+  }
+
+  mapPORIdToString(PORIdToMap) {
+    for (var i = 0; i < this.portsOfRegistry.length; i++) {
+      var item = this.portsOfRegistry[i]
+      if (item.Id == PORIdToMap) {
+        return item.PortOfRegistry
+      }
+    }
+  }
+
+  mapApplyStatusIdToString(ApplyStatusIdToMap) {
+    for (var i = 0; i < this.applicantStatus.length; i++) {
+      var item = this.applicantStatus[i]
+      if (item.Id == ApplyStatusIdToMap) {
+        return item.ApplicantStatus
+      }
+    }
+  }
+
+  mapApplyPositionIdToString(ApplyPositionIdToMap) {
+    for (var i = 0; i < this.positions.length; i++) {
+      var item = this.positions[i]
+      if (item.Id == ApplyPositionIdToMap) {
+        return item.Position
+      }
+    }
+  }
+
+  onSaveValueMapping() {
+    this.applicant.TypesofAllowance = this.mapAllowanceIdToString(
+      this.applicant.applicant_dropdown.AllowanceId
+    )
+    this.applicant.IMONo = this.mapImonoIdToString(
+      this.applicant.applicant_dropdown.ImonoId
+    )
+    this.applicant.NameofVessel = this.mapVesselIdToString(
+      this.applicant.applicant_dropdown.VesselId
+    )
+    this.applicant.PortofRegistry = this.mapPORIdToString(
+      this.applicant.applicant_dropdown.PORId
+    )
+    this.applicant.Status = this.mapApplyStatusIdToString(
+      this.applicant.applicant_dropdown.ApplyStatusId
+    )
+    this.applicant.OfferPosition = this.mapApplyPositionIdToString(
+      this.applicant.ApplyPositionID
+    )
+
+    /*console.log("Value in string: Allowance: ", this.applicant.Allowance,
+      "IMONo: ", this.applicant.IMONo,
+      "NameofVessel: ", this.applicant.NameofVessel,
+      "PortofRegistry: ", this.applicant.PortofRegistry,
+      "Status: ", this.applicant.Status
+    )*/
+  }
+
+  onUpdate(event) {
+    if (window.confirm('Do you really want to update?')) {
+      this.onSaveValueMapping()
+      this.onSaveSanitize()
+      //this.applicant.StandbyRateName = this.mapStandByRateToId(this.applicant.StandbyRate)
+      /*console.log(" applicant.ContractPeriodFrom: ", this.applicant.ContractPeriodFrom)
+      console.log(" applicant.ContractPeriodTo: ", this.applicant.ContractPeriodTo)*/
+      if (this.applicant.ContractPeriodTo < this.applicant.ContractPeriodFrom) {
+        alert('Invalid Contract Period')
+      } else {
+        // find a way to save/update data
+        const subscription = this.service
+          .updateApplicant(JSON.stringify(this.applicant))
+          .subscribe((res: any) => {
+            if (res.Id == null) {
+              alert('Failed to update applicant')
+            } else {
+              alert('Update Record Successful')
+              //event.confirm.resolve(event.newData)
+            }
+            subscription.unsubscribe()
+          })
+        this.router.navigate(['pages/jobportal/applicant'])
+      }
+    } else {
+      //event.confirm.reject()
+    }
+  }
+
+  onConfirmValueMapping() {}
+
+  onConfirmAdminSignature() {
+    const dialogConfig = new MatDialogConfig()
+    //dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true
+    dialogConfig.width = '60%'
+    dialogConfig.data = this.applicant
+    this.dialog.open(SignatureComponent, dialogConfig)
+    this.onSaveValueMapping()
+  }
+
+  getAdminId() {
+    this.signatureService
+      .getAdminDetails(localStorage.getItem('adminUsername'))
+      .subscribe(
+        (result: any) => {
+          if(result.length != 0){
+            this.adminDetails = result[0]
+            if(this.adminDetails != []){
+              this.signature = this.adminDetails.Signature
+              this.signatureAdmin = this.adminDetails.SignatureAdmin
+
+              this.applicant.adminName = this.adminDetails.UserName;
+            }else{
+              this.signature = null;
+              this.signatureAdmin = null;
+            }
+          }else{
+            this.adminDetails = [];
+            this.signature = null;
+              this.signatureAdmin = null;
+          }
+        },
+        (err) => alert('Failed to load admin details')
+      )
+  }
+
+  getSignature() {
+    console.log(this.signature,this.signatureAdmin)
+    if (this.signature != null && this.signature != '') {
+      if (this.signatureAdmin != null && this.signatureAdmin != '') {
+        this.onConfirm();
+      } else {
+
+        alert('Please upload Signature at User Id Configure!')
+        this.router.navigate(['pages/jobportal/applicant'])
+      }
+    }else {
+      alert('Please upload Signature at User Id Configure!')
+      this.router.navigate(['pages/jobportal/applicant'])
+    }
+  }
+
+  onConfirm() {
+    if (window.confirm('Do you really want to confirm?')) {
+      this.onSaveValueMapping()
+      this.onConfirmValueMapping()
+      this.onSaveSanitize()
+
+      /*console.log(" applicant.ContractPeriodFrom: ", this.applicant.ContractPeriodFrom)
+          console.log(" applicant.ContractPeriodTo: ", this.applicant.ContractPeriodTo)*/
+
+      if (this.applicant.ContractPeriodTo < this.applicant.ContractPeriodFrom) {
+        alert('Invalid Contract Period')
+      } else {
+        // find a way to save/update data
+        const subscription = this.service
+        .updateConfirmApplicant(JSON.stringify(this.applicant))
+        .subscribe((res: any) => {
+          if (res.Id == null) {
+            alert('Failed to confirm applicant')
+            console.log('response Error == null!')
+            console.log(res)
+          } else {
+            alert('Confirm Record Successful, email Sent to the Applicant!')
+            console.log('response Error != null!')
+            console.log(res)
+            //event.confirm.resolve(event.newData)
+          }
+          subscription.unsubscribe()
+        },(error)=>{alert(error);
+          console.log(error)})
+        this.router.navigate(['pages/jobportal/applicant'])
+      }
+      
+    } else {
+      //event.confirm.reject()
+    }
+  }
+
+  onBan(event) {
+    if (window.confirm('Warning: do you really want to ban the applicant?')) {
+      this.onSaveValueMapping()
+      this.onConfirmValueMapping()
+      this.onSaveSanitize()
+
+      // find a way to save/update data
+      const subscription = this.service
+        .updateBanApplicant(JSON.stringify(this.applicant))
+        .subscribe((res: any) => {
+          if (res.Id == null) {
+            alert('Failed to ban applicant')
+          } else {
+            alert('Ban Record Successful')
+            //event.confirm.resolve(event.newData)
+          }
+          subscription.unsubscribe()
+        })
+      this.router.navigate(['pages/jobportal/applicant'])
+    } else {
+      //event.confirm.reject()
+    }
+  }
+}

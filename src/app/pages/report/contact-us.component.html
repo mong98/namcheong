@@ -1,0 +1,75 @@
+<!--<div class="row">
+	<nb-card>
+    <nb-card-body>Testing for the AFE/CV/SEA Page.</nb-card-body>
+  </nb-card>
+	
+	<ng2-smart-table [settings]="settings" [source]="data"></ng2-smart-table>
+</div>-->
+
+<div class="row">
+  <div class="col">
+    <label for="applicant_name">Name</label>
+  </div>
+  <div class="col">
+    <input
+      #applicant_name
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="name"
+      placeholder="Jane Doe"
+    />
+  </div>
+  <div class="col"></div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="applicant_email">Email</label>
+  </div>
+  <div class="col">
+    <input
+      #applicant_email
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="email"
+      placeholder="janedoe@gmail.com"
+    />
+  </div>
+  <div class="col"></div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="applicant_contactNo">Contact No.</label>
+  </div>
+  <div class="col">
+    <input
+      #applicant_contactNo
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="contactNo"
+    />
+  </div>
+  <div class="col"></div>
+</div>
+
+<div class="form-group">
+  <div class="d-flex justify-content-center">
+    <button
+      nbButton
+      status="primary"
+      (click)="
+        onSearch(
+          applicant_name.value,
+          applicant_email.value,
+          applicant_contactNo.value
+        )
+      "
+    >
+      Search
+    </button>
+  </div>
+</div>
+
+<div class="form-group">
+  <label></label>
+  <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+</div>

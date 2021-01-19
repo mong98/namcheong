@@ -1,0 +1,16 @@
+<div class="form-group">
+  <div class="d-flex justify-content-right">
+    <button nbButton status="primary" (click)="onCreateConfirm($event)">
+      Add
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <ng2-smart-table
+    [settings]="settings"
+    [source]="source"
+    (edit)="onEditConfirm($event)"
+    (delete)="onDeleteConfirm($event)"
+  ></ng2-smart-table>
+</div>

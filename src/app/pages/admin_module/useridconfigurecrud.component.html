@@ -1,0 +1,155 @@
+<div class="row">
+  <div class="col">
+    <label for="userid">User ID</label>
+  </div>
+  <div class="col">
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      placeholder="User ID"
+      [(ngModel)]="userId"
+    />
+  </div>
+  <div class="col"></div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="username">User Name</label>
+  </div>
+  <div class="col">
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      placeholder="User Name"
+      [(ngModel)]="userName"
+    />
+  </div>
+  <div class="col"></div>
+</div>
+<!-- <div class="row">
+  <div class="col">
+    <label for="fullname">Full Name</label>
+  </div>
+  <div class="col">
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      placeholder="Full Name"
+      [(ngModel)]="name"
+    />
+  </div>
+  <div class="col"></div>
+</div> -->
+<div class="row mb-3">
+  <div class="col-4">
+    <label for="signature_file">Upload Signature</label>
+  </div>
+  <div class="col-3">
+    <input
+      type="file"
+      *ngIf="!signaturePath"
+      (change)="signatureChange($event)"
+      placeholder="Upload file"
+      class="form-control-file"
+      accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"
+    />
+  </div>
+  <div class="col-2" *ngIf="signaturePath && signaturePath.length > 0">
+    <button
+      type="button"
+      class="btn btn-outline-primary border-0"
+      (click)="viewSignature()"
+    >
+      View Signature
+    </button>
+  </div>
+  <div class="col" *ngIf="signaturePath && signaturePath.length > 0">
+    <button
+      type="button"
+      class="btn btn-outline-danger border-0"
+      (click)="removeSignature()"
+    >
+      Remove Signature
+    </button>
+  </div>
+</div>
+
+<div class="row mb-1">
+  <div class="col">
+    <label>Manager</label>
+  </div>
+  <div class="col">
+    <select class="custom-select mb-2 mr-sm-2" [(ngModel)]="selectedManager">
+      <option
+        *ngFor="let manager of allManagers"
+        value="{{ manager.ManagerId }}"
+      >
+        {{ manager.ManagerName | titlecase }}
+      </option>
+    </select>
+  </div>
+  <div class="col"></div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-4">
+    <label for="signature_file">Upload Manager's Signature</label>
+  </div>
+  <div class="col-3">
+    <input
+      type="file"
+      *ngIf="!signatureAdminPath"
+      (change)="signatureAdminChange($event)"
+      placeholder="Upload file"
+      class="form-control-file"
+      accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"
+    />
+  </div>
+  <div class="col-2" *ngIf="signatureAdminPath && signatureAdminPath.length > 0">
+    <button
+      type="button"
+      class="btn btn-outline-primary border-0"
+      (click)="viewSignatureAdmin()"
+    >
+      View Manager's Signature
+    </button>
+  </div>
+  <div class="col" *ngIf="signatureAdminPath && signatureAdminPath.length > 0">
+    <button
+      type="button"
+      class="btn btn-outline-danger border-0"
+      (click)="removeSignatureAdmin()"
+    >
+      Remove Manager's Signature
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+</div>
+<div class="row">
+  <div class="form-group">
+    <div class="d-flex justify-content-center">
+      <button
+        nbButton
+        status="primary"
+        (click)="onSaveConfirm($event)"
+        *ngIf="!isCreate"
+      >
+        Save
+      </button>
+      <button
+        nbButton
+        status="primary"
+        (click)="onCreateConfirm($event)"
+        *ngIf="isCreate"
+      >
+        Create
+      </button>
+      <button class="ml-2" nbButton status="primary" (click)="onCancel($event)">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,529 @@
+<div class="form-group">
+  <label><b>Applicant Detail</b></label>
+</div>
+<div class="form-group">
+  <table class="table table-bordered" style="background-color: white;">
+    <tbody>
+      <tr>
+        <th scope="row">Position</th>
+        <th scope="row">{{applicant.ApplyPosition}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Apply Date</th>
+        <th scope="row">{{applicant.ApplyDtApplication | date : "dd/MM/yyy"}}</th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="form-group" style="margin-top: 5%">
+  <label><b>Personal Data</b></label>
+</div>
+<div class="form-group">
+  <table class="table table-bordered" style="background-color: white;">
+    <tbody>
+      <tr>
+        <th scope="row"></th>
+        <th scope="row">
+          <img class="applicant_pic" src="assets/UserDoc/{{applicant.FileName}}" alt="Applicant Image" ngDefaultControl
+          *ngIf="applicant && applicant?.FileName" style="width:200px; height:250px; bgcolor:'#000000';"/>
+          <!--<img src="assets/images/applicant.png" alt="Applicant Image" />-->
+        </th>
+      </tr>
+      <tr>
+        <th scope="row">Name</th>
+        <th scope="col">{{applicant.Name}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Middle Name</th>
+        <th scope="col">{{applicant.MiddleName}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Last Name</th>
+        <th scope="col">{{applicant.LastName}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Login Email</th>
+        <th scope="col">{{applicant.LoginEmail}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Gender</th>
+        <th scope="col">{{applicant.GenderName}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Identification number</th>
+        <th scope="col">{{applicant.IC}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Date of Birth</th>
+        <th scope="col">{{applicant.DOB | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Passport No.</th>
+        <th scope="col">{{applicant.Passport}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Passport Date of Issue</th>
+        <th scope="col">{{applicant.Passport_DtIssue | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Passport Date of Expiry</th>
+        <th scope="col">{{applicant.Passport_DtExpiry | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Subsequent Renew Passport No.</th>
+        <th scope="col">{{applicant.SubsePassport}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Subsequent Date of Issue</th>
+        <th scope="col">{{applicant.SubsePassport_DtIssue | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Subsequent Date of Expiry</th>
+        <th scope="col">{{applicant.SubsePassport_DtExpiry | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Seaman Book No.</th>
+        <th scope="col">{{applicant.SeamanBookNo}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Seaman Book Date of Issue</th>
+        <th scope="col">{{applicant.SeamanBook_DtIssue | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Seaman Book Date of Expiry</th>
+        <th scope="col">{{applicant.SeamanBook_DtExpiry | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Seaman Card No.</th>
+        <th scope="col">{{applicant.SeamanCardNo}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Seaman Card Date of Issue</th>
+        <th scope="col">{{applicant.SeamanCard_DtIssue | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Seaman Card Date of Expiry</th>
+        <th scope="col">{{applicant.SeamanCard_DtExpiry | date : "dd/MM/yyy"}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Country of Origin</th>
+        <th scope="col">{{applicant.CountryOfOrigin}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Marital Status</th>
+        <th scope="col">{{applicant.MaritalStatus}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Nationality</th>
+        <th scope="col">{{applicant.Nationality}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Race</th>
+        <th scope="col">{{applicant.Race}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Religion</th>
+        <th scope="col">{{applicant.Religion}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Permanent Address</th>
+        <th scope="col">{{applicant.PermanentAddress}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Permanent PostCode</th>
+        <th scope="col">{{applicant.PPostCode}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Permanent State</th>
+        <th scope="col">{{applicant.PState}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Permanent Country</th>
+        <th scope="col">{{applicant.PCountry}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Residential Address</th>
+        <th scope="col">{{applicant.Residentialaddress}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Residential PostCode</th>
+        <th scope="col">{{applicant.RPostCode}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Residential State</th>
+        <th scope="col">{{applicant.RState}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Residential Country</th>
+        <th scope="col">{{applicant.RCountry}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Contact (Mobile / Home)</th>
+        <th scope="col">{{applicant.Contact_Mobile}}</th>
+      </tr>
+      <tr>
+        <th scope="row">Repatriation Home Port</th>
+        <th scope="col">{{applicant.RepatriationHomePort}}</th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="form-group" style="margin-top: 5%">
+  <label><b>Next of Kin</b></label>
+</div>
+<div class="form-group">
+  <table  class="table table-bordered" style="background-color: white;">
+    <tbody>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Middle Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Relationship</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Age</th>
+        <th scope="col">Handicap</th>
+        <th scope="col">Employment</th>
+      </tr>
+      <tr *ngFor="let kin of applicant.next_of_kin; let i=index">
+        <td scope="col">{{i+1}}</td>
+        <td scope="col">{{kin.NOKName}}</td>
+        <td scope="col">{{kin.NOKMiddleName}}</td>
+        <td scope="col">{{kin.NOKLastName}}</td>
+        <td scope="col">{{kin.NOKRelationship}}</td>
+        <td scope="col">{{kin.NOKGender}}</td>
+        <td scope="col">{{kin.NOKAge}}</td>
+        <td scope="col">{{kin.NOKHandicap}}</td>
+        <td scope="col">{{kin.NOKEmployment}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="form-group" style="margin-top: 5%">
+  <label><b>Emergency Contact</b></label>
+</div>
+<div class="form-group">
+  <table  class="table table-bordered" style="background-color: white;">
+    <tbody>
+      <tr>
+        <th scope="row">Name</th>
+        <td scope="col">{{applicant.EmergencyContactName}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Middle Name</th>
+        <td scope="col">{{applicant.EmergencyContactMiddleName}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Last Name</th>
+        <td scope="col">{{applicant.EmergencyContactLastName}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Relationship</th>
+        <td scope="col">{{applicant.EmergencyContactRelationship}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Contact (House)</th>
+        <td scope="col">{{applicant.EmergencyContact_HouseCtryCode}}-{{applicant.EmergencyContact_House}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Contact (Mobile)</th>
+        <td scope="col">{{applicant.EmergencyContact_MobileCtryCode}}-{{applicant.EmergencyContact_Mobile}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Address</th>
+        <td scope="col">{{applicant.EmergencyContact_Address}},{{applicant.EmergencyContact_Address2}},{{applicant.EmergencyContact_Address3}}</td>
+      </tr>
+      <tr>
+        <th scope="row">City</th>
+        <td scope="col">{{applicant.EmergencyContact_City}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Postcode</th>
+        <td scope="col">{{applicant.EmergencyContact_Postcode}}</td>
+      </tr>
+      <tr>
+        <th scope="row">State</th>
+        <td scope="col">{{applicant.EmergencyContact_State}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Country</th>
+        <td scope="col">{{applicant.EmergencyContact_Country}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="form-group" style="margin-top: 5%">
+  <label><b>Employment Data</b></label>
+</div>
+<div class="form-group">
+  <table  class="table table-bordered" style="background-color: white;">
+    <tbody>
+      <tr>
+        <th scope="row">Income Tax No.</th>
+        <td scope="row">{{applicant.IncomeTaxNo}}</td>
+      </tr>
+      <tr>
+        <th scope="row">CV</th>
+        <td scope="col">
+          <button nbButton status="basic" ngDefaultControl
+          *ngIf="applicant.FileNameCV
+          && applicant.FileNameCV.length > 0"
+          [ngModel]="applicant.FileNameCV"
+          (click)="viewFile(applicant.FileNameCV)">View</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="form-group" style="margin-top: 5%">
+  <label><b>Document</b></label>
+</div>
+<div class="form-group">
+  <table class="table table-bordered" style="background-color: white;">
+    <tbody>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Certificate/Qualification title</th>
+        <th scope="col">Certificate No</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Issuing Authority</th>
+        <th scope="col">Date of Issue</th>
+        <th scope="col">Date of Expiry</th>
+        <th scope="col">Type</th>
+        <th scope="col">File</th>
+      </tr>
+      <tr *ngFor="let applicant_document of applicant.applicant_documents; let i=index">
+        <td scope="col">{{i+1}}</td>
+        <td scope="col" *ngIf="applicant_document.Chk == 'Y'">{{applicant_document.Document}}</td>
+        <td scope="col"><input class="form-control mb-2 mr-sm-2" type="text"
+          *ngIf="applicant_document.DocNo == 'Y'"
+          [(ngModel)]="applicant_document.ApplicantDocNo"></td>
+        <td scope="col"><input class="form-control mb-2 mr-sm-2" type="text"
+          *ngIf="applicant_document.DocNo == 'Y'"
+          [(ngModel)]="applicant_document.Grade"></td>
+        <td scope="col">
+          <select class="custom-select mb-2 mr-sm-2" id="issuingauthority"
+          *ngIf="applicant_document.DocNo == 'Y'"
+          [(ngModel)]="applicant_document.IssuingAuthority">
+            <option *ngFor="let ia of issuingAuthority; let i = index" value="{{ ia.Id }}">
+              {{ ia.Name }}
+            </option>
+          </select>
+        </td>
+        <td scope="col"><input class="form-control mb-2 mr-sm-2" type="date"
+          *ngIf="applicant_document.DtIssue == 'Y'"
+          [ngModel]="applicant_document.ApplicantDocDtIssue | date:'yyyy-MM-dd'"
+          (ngModelChange)="applicant_document.ApplicantDocDtIssue = $event"></td>
+        <td scope="col"><input class="form-control mb-2 mr-sm-2" type="date"
+          [ngModel]="applicant_document.ApplicantDocDtExpiry | date:'yyyy-MM-dd'"
+          *ngIf="applicant_document.DtExpiry == 'Y'"
+          (ngModelChange)="applicant_document.ApplicantDocDtExpiry = $event"></td>
+        <td scope="col"><input class="form-control mb-2 mr-sm-2" type="text" 
+          *ngIf="applicant_document.DocType == 'Y'" 
+          [(ngModel)]="applicant_document.ApplicantDocType"></td>
+        <td scope="col">
+          <button nbButton ngDefaultControl *ngIf="applicant_document.ApplicantDocFileName
+          && applicant_document.ApplicantDocFileName.length > 0"
+          [ngModel]="applicant_document.ApplicantDocFileName"
+          (click)="viewFile(applicant_document.ApplicantDocFileName)">View</button>
+          <!--<input type="file" *ngIf="applicant_document.DocFile == 'Y'">
+          <a href="./assets/UserDoc/{{applicant_document.ApplicantDocFileName}}" download><button *ngIf="applicant_document.DocFile == 'Y'" >View</button></a></td>-->
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="form-group" style="margin-top: 5%">
+  <label><b>References</b></label>
+</div>
+<div class="form-group">
+  <table  class="table table-bordered" style="background-color: white;">
+    <tbody>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Company</th>
+        <th scope="col">Designation</th>
+        <th scope="col">Contact No.</th>
+      </tr>
+      <tr *ngIf="applicant.Ref1Name != ''">
+        <td scope="col">{{applicant.Ref1Name}}</td>
+        <td scope="col">{{applicant.Ref1Company}}</td>
+        <td scope="col">{{applicant.Ref1Designation}}</td>
+        <td scope="col">{{applicant.Ref1Contact}}</td>
+      </tr>
+      <tr *ngIf="applicant.Ref2Name != ''">
+        <td scope="col">{{applicant.Ref2Name}}</td>
+        <td scope="col">{{applicant.Ref2Company}}</td>
+        <td scope="col">{{applicant.Ref2Designation}}</td>
+        <td scope="col">{{applicant.Ref2Contact}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="form-group" style="margin-top: 5%">
+  <label><b>Agreement Data</b></label>
+</div>
+<div class="form-group">
+  <table  class="table table-bordered" style="background-color: white;">
+    <tbody>
+      <tr>
+        <th scope="col">Offer Position</th>
+        <td scope="col">
+          <select #position class="custom-select mb-2 mr-sm-2" id="position" [(ngModel)]="applicant.ApplyPositionID">
+            <option selected value="19">Choose...</option>
+            <option
+              *ngFor="let position of positions; let i = index"
+              value="{{ position.Id }}">
+              {{ position.Position }}
+            </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Currency</th>
+        <td scope="col">
+          <select #currency class="custom-select mb-2 mr-sm-2" id="currency" [(ngModel)]="applicant.CurrencyID" (ngModelChange)="currencyOnChange($event)">
+            <option selected value="19">Choose...</option>
+            <option
+              *ngFor="let currency of currencies; let i = index"
+              value="{{currency.Id}}">
+              {{ currency.Currency }}
+            </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Daily Rate</th>
+        <td scope="col">
+          <input type="text" class="form-control mb-2 mr-sm-2" id="daily_rate" [(ngModel)]="applicant.DailyRate" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Standby Rate</th>
+        <td scope="col">
+          <select #allowance_type class="custom-select mb-2 mr-sm-2" id="standby_rate" [(ngModel)]="applicant.StandbyRate">
+            <option
+              *ngFor="let rate of standbyRates; let i = index"
+              value="{{ rate.Id }}">
+              {{ rate.Rate }}
+            </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Other Applicable Allowance</th>
+        <td scope="col">
+          <select #allowance_type class="custom-select mb-2 mr-sm-2" id="allowance_type" [(ngModel)]="applicant.applicant_dropdown.AllowanceId">
+            <option selected value="19">Choose...</option>
+            <option
+              *ngFor="let allowance of allowances; let i = index"
+              value="{{ allowance.Id }}">
+              {{ allowance.Allowance }}
+            </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Allowance</th>
+        <td scope="col">
+          <input type="text" class="form-control mb-2 mr-sm-2" id="allowance_amount" [(ngModel)]="applicant.Allowance" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Contract Period (in Months)</th>
+        <td scope="col">
+          <input type="text" class="form-control mb-2 mr-sm-2" id="contract_period" [(ngModel)]="applicant.ContractPeriodFromInMth" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Contract Period From</th>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="date"
+          [ngModel]="applicant.ContractPeriodFrom | date:'yyyy-MM-dd'"
+          (ngModelChange)="applicant.ContractPeriodFrom = $event"
+          id="contract_period_from" name="begin" value="applicant.ContractPeriodFrom">
+          <!--<input id="contract_period_from" [nbDatepicker]="rangepicker" />
+          <nb-rangepicker #rangepicker></nb-rangepicker>-->
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Contract Period To</th>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="date"
+          [ngModel]="applicant.ContractPeriodTo | date:'yyyy-MM-dd'"
+          (ngModelChange)="applicant.ContractPeriodTo = $event"
+          id="contract_period_to" name="begin" value="applicant.ContractPeriodTo">
+          <!--<input id="contract_period_to" [nbDatepicker]="rangepicker" />
+          <nb-rangepicker #rangepicker></nb-rangepicker>-->
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Name of Vessel</th>
+        <td scope="col">
+          <select #vessel_name class="custom-select mb-2 mr-sm-2" id="vessel_name" [(ngModel)]="applicant.applicant_dropdown.VesselId">
+            <option selected value="19">Choose...</option>
+            <option
+              *ngFor="let vessel of vessels; let i = index"
+              value="{{ vessel.VesselID }}">
+              {{ vessel.HullNo }}
+            </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">IMO No.</th>
+        <td scope="col">
+          <select #imono class="custom-select mb-2 mr-sm-2" id="imono" [(ngModel)]="applicant.applicant_dropdown.ImonoId">
+            <option selected value="19">Choose...</option>
+            <option
+              *ngFor="let imono of imonos; let i = index"
+              value="{{ imono.Id }}">
+              {{ imono.IMONo }}
+            </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Port of Registry</th>
+        <td scope="col">
+          <select #port class="custom-select mb-2 mr-sm-2" id="port_of_registry" [(ngModel)]="applicant.applicant_dropdown.PORId">
+            <option selected value="19">Choose...</option>
+            <option
+              *ngFor="let port of portsOfRegistry; let i = index"
+              value="{{ port.Id }}">
+              {{ port.PortOfRegistry }}
+            </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th scope="col">Status</th>
+        <td scope="col">
+          <select #status class="custom-select mb-2 mr-sm-2" id="status" [(ngModel)]="applicant.applicant_dropdown.ApplyStatusId">
+            <option selected value="19">Choose...</option>
+            <option
+              *ngFor="let status of applicantStatus; let i = index"
+              value="{{ status.Id }}">
+              {{ status.ApplicantStatus }}
+            </option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="row" style="margin-top: 5%">
+  <div class="col"></div>
+  <div class="col">
+    <button class="ml-2" nbButton status="primary" (click)="onUpdate($event)">Update</button>
+  </div>
+  <div class="col">
+    <button class="ml-2" nbButton status="primary" (click)="getSignature()">Confirm</button>
+  </div>
+  <div class="col">
+    <button class="ml-2" nbButton status="primary" (click)="onCancel($event)">Cancel</button>
+  </div>
+  <div class="col"></div>
+</div>

@@ -1,0 +1,46 @@
+
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" placeholder="Name" [(ngModel)]="name"/>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email</label>
+    <input
+      type="email"
+      class="form-control"
+      id="email"
+      aria-describedby="emailHelp"
+      placeholder="Email"
+      [(ngModel)]="email"
+    />
+    <small id="emailHelp" class="form-text text-muted"
+      >We'll never share your email with anyone else.</small
+    >
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Contact Number</label>
+    <input
+      type="text"
+      class="form-control"
+      id="contactNumber"
+      aria-describedby="contactHelp"
+      placeholder="Contact number"
+      [(ngModel)]="contactNo"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Message</label>
+    <textarea
+      class="form-control"
+      id="message"
+      (onkeyup)="fnCountWord();"
+      rows="3"
+      maxlength="300"
+      placeholder="Message"
+      [(ngModel)]="message"
+    ></textarea>
+    <div id="lblValue">Maximum: 300 characters</div>
+  </div>
+  <button type="submit" class="btn btn-primary" (click)="submitForm()">Submit</button>
+

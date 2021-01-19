@@ -1,0 +1,778 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" rel="stylesheet">
+
+<div class="form-group">
+  <h3>Application For Employment</h3>
+</div>
+
+<div class="form-group">
+  <label for="formGroupExampleInput">Position Applied</label>
+  <select #position class="custom-select my-1 mr-sm-2" id="position" 
+  [(ngModel)]="applicantapply.PositionID" (ngModelChange)="updatePositionDocumentChecklist($event)"
+  *ngIf="(applicantapply && applicantapply?.PositionID) ? applicantapply.PositionID : defaultPositionID">
+    <option>Choose...</option>
+    <option
+      *ngFor="let position of positions; let i = index"
+      value="{{ position.Id }}">
+      {{ position.Position }}
+    </option>
+  </select>
+</div>
+<div class="form-group">
+  <h3>Personal Data</h3>
+</div>
+<div class="form-group">
+  <label for="photo_label">Photo</label>
+  <div id="applicant_pic">
+    <img alt="Applicant Image" [src]="url"
+    *ngIf="applicant && applicant?.FileName || url" id="output"
+    style="width:200px; height:250px; bgcolor:'#000000';"/>
+  </div> <!--src="assets/UserDoc/{{applicant.FileName}}" -->
+  <input type="file" class="form-control-file" id="photo_upload"
+  accept="image/*" name="image" id="file" (change)="loadFile($event)" />
+  <!--<input
+    type="submit"
+    name="btnUpload"
+    value="Upload"
+    id="btnUpload"
+    class="BtnUpload"
+  />-->
+</div>
+<div class="row">
+  <div class="col">
+    <label for="name">First Name</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="first_name"
+      placeholder="First Name"
+      [(ngModel)]="applicant.Name"
+    />
+  </div>
+  <div class="col">
+    <label for="name">Middle Name</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="middle_name"
+      placeholder="Middle Name"
+      [(ngModel)]="applicant.MiddleName"
+    />
+  </div>
+  <div class="col">
+    <label for="name">Last Name/Surname</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="last_name"
+      placeholder="Last Name"
+      [(ngModel)]="applicant.LastName"
+    />
+  </div>
+</div>
+<div class="form-group">
+  <fieldset disabled>
+    <label for="name">Login Email</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="email"
+      placeholder="email_address@gmail.com"
+      [(ngModel)]="applicant.LoginEmail"
+      *ngIf="(applicant && applicant?.LoginEmail) ? applicant.LoginEmail : applicant.Name "/>
+  </fieldset>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="">Gender</label>
+    <select class="custom-select my-1 mr-sm-2" id="gender" [(ngModel)]="applicant.Gender">
+      <option selected>Male</option>
+      <option value="1">Female</option>
+    </select>
+  </div>
+  <div class="col">
+    <label for="">Country of Origin</label>
+    <select class="custom-select my-1 mr-sm-2" id="country_of_origin" [(ngModel)]="applicant.CountryOfOrigin" >
+      <option
+        *ngFor="let country of countries; let i = index"
+        value="{{ country.Country }}"
+      >
+        {{ country.Country }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <label for="name">IC Number</label>
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    id="ic_number"
+    placeholder="800212-09-5012"
+    [(ngModel)]="applicant.IC"
+  />
+</div>
+<div class="row">
+  <div class="col">
+    <label for="">Passport</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="passport" [(ngModel)]="applicant.Passport"/>
+  </div>
+  <div class="col">
+    <label for="endDate">Validity</label>
+    <input
+      class="form-control mb-2 mr-sm-2"
+      id="endDate"
+      [nbDatepicker]="endDate"
+      [(ngModel)]="applicant.ValidityDate"
+    />
+    <nb-datepicker format="dd.MM.yyyy" #endDate></nb-datepicker>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="endDate">Date of Birth</label>
+    <input
+      class="form-control mb-2 mr-sm-2"
+      id="birthday"
+      [nbDatepicker]="birthday"
+      [(ngModel)]="applicant.DOB"
+    />
+    <nb-datepicker format="dd/MM/yyyy" #birthday></nb-datepicker>
+  </div>
+  <div class="col">
+    <label for="">Place of Birth</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="place_of_birth" [(ngModel)]="applicant.PlaceofBirth" />
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="">Marital Status</label>
+    <select class="custom-select mb-2 mr-sm-2" id="marital_status" [(ngModel)]="applicant.MaritalStatus">
+      <option
+        *ngFor="let status of maritalStatus; let i = index"
+        value="{{ status }}"
+      >
+        {{ status }}
+      </option>
+    </select>
+  </div>
+  <div class="col">
+    <label for="">Nationality</label>
+    <select class="custom-select my-1 mr-sm-2" id="nationality" [(ngModel)]="applicant.Nationality">
+      <option
+        *ngFor="let country of countries; let i = index"
+        value="{{ country.Country }}">
+        {{ country.Country }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <label for="">Race</label>
+    <select class="custom-select my-1 mr-sm-2" id="race" [(ngModel)]="applicant.Race">
+      <option *ngFor="let race of races; let i = index" value="{{ race.Race }}">
+        {{ race.Race }}
+      </option>
+    </select>
+  </div>
+  <div class="col">
+    <label for="">Religion</label>
+    <select class="custom-select my-1 mr-sm-2" id="religion" [(ngModel)]="applicant.Religion">
+      <option
+        *ngFor="let religion of religions; let i = index"
+        value="{{ religion.Religion }}"
+      >
+        {{ religion.Religion }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Permanent Address 1</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="permanent_address"
+    [(ngModel)]="applicant.PermanentAddress"/>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Permanent Address 2</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="permanent_address2"
+    [(ngModel)]="applicant.PermanentAddress2"/>
+  </div>
+  <div class="col">
+    <label for="address">Permanent Address 3</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="permanent_address3"
+    [(ngModel)]="applicant.PermanentAddress3"/>
+  </div>
+  <div class="col"></div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Postcode</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="permanent_postcode"
+      [(ngModel)]="applicant.PPostcode"
+    />
+  </div>
+  <div class="col">
+    <label for="">State</label>
+    <select class="custom-select mb-2 mr-sm-2" id="permanent_state" [(ngModel)]="applicant.PState">
+      <option *ngFor="let state of states; let i = index" value="{{ state.State }}">
+        {{ state.State }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Residential Address</label>
+  </div>
+  <div class="col">
+    <nb-checkbox (change)="copyPermanentAddr($event)">Same as Above</nb-checkbox>
+  </div>
+  <div class="col"></div>
+  <div class="col"></div>
+</div>
+<div class="form-group">
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    id="residential_address"
+    [(ngModel)]="applicant.Residentialaddress"
+  />
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Residential Address 2</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="residential_address2"
+    [(ngModel)]="applicant.Residentialaddress2"/>
+  </div>
+  <div class="col">
+    <label for="address">Residential Address 3</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="Residential_address3"
+    [(ngModel)]="applicant.Residentialaddress3"/>
+  </div>
+  <div class="col"></div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Postcode</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="residential_postcode"
+      [(ngModel)]="applicant.RPostcode"
+    />
+  </div>
+  <div class="col">
+    <label for="">State</label>
+    <select class="custom-select mb-2 mr-sm-2" id="residential_state" [(ngModel)]="applicant.RState">
+      <option *ngFor="let state of states; let i = index" value="{{ state.State }}">
+        {{ state.State }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="contact">Contact (Mobile/ House)</label>
+
+    <div class="row">
+      <div class="col">
+        <div class="col-lg-8">
+          <input
+            type="text"
+            class="form-control"
+            id="country_code"
+            placeholder="country code"
+            [(ngModel)]="applicant.Contact_MobileCtryCode"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control mb-2 mr-sm-2"
+          id="contact_mobile"
+          placeholder="phone number"
+          [(ngModel)]="applicant.Contact_Mobile"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col"></div>
+  <div class="col"></div>
+</div>
+<div class="form-group">
+  <label for="repatriation port">Repatriation Home Port</label>
+  <input type="text" class="form-control mb-2 mr-sm-2" id="repatriation_port" [(ngModel)]="applicant.RepatriationHomePort" />
+</div>
+<div class="form-group">
+  <label for="repatriation port">Highest Education Level</label>
+  <select class="custom-select my-1 mr-sm-2" id="education" [(ngModel)]="applicant.Education">
+    <option *ngFor="let education of educations; let i = index" value="{{ education.value }}">
+      {{ education.title }}
+    </option>
+  </select>
+  <input type="file" class="form-control-file" id="upload_education_level"
+  (change)="fileChange($event, 0, 'education')"
+  placeholder="Upload file"
+  class="form-control-file"
+  accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"/>
+  <div class="form-group" *ngIf="applicant.EducationFileName">
+    <button nbButton ngDefaultControl *ngIf="applicant.EducationFileName
+    && applicant.EducationFileName.length > 0"
+    [ngModel]="applicant.EducationFileName"
+    (click)="viewFile(applicant.EducationFileName)">View</button>
+  </div>
+</div>
+<div class="form-group">
+  <label><b>Next of Kin</b></label>
+  <ng2-smart-table [settings]="settings" [source]="data"
+  (deleteConfirm)="onDeleteConfirm($event)"
+  (editConfirm)="onSaveConfirm($event)"
+  (createConfirm)="onCreateConfirm($event)"></ng2-smart-table>
+</div>
+<div class="form-group">
+  <label><b>Emergency Contact</b></label>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="">Name in Full</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="emergency_contact_name"
+      [(ngModel)]="applicant.EmergencyContactName"
+    />
+  </div>
+  <div class="col">
+    <label for="">Relationship</label>
+    <select
+      class="custom-select mb-2 mr-sm-2"
+      id="relationships"
+      [(ngModel)]="applicant.EmergencyContactRelationship"
+    >
+      <option
+        *ngFor="
+          let relationship of relationships;
+          let i = index
+        "
+        value="{{ relationship.Relationship }}"
+      >
+        {{ relationship.Relationship }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="contact">Contact (Mobile/ House)</label>
+
+    <div class="row">
+      <div class="col">
+        <div class="col-lg-8">
+          <input
+            type="text"
+            class="form-control"
+            id="emergency_contact_country_code"
+            [(ngModel)]="applicant.EmergencyContact_MobileCtryCode"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control mb-2 mr-sm-2"
+          id="emergency_contact_mobile"
+          placeholder="phone number"
+          [(ngModel)]="applicant.EmergencyContact_Mobile"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col"></div>
+  <div class="col"></div>
+</div>
+<div class="form-group">
+  <label><b>Employment Data</b></label>
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    id="income_tax_number"
+    placeholder="Income Tax No."
+    [(ngModel)]="applicant.IncomeTaxNo"
+  />
+</div>
+<div class="form-group">
+  <label for="exampleFormControlFile1">CV</label>
+  <input type="file" class="form-control-file" id="cv_file"
+  (change)="fileChange($event, 0, 'cv')"
+  placeholder="Upload file"
+  class="form-control-file"
+  accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"/>
+  <div class="form-group" *ngIf="applicant.FileNameCV">
+    <button nbButton ngDefaultControl *ngIf="applicant.FileNameCV && applicant.FileNameCV.length > 0"
+    [ngModel]="applicant.FileNameCV"
+    type="button"
+    status="info"
+    (click)="viewFile(applicant.FileNameCV)">View</button>
+  </div>
+</div>
+<div class="form-group">
+  <table class="table bg-info table-bordered">
+    <tbody>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Certificate/Qualification title</th>
+        <th scope="col">Certificate No</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Issuing Authority</th>
+        <th scope="col">Date of Issue</th>
+        <th scope="col">Date of Expiry</th>
+        <th scope="col">Type</th>
+        <th scope="col">File</th>
+      </tr>
+      <tr *ngFor="let applicant_document of applicant.applicant_documents; let i=index">
+        <ng-container *ngIf="applicant_document.Chk == 'Y'">
+          <td scope="col">{{i+1}}</td>
+          <td scope="col" *ngIf="applicant_document.Chk == 'Y'">{{applicant_document.Document}}</td>
+          <td scope="col"><input class="form-control mb-2 mr-sm-2" type="text"
+            *ngIf="applicant_document.DocNo == 'Y'"
+            [(ngModel)]="applicant_document.ApplicantDocNo"></td>
+          <td scope="col"><input class="form-control mb-2 mr-sm-2" type="text"
+            *ngIf="applicant_document.DocNo == 'Y'"
+            [(ngModel)]="applicant_document.Grade"></td>
+          <td scope="col">
+            <select class="custom-select mb-2 mr-sm-2" id="issuingauthority"
+            *ngIf="applicant_document.DocNo == 'Y'"
+            [(ngModel)]="applicant_document.IssuingAuthority">
+              <option *ngFor="let ia of issuingAuthority; let i = index" value="{{ ia.Id }}">
+                {{ ia.Name }}
+              </option>
+            </select>
+          </td>
+          <td scope="col"><input class="form-control mb-2 mr-sm-2" type="date"
+            *ngIf="applicant_document.DtIssue == 'Y'"
+            [ngModel]="applicant_document.ApplicantDocDtIssue | date:'yyyy-MM-dd'"
+            (ngModelChange)="applicant_document.ApplicantDocDtIssue = $event"></td>
+          <td scope="col"><input class="form-control mb-2 mr-sm-2" type="date"
+            [ngModel]="applicant_document.ApplicantDocDtExpiry | date:'yyyy-MM-dd'"
+            *ngIf="applicant_document.DtExpiry == 'Y'"
+            (ngModelChange)="applicant_document.ApplicantDocDtExpiry = $event"></td>
+          <td scope="col"><input class="form-control mb-2 mr-sm-2" type="text" 
+            *ngIf="applicant_document.DocType == 'Y'" 
+            [(ngModel)]="applicant_document.ApplicantDocType"></td>
+          <td scope="col">
+            <div class="col" *ngIf="applicant_document.DocFile == 'Y'">
+              <input type="file"
+              (change)="fileChange($event, applicant_document.DocumentID, 'document')"
+              placeholder="Upload file"
+              class="form-control-file"
+              accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf">
+              <!--*ngIf="!applicant_document.ApplicantDocFileName"-->
+              <button nbButton ngDefaultControl *ngIf="applicant_document.ApplicantDocFileName
+              && applicant_document.ApplicantDocFileName.length > 0"
+              [ngModel]="applicant_document.ApplicantDocFileName"
+              (click)="viewFile(applicant_document.ApplicantDocFileName)">View</button>
+            </div>
+            <br/>
+            <!--<div class="col" *ngIf="applicant_document.ApplicantDocFileName
+              && applicant_document.ApplicantDocFileName.length > 0">
+              <button
+                type="button"
+                class="btn btn-danger border-0"
+                (click)="onRemoveFile(applicant_document.Id, 'document')"
+              >
+                Remove File
+              </button>
+            </div>-->
+            <br/><br/>
+
+            <div class="col" *ngIf="applicant_document.DocumentID == 19">
+              <label><b>Charterer</b></label><br/>
+              <button nbButton ngDefaultControl
+                *ngIf="!charterer_dropdown_shown && !applicant_document.Charterer"
+                (click)="addCharterer($event, 19)">Add Charterer</button>
+            </div>
+
+            <div class="col" *ngIf="applicant_document.DocumentID == 20">
+              <label><b>Charterer</b></label><br/>
+              <button nbButton ngDefaultControl
+                *ngIf="!charterer_dropdown_shown2 && !applicant_document.Charterer"
+                (click)="addCharterer($event, 20)">Add Charterer</button>
+            </div>
+
+            <div class="col" *ngIf="applicant_document.DocumentID == 19">
+              <select class="custom-select my-1 mr-sm-2" id="charterer"
+                *ngIf="charterer_dropdown_shown || applicant_document.Charterer"
+                [(ngModel)]="applicant_document.Charterer">
+                <option *ngFor="let charterer of charterers; let i = index" value="{{ charterer.value }}">
+                  {{ charterer.title }}
+                </option>
+              </select>
+              <input class="form-control mb-2 mr-sm-2" type="text"
+                *ngIf="charterer_dropdown_shown || applicant_document.Charterer"
+                [(ngModel)]="applicant_document.ChartererOthers" placeholder="Others">
+            </div>
+
+            <div class="col" *ngIf="applicant_document.DocumentID == 20">
+              <select class="custom-select my-1 mr-sm-2" id="charterer"
+                *ngIf="charterer_dropdown_shown2 || applicant_document.Charterer"
+                [(ngModel)]="applicant_document.Charterer">
+                <option *ngFor="let charterer of charterers; let i = index" value="{{ charterer.value }}">
+                  {{ charterer.title }}
+                </option>
+              </select>
+              <input class="form-control mb-2 mr-sm-2" type="text"
+                *ngIf="charterer_dropdown_shown2 || applicant_document.Charterer"
+                [(ngModel)]="applicant_document.ChartererOthers" placeholder="Others">
+            </div>
+            <br/><br/>
+
+            <div class="col" *ngIf="(applicant_document.DocumentID == 19 || applicant_document.DocumentID == 20)">
+              <label><b>Dynamic Position Cert Type</b></label><br/>
+              <select class="custom-select my-1 mr-sm-2" id="dynamic_position_cert"
+                [(ngModel)]="applicant_document.DynamicPositionCertType">
+                <option *ngFor="let cert of dynamicPosCertType; let i = index" value="{{ cert.value }}">
+                  {{ cert.title }}
+                </option>
+              </select>
+              <input nbButton ngDefaultControl type="file" name="btnUploadCert"
+              value="Upload" id="btnUploadCert"
+              (change)="fileChange($event, applicant_document.DocumentID, 'dynamic_position_cert')"
+              placeholder="Upload file"
+              class="form-control-file"
+              accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"/>
+            </div>
+
+            </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<br /><br />
+
+<div class="row">
+  <div class="col-25">
+    <label for="References"><b>MEDICAL HISTORY</b></label>
+    <br/>
+    **MEDICAL HISTORY: It is of utmost importance that all illness other than minor afflictions should be stated.<br />
+    The Company is entitled to refuse any claim for treatment, cost or any other insured benefits if a complete statement 
+    of all previous illness has not been given. <br />If yes, please provide following details.<br/>
+  </div>
+  <table
+    id="Table1"
+    class="table"
+    style="border-collapse: collapse; border-color: #aaaaaa">
+    <thead>
+      <tr>
+        <th>Questions</th>
+        <th>Answers</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr *ngFor="let question of generalQuestion; let i = index">
+        <ng-container *ngIf="question.Type == 2">
+          <td scope="col" *ngIf="question.Question">{{question.Question}}
+          <br/>
+          <textarea class="form-control mb-2 mr-sm-2" *ngIf="question.TxtBox == 'Y'"
+            placeholder="Brief description" [(ngModel)]="generalAnswer[question.Id-1].Description"></textarea>
+          </td>
+          <td scope="col">
+            <select class="custom-select my-1 mr-sm-2" id="english_understanding" *ngIf="question.YesNo == 'Y'"
+            [(ngModel)]="generalAnswer[question.Id-1].Answer">
+              <option *ngFor="let selectyesno of yesno" value="{{ selectyesno.value }}">
+                {{ selectyesno.title }}
+              </option>
+            </select>
+          </td>
+        </ng-container>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<br/><br/>
+<div class="row">
+  <div class="col-25">
+    <label for="References"><b>GENERAL</b></label>
+  </div>
+  <table
+    id="Table1"
+    class="table"
+    style="border-collapse: collapse; border-color: #aaaaaa"
+  >
+    <thead>
+      <tr>
+        <th>Questions</th>
+        <th>Answers</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr *ngFor="let question of generalQuestion; let i = index">
+        <ng-container *ngIf="question.Type == 1">
+          <td scope="col" *ngIf="question.Question">{{question.Question}}
+            <textarea class="form-control mb-2 mr-sm-2" *ngIf="question.TxtBox == 'Y' && generalAnswer[question.Id-1].Answer == 'Y'"
+              placeholder="Brief description" [(ngModel)]="generalAnswer[question.Id-1].Description"></textarea>
+            <input type="file" *ngIf="question.FileNeeded == 'Y' && generalAnswer[question.Id-1].Answer == 'Y'">
+          </td>
+          <td scope="col">
+            <select class="custom-select my-1 mr-sm-2" id="english_understanding" *ngIf="question.YesNo == 'Y'"
+            [(ngModel)]="generalAnswer[question.Id-1].Answer">
+              <option *ngFor="let selectyesno of yesno" value="{{ selectyesno.value }}">
+                {{ selectyesno.title }}
+              </option>
+            </select>
+            <select class="custom-select my-1 mr-sm-2" id="rating_understanding" *ngIf="question.Rating == 'Y'"
+            [(ngModel)]="generalAnswer[question.Id-1].Answer">
+              <option *ngFor="let selectrating of rating" value="{{ selectrating.value }}">
+                {{ selectrating.title }}
+              </option>
+            </select>
+          </td>
+        </ng-container>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<br /><br />
+<div class="row">
+  <div class="col-25">
+    <label for="References"><b>References</b></label>
+  </div>
+  <table
+    id="Table1"
+    class="table"
+    style="border-collapse: collapse; border-color: #aaaaaa"
+  >
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Designation</th>
+        <th>Contact No.</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="text"
+          [(ngModel)]="applicant.Ref1Name"
+          placeholder="Reference Name 1"></td>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="text"
+            [(ngModel)]="applicant.Ref1Company"
+            placeholder="Reference Company 1">
+        </td>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="text"
+            [(ngModel)]="applicant.Ref1Designation"
+            placeholder="Reference Designation 1">
+        </td>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="text"
+          [(ngModel)]="applicant.Ref1Contact"
+          placeholder="Reference Contact 1">
+        </td>
+      </tr>
+      <tr>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="text"
+          [(ngModel)]="applicant.Ref2Name"
+          placeholder="Reference Name 2">
+        </td>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="text"
+            [(ngModel)]="applicant.Ref2Company"
+            placeholder="Reference Company 2">
+        </td>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="text"
+            [(ngModel)]="applicant.Ref2Designation"
+            placeholder="Reference Designation 2">
+        </td>
+        <td scope="col">
+          <input class="form-control mb-2 mr-sm-2" type="text"
+          [(ngModel)]="applicant.Ref2Contact"
+          placeholder="Reference Contact 2">
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<br /><br />
+
+<div class="form-group">
+  <label><b>Signature</b></label>
+</div>
+<div class="form-group">
+  <label><b>Name</b></label>
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    placeholder="Name"
+    [(ngModel)]="applicant.SignatureName"
+  />
+  <label><b>NRIC/Passport</b></label>
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    placeholder="Name"
+    [(ngModel)]="applicant.SignatureIcPassport"
+  />
+  <label><b>Date</b></label>
+  <input class="form-control mb-2 mr-sm-2" type="date"
+  [ngModel]="applicant.SignatureDate | date:'yyyy-MM-dd'"
+  (ngModelChange)="applicant.SignatureDate = $event">
+
+</div>
+<!---	Signature is Name, NRIC/Passport & Date-->
+
+<!--
+<div class="row" style="margin: auto; width: 50%; ">
+<div class="scrollable" style="padding:4px; background-color: white; width: 500px; height: 250px; overflow-x: hidden; overflow-y: auto; text-align:justify;">
+  &nbsp; &nbsp; I hereby agree that all the particulars given in this Application for Employment Form are true
+  and complete to the best of my knowledge. By submitting this Application for Employment Form, I hereby give my consent
+  pursuant to Section 6 (1) of the Personal Data Protection Act 2010 (hereinafter referred to as “the ACT”) that
+  the Company (SKOM Sdn Bhd) may collect, obtain, store and process my personal data provided in this Application
+  for Employment Form for the purpose of employment, receiving updates, news, or materials from the Company and
+  disclose my personal data to the relevant governmental authorities or third parties where required by law or for
+  legal purposes. I authorize the Company to make such investigations and inquiries of my personal data and other
+  relevant matters as may be necessary in arriving at an employment decision; and may be transferred to any company
+  within the Company’s parent companies and subsidiaries. For the purpose of updating or correcting such data, I may
+  at any time apply to the Company to have access to my personal data which are stored by the Company. For the avoidance
+  of doubt, personal data includes all data defined within the Personal Data Protection Act 2010 including all data I had
+  disclosed to the Company in this Application for Employment Form.
+</div>
+</div>
+
+<div class="row"style="margin: auto; width: 50%; ">
+  <div class="col">
+    <nb-checkbox [(ngModel)]="applicant.PDPAChk">I hereby declare that the above is true</nb-checkbox>
+  </div>
+</div>-->
+<br/><br/>
+<div class="form-group">
+  <table>
+    <tr>
+      <td></td>
+      <td>
+        <button class="ml-2" nbButton status="primary" id="btnSaveAsDraft" (click)='onSaveAsDraft($event)'>Save as Draft</button>
+      </td>
+      <td>&nbsp;&nbsp;&nbsp;</td>
+      <td>
+        <button class="ml-2" nbButton status="primary" id="btnSubmit" (click)='onSubmit($event)'>Submit</button>-->
+        <!--<button class="ml-2" nbButton status="primary" id="btnSubmit" (click)='openDialog($event)'>Submit</button>-->
+      </td>
+    </tr>
+  </table>
+</div>

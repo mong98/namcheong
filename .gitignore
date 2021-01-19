@@ -1,0 +1,55 @@
+# compiled output
+/dist
+/tmp
+/out-tsc
+/dist.zip
+
+# dependencies
+/node_modules
+/api/node_modules
+/api/logs/
+/api/database/db.js
+
+# release partial api & release dist, test User Data to vendor
+/node_api
+/release
+/src/assets/UserDoc
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+/docs
+/api/database/db.js
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+
+#VS Code
+#.vscode
+

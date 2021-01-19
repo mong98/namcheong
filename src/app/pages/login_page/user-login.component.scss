@@ -1,0 +1,129 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+nb-layout-column {
+  background-color: black;
+}
+
+body,
+html {
+  height: 100%;
+  margin: auto;
+  background-image: url('/assets/images/Main1.jpg');
+  background-size: 100% 100%;
+}
+
+.bg-image {
+  /* The image used */
+  background-image: url('/assets/images/Main1.jpg');
+  
+  /* Add the blur effect */
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  
+  /* Full height */
+  height: 100%; 
+  
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+input[type='text'],
+input[type='password'],
+select,
+textarea {
+  color: #ffffff;
+  width: 50%;
+  padding: 8px;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  resize: vertical;
+  background-color: green;
+  opacity: 0.8;
+  filter: alpha(opacity=60); /* For IE8 and earlier */
+}
+
+input[type='password'],
+input[type='text'],
+textarea {
+  background-color: #000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  opacity: 0.8;
+  filter: alpha(opacity=60); /* For IE8 and earlier */
+}
+
+input[type='submit']:hover.BtnView {
+  background-color: #adff2f;
+  border-radius: 24px;
+  border: 1px solid #ffffff;
+  font-size: 24px;
+}
+
+input[type='submit'].BtnView {
+  border-radius: 24px;
+  background-color: #000000;
+  color: #000000;
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+  border: 1px solid #ffffff;
+  font-size: 24px;
+}
+
+input[type='submit'] {
+  border-radius: 24px;
+  background-color: #000000;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+  border: 1px solid #ffffff;
+  font-size: 24px;
+}
+
+input[type='submit']:hover {
+  border-radius: 24px;
+  background-color: #000000;
+  border: 1px solid #ffffff;
+  font-size: 24px;
+}
+
+input[type='submit']:disabled,
+button[disabled] {
+  border-radius: 24px;
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  border: 1px solid #ffffff;
+  font-size: 24px;
+}
+
+.col-10 {
+  float: left;
+  width: 4%;
+  margin-top: 6px;
+}
+
+.col-50 {
+  float: left;
+  width: 46%;
+  margin-top: 6px;
+}
+
+.col-25 {
+  float: left;
+  width: 23%;
+  margin-top: 6px;
+}
+
+.col-75 {
+  float: left;
+  width: 70%;
+  margin-top: 6px;
+}

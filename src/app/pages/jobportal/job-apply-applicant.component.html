@@ -1,0 +1,1193 @@
+<div class="form-group">
+  <label for="formGroupExampleInput">Position Applied</label>
+  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>Choose...</option>
+    <option value="22">2nd Engineer</option>
+    <option value="25">2nd Officer</option>
+    <option value="23">3rd Engineer</option>
+    <option value="30">Able Bodied</option>
+    <option value="31">Bosun</option>
+    <option value="21">Chief Engineer</option>
+    <option value="24">Chief Officer</option>
+    <option value="28">Cook</option>
+    <option value="32">Crane Operator</option>
+    <option value="26">Electrician</option>
+    <option value="27">ETO</option>
+    <option value="20">Master</option>
+    <option value="33">Medic</option>
+    <option value="34">Oiler</option>
+    <option value="35">Radio Operator</option>
+    <option value="36">Scaffolder</option>
+    <option value="37">Scaffolder Inspector</option>
+    <option value="29">Steward/OS</option>
+    <option value="38">test engineer</option>
+  </select>
+</div>
+<div class="form-group">
+  <h2>Personal Data</h2>
+</div>
+<div class="form-group">
+  <label for="exampleFormControlFile1">Photo</label>
+  <input type="file" class="form-control-file" id="exampleFormControlFile1" />
+  <input
+    type="submit"
+    name="btnUpload"
+    value="Upload"
+    id="btnUpload"
+    class="BtnUpload"
+  />
+</div>
+<div class="form-group">
+  <label for="name">Name in Full (as per NRIC/Passport)</label>
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    id="name"
+    placeholder="Jane Doe"
+  />
+</div>
+<div class="form-group">
+  <fieldset disabled>
+    <label for="name">Email</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="email"
+      placeholder="kqlgubtzlyxevpmcfw@miucce.online"
+    />
+  </fieldset>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="">Gender</label>
+    <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+      <option selected>Male</option>
+      <option value="1">Female</option>
+    </select>
+  </div>
+  <div class="col">
+    <label for="">Country of Origin</label>
+    <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+      <option selected="selected" value=""></option>
+      <option value="Singapore">Singapore</option>
+      <option value="Thailand">Thailand</option>
+      <option value="Others">Others</option>
+      <option value="Malaysia">Malaysia</option>
+      <option value="China">China</option>
+      <option value="Brunei">Brunei</option>
+      <option value="Indonesia">Indonesia</option>
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <label for="name">IC Number</label>
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    id="ic_number"
+    placeholder="Jane Doe"
+  />
+</div>
+<div class="row">
+  <div class="col">
+    <label for="">Passport</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="passport" />
+  </div>
+  <div class="col">
+    <label for="endDate">Validity</label>
+    <input
+      class="form-control mb-2 mr-sm-2"
+      id="endDate"
+      [nbDatepicker]="rangepicker"
+    />
+    <nb-rangepicker #rangepicker></nb-rangepicker>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="endDate">Date of Birth</label>
+    <input
+      class="form-control mb-2 mr-sm-2"
+      id="birthday"
+      [nbDatepicker]="rangepicker"
+    />
+    <nb-rangepicker #rangepicker></nb-rangepicker>
+  </div>
+  <div class="col">
+    <label for="">Place of Birth</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="place_of_birth" />
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="">Marital Status</label>
+    <select class="custom-select my-1 mr-sm-2" id="marital_status">
+      <option selected></option>
+      <option value="0">Married</option>
+      <option value="1">Single</option>
+      <option value="2">Divorced</option>
+      <option value="3">Other</option>
+    </select>
+  </div>
+  <div class="col">
+    <label for="">Nationality</label>
+    <select class="custom-select my-1 mr-sm-2" id="nationality">
+      <option selected="selected" value=""></option>
+      <option value="Singapore">Singapore</option>
+      <option value="Thailand">Thailand</option>
+      <option value="Others">Others</option>
+      <option value="Malaysia">Malaysia</option>
+      <option value="China">China</option>
+      <option value="Brunei">Brunei</option>
+      <option value="Indonesia">Indonesia</option>
+    </select>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <label for="">Race</label>
+    <select class="custom-select my-1 mr-sm-2" id="race">
+      <option selected></option>
+      <option value="0">Chinese</option>
+      <option value="1">Malay</option>
+      <option value="2">Indian</option>
+      <option value="3">Other</option>
+    </select>
+  </div>
+  <div class="col">
+    <label for="">Religion</label>
+    <select class="custom-select my-1 mr-sm-2" id="religion">
+      <option selected="selected" value=""></option>
+      <option value="0">Hindu</option>
+      <option value="1">Chinese</option>
+      <option value="2">Islam</option>
+      <option value="3">Others</option>
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <label for="address">Permanent Address</label>
+  <input type="text" class="form-control mb-2 mr-sm-2" id="permanent_address" />
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Postcode</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="permanent_postcode"
+    />
+  </div>
+  <div class="col">
+    <label for="">State</label>
+    <select class="custom-select my-1 mr-sm-2" id="permanent_state">
+      <option selected="selected" value=""></option>
+      <option value="Selangor">Selangor</option>
+      <option value="Others">Others</option>
+      <option value="Johor">Johor</option>
+      <option value="Malacca">Malacca</option>
+      <option value="Negeri Sembilan">Negeri Sembilan</option>
+      <option value="Pahang">Pahang</option>
+      <option value="Perak">Perak</option>
+      <option value="Terengganu">Terengganu</option>
+      <option value="Kelantan">Kelantan</option>
+      <option value="Sarawak">Sarawak</option>
+      <option value="Kuala Lumpur">Kuala Lumpur</option>
+      <option value="Putrajaya">Putrajaya</option>
+      <option value="Penang">Penang</option>
+      <option value="Sabah">Sabah</option>
+      <option value="Kedah">Kedah</option>
+      <option value="Labuan">Labuan</option>
+      <option value="Perlis">Perlis</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Residential Address</label>
+  </div>
+  <div class="col">
+    <nb-checkbox>Same as Above</nb-checkbox>
+  </div>
+  <div class="col"></div>
+  <div class="col"></div>
+</div>
+<div class="form-group">
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    id="residential_address"
+  />
+</div>
+<div class="row">
+  <div class="col">
+    <label for="address">Postcode</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="residential_postcode"
+    />
+  </div>
+  <div class="col">
+    <label for="">State</label>
+    <select class="custom-select my-1 mr-sm-2" id="residential_state">
+      <option selected="selected" value=""></option>
+      <option value="Selangor">Selangor</option>
+      <option value="Others">Others</option>
+      <option value="Johor">Johor</option>
+      <option value="Malacca">Malacca</option>
+      <option value="Negeri Sembilan">Negeri Sembilan</option>
+      <option value="Pahang">Pahang</option>
+      <option value="Perak">Perak</option>
+      <option value="Terengganu">Terengganu</option>
+      <option value="Kelantan">Kelantan</option>
+      <option value="Sarawak">Sarawak</option>
+      <option value="Kuala Lumpur">Kuala Lumpur</option>
+      <option value="Putrajaya">Putrajaya</option>
+      <option value="Penang">Penang</option>
+      <option value="Sabah">Sabah</option>
+      <option value="Kedah">Kedah</option>
+      <option value="Labuan">Labuan</option>
+      <option value="Perlis">Perlis</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="contact">Contact (Mobile/ House)</label>
+
+    <div class="row">
+      <div class="col">
+        <div class="col-lg-8">
+          <input
+            type="text"
+            class="form-control"
+            id="country_code"
+            placeholder="country code"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control mb-2 mr-sm-2"
+          id="contact_mobile"
+          placeholder="phone number"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col"></div>
+  <div class="col"></div>
+</div>
+<div class="form-group">
+  <label for="repatriation port">Repatriation Home Port</label>
+  <input type="text" class="form-control mb-2 mr-sm-2" id="repatriation_port" />
+</div>
+<div class="form-group">
+  <h4>Next of Kin</h4>
+  <ng2-smart-table [settings]="settings" [source]="data"></ng2-smart-table>
+</div>
+<div class="form-group">
+  <label><b>Emergency Contact</b></label>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="">Name in Full</label>
+    <input
+      type="text"
+      class="form-control mb-2 mr-sm-2"
+      id="emergency_contact_name"
+    />
+  </div>
+  <div class="col">
+    <label for="">Relationship</label>
+    <select
+      class="custom-select my-1 mr-sm-2"
+      id="emergency_contact_relationship"
+    >
+      <option selected="selected" value=""></option>
+      <option value="Wife">Wife</option>
+      <option value="Others">Others</option>
+      <option value="Son">Son</option>
+      <option value="Daughter">Daughter</option>
+      <option value="Grandfather">Grandfather</option>
+      <option value="Grandmother">Grandmother</option>
+      <option value="Sister">Sister</option>
+      <option value="Husband">Husband</option>
+      <option value="Mother">Mother</option>
+      <option value="Brother">Brother</option>
+      <option value="Aunt">Aunt</option>
+      <option value="Cousin">Cousin</option>
+      <option value="Father">Father</option>
+      <option value="Uncle">Uncle</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <label for="contact">Contact (Mobile/ House)</label>
+
+    <div class="row">
+      <div class="col">
+        <div class="col-lg-8">
+          <input
+            type="text"
+            class="form-control"
+            id="emergency_contact_country_code"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control mb-2 mr-sm-2"
+          id="emergency_contact_mobile"
+          placeholder="phone number"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col"></div>
+  <div class="col"></div>
+</div>
+<div class="form-group">
+  <label><b>Employment Data</b></label>
+  <input
+    type="text"
+    class="form-control mb-2 mr-sm-2"
+    id="income_tax_number"
+    placeholder="Income Tax No."
+  />
+</div>
+<div class="form-group">
+  <label for="exampleFormControlFile1">Upload CV</label>
+  <input type="file" class="form-control-file" id="cv_file" />
+</div>
+<div class="form-group">
+  <table
+    cellspacing="0"
+    rules="all"
+    border="1"
+    id="GdVCommitList"
+    style="width: 100%; border-collapse: collapse"
+  >
+    <tr class="WHGridHeader">
+      <th scope="col">No</th>
+      <th scope="col">Document</th>
+      <th scope="col">No</th>
+      <th scope="col">Date of Issue</th>
+      <th scope="col">Date of Expiry</th>
+      <th scope="col">Type</th>
+      <th scope="col">File</th>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">1</td>
+      <td align="left" valign="top" style="width: 40%">
+        International Passport
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl02$txtNo"
+          type="text"
+          id="GdVCommitList_ctl02_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl02$txtDtIssue"
+          type="text"
+          id="GdVCommitList_ctl02_txtDtIssue"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl02_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl02$txtDtExpiry"
+          type="text"
+          id="GdVCommitList_ctl02_txtDtExpiry"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl02_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl02$fileDoc"
+          id="GdVCommitList_ctl02_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl02_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl02_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">2</td>
+      <td align="left" valign="top" style="width: 40%">
+        Identification Card (Malaysian/PR)
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl03$txtNo"
+          type="text"
+          id="GdVCommitList_ctl03_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl03_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl03_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl03$fileDoc"
+          id="GdVCommitList_ctl03_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl03_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl03_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">3</td>
+      <td align="left" valign="top" style="width: 40%">COC and COE</td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl04$txtNo"
+          type="text"
+          id="GdVCommitList_ctl04_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl04_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl04_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl04$fileDoc"
+          id="GdVCommitList_ctl04_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl04_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl04_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">4</td>
+      <td align="left" valign="top" style="width: 40%">Malaysia Seaman Card</td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl05$txtNo"
+          type="text"
+          id="GdVCommitList_ctl05_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl05$txtDtIssue"
+          type="text"
+          id="GdVCommitList_ctl05_txtDtIssue"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl05_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl05$txtDtExpiry"
+          type="text"
+          id="GdVCommitList_ctl05_txtDtExpiry"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl05_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl05$fileDoc"
+          id="GdVCommitList_ctl05_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl05_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl05_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">5</td>
+      <td align="left" valign="top" style="width: 40%">
+        Marine Department Medical
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl06$txtNo"
+          type="text"
+          id="GdVCommitList_ctl06_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl06$txtDtIssue"
+          type="text"
+          id="GdVCommitList_ctl06_txtDtIssue"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl06_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl06$txtDtExpiry"
+          type="text"
+          id="GdVCommitList_ctl06_txtDtExpiry"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl06_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl06$fileDoc"
+          id="GdVCommitList_ctl06_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl06_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl06_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">6</td>
+      <td align="left" valign="top" style="width: 40%">PETRONAS/PMU Medical</td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl07$txtNo"
+          type="text"
+          id="GdVCommitList_ctl07_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl07$txtDtIssue"
+          type="text"
+          id="GdVCommitList_ctl07_txtDtIssue"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl07_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl07$txtDtExpiry"
+          type="text"
+          id="GdVCommitList_ctl07_txtDtExpiry"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl07_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl07$fileDoc"
+          id="GdVCommitList_ctl07_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl07_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl07_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">7</td>
+      <td align="left" valign="top" style="width: 40%">
+        BOSIET/T-BOSEIT/FOET-T-FOET
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl08$txtNo"
+          type="text"
+          id="GdVCommitList_ctl08_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl08$txtDtIssue"
+          type="text"
+          id="GdVCommitList_ctl08_txtDtIssue"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl08_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl08$txtDtExpiry"
+          type="text"
+          id="GdVCommitList_ctl08_txtDtExpiry"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl08_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl08$fileDoc"
+          id="GdVCommitList_ctl08_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl08_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl08_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">8</td>
+      <td align="left" valign="top" style="width: 40%">
+        Seaman Book (all pages)
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl09$txtNo"
+          type="text"
+          id="GdVCommitList_ctl09_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl09$txtDtIssue"
+          type="text"
+          id="GdVCommitList_ctl09_txtDtIssue"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl09_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl09$txtDtExpiry"
+          type="text"
+          id="GdVCommitList_ctl09_txtDtExpiry"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl09_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl09$fileDoc"
+          id="GdVCommitList_ctl09_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl09_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl09_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">9</td>
+      <td align="left" valign="top" style="width: 40%">
+        Basic Training Certificates
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl10$txtNo"
+          type="text"
+          id="GdVCommitList_ctl10_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl10$txtDtIssue"
+          type="text"
+          id="GdVCommitList_ctl10_txtDtIssue"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl10_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl10$txtDtExpiry"
+          type="text"
+          id="GdVCommitList_ctl10_txtDtExpiry"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl10_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl10$fileDoc"
+          id="GdVCommitList_ctl10_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl10_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl10_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">10</td>
+      <td align="left" valign="top" style="width: 40%">
+        Proficiency if Fast Rescue Boats
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl11$txtNo"
+          type="text"
+          id="GdVCommitList_ctl11_txtNo"
+          style="width: 120px"
+        />
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl11$txtDtIssue"
+          type="text"
+          id="GdVCommitList_ctl11_txtDtIssue"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl11_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <input
+          name="GdVCommitList$ctl11$txtDtExpiry"
+          type="text"
+          id="GdVCommitList_ctl11_txtDtExpiry"
+          class="date"
+          style="width: 120px"
+        />
+        <span
+          id="GdVCommitList_ctl11_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl11$fileDoc"
+          id="GdVCommitList_ctl11_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+        <span
+          id="GdVCommitList_ctl11_reqfileDoc"
+          style="color: Red; visibility: hidden"
+          >Please upload file</span
+        >
+        <span
+          id="GdVCommitList_ctl11_customValidator1"
+          style="color: Red; visibility: hidden"
+          >File too Big!!!</span
+        >
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">11</td>
+      <td align="left" valign="top" style="width: 40%">Other 1</td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl12_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl12_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl12$fileDoc"
+          id="GdVCommitList_ctl12_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">12</td>
+      <td align="left" valign="top" style="width: 40%">Other 2</td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl13_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl13_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl13$fileDoc"
+          id="GdVCommitList_ctl13_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="width: 5%">13</td>
+      <td align="left" valign="top" style="width: 40%">Other 3</td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl14_reqtxtDtIssue"
+          style="color: Red; visibility: hidden"
+          >Please insert Issue Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px">
+        <span
+          id="GdVCommitList_ctl14_reqtxtDtExpiry"
+          style="color: Red; visibility: hidden"
+          >Please insert Expiry Date</span
+        >
+      </td>
+      <td valign="top" style="width: 100px"></td>
+      <td valign="top" style="width: 100px">
+        <input
+          type="file"
+          name="GdVCommitList$ctl14$fileDoc"
+          id="GdVCommitList_ctl14_fileDoc"
+          class="fileavailablecheck"
+          onchange="FileUploadGrvCommitList(this)"
+          isfileavailable="No File Chosen"
+        />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<br /><br />
+<div class="row">
+  <div class="col-25">
+    <label for="References"><b>References</b></label>
+  </div>
+  <table
+    id="Table1"
+    cellpadding="0"
+    cellspacing="0"
+    border="1"
+    width="100%"
+    style="width: 100%; border-collapse: collapse; border-color: #aaaaaa"
+  >
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Designation</th>
+        <th>Contact No.</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr>
+        <td>
+          <input
+            name="txtRef1Name"
+            type="text"
+            maxlength="100"
+            id="txtRef1Name"
+            style="width: 350px"
+          />
+        </td>
+        <td>
+          <input
+            name="txtRef1Company"
+            type="text"
+            maxlength="100"
+            id="txtRef1Company"
+            style="width: 300px"
+          />
+        </td>
+        <td>
+          <input
+            name="txtRef1Designation"
+            type="text"
+            maxlength="100"
+            id="txtRef1Designation"
+            style="width: 200px"
+          />
+        </td>
+        <td>
+          <input
+            name="txtRef1Contact"
+            type="text"
+            maxlength="100"
+            id="txtRef1Contact"
+            style="width: 200px"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input
+            name="txtRef2Name"
+            type="text"
+            maxlength="100"
+            id="txtRef2Name"
+            style="width: 350px"
+          />
+        </td>
+        <td>
+          <input
+            name="txtRef2Company"
+            type="text"
+            maxlength="100"
+            id="txtRef2Company"
+            style="width: 300px"
+          />
+        </td>
+        <td>
+          <input
+            name="txtRef2Designation"
+            type="text"
+            maxlength="100"
+            id="txtRef2Designation"
+            style="width: 200px"
+          />
+        </td>
+        <td>
+          <input
+            name="txtRef2Contact"
+            type="text"
+            maxlength="100"
+            id="txtRef2Contact"
+            style="width: 200px"
+          />
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<div class="form-group">
+  <table>
+    <tr>
+      <td></td>
+      <td><input type="submit" name="btnSave" value="Save" id="btnSave" /></td>
+      <td>&nbsp;&nbsp;&nbsp;</td>
+      <td>
+        <input
+          type="submit"
+          name="btnConfirm"
+          value="Save &amp; Confirm"
+          onclick='return validateAndConfirm(&#39;Do you really want to update?&#39;);WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions("btnConfirm", "", true, "", "", false, false))'
+          id="btnConfirm"
+        />
+      </td>
+    </tr>
+  </table>
+</div>

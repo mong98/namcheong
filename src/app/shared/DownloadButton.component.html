@@ -1,0 +1,16 @@
+<button
+  nbButton
+  type="button"
+  class="btn"
+  [ngClass]="{
+    'btn-primary': filePath && filePath.trim().length > 0,
+    'btn-outline-primary': !filePath || filePath.trim().length === 0
+  }"
+  [ngStyle]="{
+    color: filePath && filePath.trim().length > 0 ? 'white' : 'inherit'
+  }"
+  [disabled]="!filePath || filePath.trim().length === 0"
+  (click)="download()"
+>
+  {{ label }}
+</button>
