@@ -6,6 +6,9 @@ var queries = JSON.parse(rawdata)
 var GenerationController = require('./GenerationController.js')
 var path = require('path')
 
+//added 20/1/2021
+const { PDFNet } = require('@pdftron/pdfnet-node')
+
 class ApplicantController {
   async getApplicant(req, res) {
     console.log('getApplicant')
@@ -25,7 +28,6 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCurrency)
-								 
 
       console.log(result.recordset)
       res.json(result.recordset)
@@ -36,7 +38,6 @@ class ApplicantController {
   }
 
   async getApplicantApply(req, res) {
-			  
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getApplicantApply)
@@ -55,7 +56,6 @@ class ApplicantController {
       const result = await pool
         .request()
         .query(queries.getApplicantGeneralQuestion)
-			   
 
       console.log(result.recordset)
       res.json(result.recordset)
@@ -64,7 +64,6 @@ class ApplicantController {
       res.send(error.message)
     }
   }
-
 
   async getApplicantGeneralAnswerById(req, res) {
     try {
@@ -225,9 +224,8 @@ class ApplicantController {
 
   async getApplicantStatus(req, res) {
     try {
-			
       const pool = await poolPromise
-										 
+
       const result = await pool.request().query(queries.getApplicantStatus)
 
       console.log(result.recordset)
@@ -274,7 +272,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCharterer)
-									
+
       console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -287,7 +285,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCompetency)
-									 
+
       console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -300,7 +298,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getWorking)
-								  
+
       console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -313,7 +311,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getGender)
-								 
+
       console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -326,7 +324,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getEducation)
-									
+
       console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -339,7 +337,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getDynamicPos)
-									 
+
       console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -430,7 +428,6 @@ class ApplicantController {
           var afe_result = await GenerationController.generateAFE(req, res)
           var cv_result = await GenerationController.generateCV(req, res)
         } else if (req.body.Status == 'Offered') {
-											   
           console.log('generate SEA ', req.body.Id)
           var afe_result = await GenerationController.generateAFE(req, res)
           var cv_result = await GenerationController.generateCV(req, res)
@@ -481,9 +478,8 @@ class ApplicantController {
           .input('NameofVessel', sql.VarChar, req.body.NameofVessel)
           .input('IMONo', sql.VarChar, req.body.IMONo)
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
-					.input('Currency', sql.VarChar, req.body.Currency)										
+          .input('Currency', sql.VarChar, req.body.Currency)
           .query(queryStr)
-
 
         // Set ApplyID & Status for doc generation
         req.body.ApplyID = req.body.Id
@@ -492,8 +488,8 @@ class ApplicantController {
         // Generate AFE/CV/SEA doc if Status = 'Offered'
         console.log('generate AFE/CV ', req.body.Id)
         var afe_result = await GenerationController.generateAFE(req, res)
-        if(afe_result == false){
-          console.log('AFE not generated due to file not found!');
+        if (afe_result == false) {
+          console.log('AFE not generated due to file not found!')
           res.send('AFE not generated due to file not found!')
         }
 
@@ -505,60 +501,97 @@ class ApplicantController {
 
         console.log('generate SEA ', req.body.Id)
         var sea_result = await GenerationController.generateSEA(req, res)
-        if(sea_result == false){
-          console.log('SEA not generated due to file not found!');
+        if (sea_result == false) {
+          console.log('SEA not generated due to file not found!')
           res.send('SEA not generated due to file not found!')
         }
         // console.log('SEA')
         // console.log(res)
 
-        if (result != null && sea_result == true&& cv_result == true&& afe_result == true) {
+        if (
+          result != null &&
+          sea_result == true &&
+          cv_result == true &&
+          afe_result == true
+        ) {
           const applicantApply = await pool
             .request()
             .input('Id', sql.SmallInt, req.body.Id)
             .query(queries.getApplicantApplyById)
 
+          //added 20/1/2021
+          const extend = '.pdf'
+          let enterPath = path.resolve(
+            '../src/assets/UserDoc/' + applicantApply.recordset[0].FileSEA
+          )
+          const outputPath = path.resolve(
+            '../src/assets/UserDoc/' +
+              applicantApply.recordset[0].FileSEA.replace('.docx', extend)
+          )
+
+          //added 20/1/2021
+          const convertPDF = async () => {
+            const pdfdoc = await PDFNet.PDFDoc.create()
+            await pdfdoc.initSecurityHandler()
+            await PDFNet.Convert.toPdf(pdfdoc, enterPath)
+            pdfdoc.save(outputPath, PDFNet.SDFDoc.SaveOptions.e_linearized)
+          }
+          //added 20/1/2021
+          await PDFNet.runWithCleanup(convertPDF)
+            .then(() => {
+              fs.readFileSync(outputPath, (err, data) => {
+                if (err) {
+                  res.status(500)
+                  res.send(err)
+                }
+              })
+            })
+            .catch((err) => {
+              res.status(500)
+              res.send(err)
+            })
+          //added 20/1/2021
+          let attachmentPDF = fs.readFileSync(outputPath).toString('base64')
+          let Filename = applicantApply.recordset[0].FileSEA.replace(
+            '.docx',
+            extend
+          )
           //send email
-          // sgMail.setApiKey(
-          //   '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'
-          // )
-          // let pathToAttachment = path.resolve(
-          //   '../src/assets/UserDoc/' + applicantApply.recordset[0].FileSEA
-          // )
-          // let attachment = fs.readFileSync(pathToAttachment).toString('base64')
-          // const msg = {
-          //   to: applicant.recordset[0].LoginEmail, // Change to your recipient
-          //   from: 'desomond17@gmail.com', // Change to your verified sender
-          //   subject: '[TEST]: SKOM eCrew Job Portal',
-          //   text: '<strong>You Have Been Offered!</strong>',
-          //   html: '<strong>You Have Been Offered!</strong>',
-          //   attachments: [
-          //     {
-          //       content: attachment,
-          //       filename: applicantApply.recordset[0].FileSEA,
-          //       type: 'application/docx',
-          //       disposition: 'attachment',
-          //     },
-          //   ],
-          // }
-          // sgMail
-          //   .send(msg)
-          //   .then(() => {
-          //     console.log('Email sent to ' + applicant.recordset[0].LoginEmail)
-          //   })
-          //   .catch((error) => {
-          //     console.error(error)
-          //   })
-          console.log('3 File is Generated inside userDoc folder!');
+          sgMail.setApiKey(
+            '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'
+          )
+          const msg = {
+            to: applicant.recordset[0].LoginEmail, // Change to your recipient
+            from: 'desomond17@gmail.com', // Change to your verified sender
+            subject: '[TEST]: SKOM eCrew Job Portal',
+            text: '<strong>You Have Been Offered!</strong>',
+            html: '<strong>You Have Been Offered!</strong>',
+            attachments: [
+              {
+                content: attachmentPDF,
+                filename: Filename,
+                type: 'application/pdf',
+                disposition: 'attachment',
+              },
+            ],
+          }
+          sgMail
+            .send(msg)
+            .then(() => {
+              console.log('Email sent to ' + applicant.recordset[0].LoginEmail)
+            })
+            .catch((error) => {
+              console.error(error)
+            })
+          console.log('3 File is Generated inside userDoc folder!')
         }
 
         res.json({ Id: req.body.Id })
-
       } else {
         res.send('All fields are required!')
       }
     } catch (error) {
-      console.log('Error generating file!');
+      console.log('Error generating file!')
       res.status(500)
       res.send(error)
     }

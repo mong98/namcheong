@@ -6,6 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@pdftron/pdfnet-node": "^8.1.0",
     "@sendgrid/mail": "^7.4.1",
     "@types/mssql": "^6.0.7",
     "bcryptjs": "^2.4.3",

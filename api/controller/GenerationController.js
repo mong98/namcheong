@@ -1897,6 +1897,10 @@ class GenerationController {
           let NOKAddress2 = '-'
           let NOKAddress3 = '-'
 
+          //added 20/1/2021
+          let OtherAllowanceRate = '-'
+          let Salary = '-'
+
           //get data from dbo.applicant
           const pool = await poolPromise
 
@@ -2016,14 +2020,19 @@ class GenerationController {
             } else {
               Currency = '-'
             }
+            //added 20/1/2021
+            if (applicantApply.Salary != null) {
+              Salary = applicantApply.Salary
+            } else {
+              Salary = '-'
+            }
+            if (applicantApply.OtherAllowance != null) {
+              OtherAllowanceRate = applicantApply.OtherAllowance
+            } else {
+              OtherAllowanceRate = '-'
+            }
           }
-          if (applicant.Passport_DtExpiry != null) {
-            let date1 = new Date(applicant.Passport_DtExpiry)
-            var date2 = moment(date1).format('DD/MM/YYYY')
-            PassportDtExpiry = date2
-          } else {
-            PassportDtExpiry = '-'
-          }
+        
           //comment 15/1/2021
           // if (PassportDocument != []) {
           //   if (PassportDocument.DtExpiry != null) {
@@ -2036,6 +2045,13 @@ class GenerationController {
           // }
 
           if (applicant != [] || applicant != null) {
+            if (applicant.Passport_DtExpiry != null) {
+              let date1 = new Date(applicant.Passport_DtExpiry)
+              var date2 = moment(date1).format('DD/MM/YYYY')
+              PassportDtExpiry = date2
+            } else {
+              PassportDtExpiry = '-'
+            }
             if (applicant.Name != null) {
               Name = applicant.Name
             } else {
@@ -2295,6 +2311,7 @@ class GenerationController {
             } else {
               NOKAddress3 = '-'
             }
+           
           }
 
           if (admin != null || admin != []) {
@@ -2400,6 +2417,9 @@ class GenerationController {
               NOKAddress: NOKAddress,
               NOKAddress2: NOKAddress2,
               NOKAddress3: NOKAddress3,
+              //added 20/1/2021
+              Salary:Salary,
+              OtherAllowanceRate:OtherAllowanceRate,
             })
 
             doc.render() //apply them
