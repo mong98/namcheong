@@ -616,6 +616,19 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     })
   }
 
+  // Added by Hakim on 26 Jan 2021 - Start
+  contractPeriodFromOnChange(value) {
+
+    this.applicant.ContractPeriodFrom = value
+    if (this.applicant.ContractPeriodFromInMth != null && this.applicant.ContractPeriodFrom != null) {
+      let period = this.applicant.ContractPeriodFromInMth;
+      let startDate = new Date(this.applicant.ContractPeriodFrom)
+      let endDate = startDate.setMonth(startDate.getMonth()+period)
+      this.applicant.ContractPeriodTo = endDate
+    }
+  }
+  // Added by Hakim on 26 Jan 2021 - End
+
   currencyOnChange(value) {
     this.applicant.Currency = this.mapCurrencyToName(value)
   }

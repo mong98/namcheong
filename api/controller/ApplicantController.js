@@ -410,6 +410,7 @@ class ApplicantController {
           .input('ApplyPosition', sql.VarChar, req.body.ApplyPosition)
           .input('DailyRate', sql.VarChar, req.body.DailyRate)
           .input('StandbyRate', sql.VarChar, req.body.StandbyRate)
+          .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021								
           .input('Allowance', sql.VarChar, req.body.Allowance)
           .input('TypesofAllowance', sql.VarChar, req.body.TypesofAllowance)
           .input(
@@ -480,6 +481,7 @@ class ApplicantController {
           .input('OfferPosition', sql.VarChar, req.body.OfferPosition)
           .input('DailyRate', sql.VarChar, req.body.DailyRate)
           .input('StandbyRate', sql.VarChar, req.body.StandbyRate)
+          .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021								
           .input('Allowance', sql.VarChar, req.body.Allowance)
           .input('TypesofAllowance', sql.VarChar, req.body.TypesofAllowance)
           .input(
@@ -494,7 +496,7 @@ class ApplicantController {
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
           .input('Currency', sql.VarChar, req.body.Currency)
           .input('Salary', sql.VarChar, req.body.Salary)		
-          .input('OtherAllowance', sql.VarChar, req.body.OtherAllowance)								
+          .input('OtherAllowance', sql.VarChar, req.body.OtherAllowance)
           .query(queryStr)
 
 

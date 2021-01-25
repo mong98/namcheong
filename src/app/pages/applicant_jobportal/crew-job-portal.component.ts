@@ -287,11 +287,12 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   // User ic format checking
   icChange($event) {
     let inputIC = this.applicant.IC
-    if (inputIC.length == 6 || inputIC.length == 9) {
-      this.applicant.IC += '-'
-    }
+    // Commented by Hakim on 25 Jan 2021
+    // if (inputIC.length == 6 || inputIC.length == 9) {
+    //   this.applicant.IC += '-'
+    // }
 
-    if (inputIC.length > 14) {
+    if (inputIC.length > 12) {
       this.applicant.IC = inputIC.slice(0, -1)
       alert('Invalid identification card number format. Please insert ic in the folowing format 000000-00-0000')
     }

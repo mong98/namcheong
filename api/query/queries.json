@@ -191,13 +191,13 @@
                                 , "LEFT JOIN [dbo].[Vessel] AS [VesselType] "
                                 , "ON [VesselType].[VesselName] = [v_ApplicantApply].[NameofVessel] "
                                 , "WHERE [v_ApplicantApply].[Id] = @Id "],
-    "updateApplicant" : ["UPDATE [ApplicantApply] SET OfferPosition = @ApplyPosition, DailyRate = @DailyRate, StandbyRate = @StandbyRate,"
-                            , "Allowance = @Allowance, TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth,"
-                            , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo,"
-                            , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry,"
+    "updateApplicant" : ["UPDATE [ApplicantApply] SET OfferPosition = @ApplyPosition, DailyRate = @DailyRate, StandbyRate = @StandbyRate, StandbyAllowance = @StandbyAllowance, "
+                            , "Allowance = @Allowance, TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth, "
+                            , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
+                            , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry, "
                             , "Status = @Status, "
-                            , "Currency = @Currency "
-                            , "Salary = @Salary "
+                            , "Currency = @Currency, "
+                            , "Salary = @Salary, "
                             , "OtherAllowance = @OtherAllowance "
                             , "WHERE Id=@Id "],
                             
@@ -215,7 +215,7 @@
                                 , "SET @SerialNumber = '88-' + CAST(YEAR(getdate()) AS varchar) + CAST(MONTH(getdate()) AS varchar) + CAST(Day(getdate()) AS varchar) + '-' + CAST(@ConfirmNo AS varchar) "
                                 , "UPDATE [JobPortal].[dbo].[ApplicantApply] "
                                 , "SET OfferPosition = @OfferPosition, "
-                                , "DailyRate = @DailyRate, StandbyRate = @StandbyRate, Allowance = @Allowance, "
+                                , "DailyRate = @DailyRate, StandbyRate = @StandbyRate, StandbyAllowance = @StandbyAllowance, Allowance = @Allowance, "
                                 , "TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth, "
                                 , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
                                 , "NameofVessel = @NameofVessel, IMONo = @IMONo, DtApplication = getdate(), PortofRegistry = @PortofRegistry, "
