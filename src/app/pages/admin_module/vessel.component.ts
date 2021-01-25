@@ -29,7 +29,7 @@ export class VesselComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this._vesselSubscription) {
-      this._vesselSubscription.unsubscribe()
+      this._vesselSubscription.unsubscribe() 
     }
   }
 
@@ -139,6 +139,9 @@ export class VesselComponent implements OnInit, OnDestroy {
   }
 
   _refreshData() {
+
+    console.log("check vessels")
+    console.log(this.vesselsList)
     this.source.load(
       this.vesselsList.map((item: Vessel, index: number) => {
         return {

@@ -11,6 +11,8 @@ export class VesselService {
   constructor(private service: BaseService) { }
 
   getAllVessels() {
+    console.log("check entity")
+    console.log(this._entity)
     return this.service.get(this._entity)
   }
 

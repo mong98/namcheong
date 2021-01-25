@@ -2,12 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ApplicantService } from '../../services/applicant.service'
 import { PositionService } from '../../services/position.service'
 import { ImoNoService } from '../../services/imono.service'
+import { VesselService } from '../../services/vessel.service'
 import { PortOfRegistryService } from '../../services/portofregistry.service'
 import { AllowanceService } from '../../services/allowance.service'
 import { IssuingAuthorityService } from '../../services/issuingauthority.service'
 import { UserIdConfigService } from '../../services/useridconfigure.service'
 import { RelationshipService } from '../../services/relationship.service'
 import { BaseService } from '../../services/base.service'
+import { Vessel } from '../../interfaces/vessel'
 
 import { Injectable } from '@angular/core'
 import { Subscription } from 'rxjs'
@@ -66,6 +68,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   constructor(
     private signatureService: UserIdConfigService,
     private relationshipService: RelationshipService,
+    private vesselService: VesselService,
     private service: ApplicantService,
     private positionService: PositionService,
     private imoNoService: ImoNoService,
@@ -145,8 +148,6 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   _refreshCurrencyData() {
-    console.log("check currency")
-    console.log(this.currencies)
     this.currencies.map((item: Currency) => {
       return {
         Id: item.Id,
@@ -156,7 +157,6 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   viewFile(filePath) {
-    console.log('filePath: ', filePath)
     if (filePath && filePath.length > 0) {
       window.open(`${environment.documentPathPrefix}/` + filePath, '_blank')
     }
@@ -176,6 +176,9 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
 
   getApplicantDocument(Id, LoginEmail, PositionID) {
     this.applicant.applicant_documents = []
+    //this.applicantLoginEmail = this.activatedRoute.snapshot.params.LoginEmail
+    // route.snapshot.paramMap.get
+
     this.service
       .getApplicantDocument(
         '?Id=' + Id + '&LoginEmail=' + LoginEmail + '&PositionID=' + PositionID
@@ -267,11 +270,9 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
 
   getApplicantDropdown(Id) {
     this.applicant.applicant_dropdown = []
-    //console.log("inside getApplicantDropdownId: ", this.applicant.applicant_dropdown)
     this.service.getApplicantDropdown(Id).subscribe(
       (result) => {
         this.applicant.applicant_dropdown = result[0]
-        //console.log("this.applicant.applicant_dropdown: ", this.applicant.applicant_dropdown)
         this._refreshApplicantDropdownData()
       },
       (err) => alert('Failed to load applicant dropdown ids')
@@ -300,21 +301,32 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     })
   }
 
+  // getVesselType() {
+  //   this.imoNoService.getAllVessels().subscribe(
+  //     (result: any) => {
+  //       this.vessels = result
+  //       this._refreshVesselData()
+  //     },
+  //     (err) => alert('Failed to load Vessel Type')
+  //   )
+  // }
   getVesselType() {
-    this.imoNoService.getAllVessels().subscribe(
+    this.vesselService.getAllVessels().subscribe(
       (result: any) => {
         this.vessels = result
         this._refreshVesselData()
       },
-      (err) => alert('Failed to load Vessel Type')
+      (err) => alert('Failed to load vessels')
     )
   }
 
   _refreshVesselData() {
-    this.vessels.map((item: VesselType) => {
+    this.vessels.map((item: Vessel, index: number) => {
       return {
-        VesselId: item.VesselId,
-        HullNo: item.HullNo,
+        No: index + 1,
+        Id: item.Id,
+        VesselType: item.VesselType,
+        VesselName: item.VesselName
       }
     })
   }
@@ -373,14 +385,9 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   mapStandByRateToId(id) {
-    console.log("map mapStandByRateToId")
-    console.log(id)
-    console.log(this.standbyRates)
     for (var i =0; i < this.standbyRates.length; i++) {
       var item = this.standbyRates[i]
       if (item.Id == id) {
-        console.log("check mapStandByRateToId")
-        console.log(item.Rate)
         //this.applicant.CurrencyID = item.Id;
         return item.Rate
       }
@@ -391,8 +398,6 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     this._subscription = this.service.getGender().subscribe(
       (result: any) => {
         this.genderlist = result
-        console.log("check gender")
-        console.log(this.genderlist)
         //this._refreshCountryData()
       },
       (err) => alert('Failed to load Gender')
@@ -403,22 +408,15 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     this._subscription = this.relationshipService.getAllRelationships().subscribe(
       (result: any) => {
         this.relationshiplist = result
-        console.log("check relationship")
-        console.log(this.relationshiplist)
       },
       (err) => alert('Failed to load relationships')
     )
   }
 
   mapRelationshipToName(id) {
-    console.log("map relationshiplist")
-    console.log(id)
-    console.log(this.relationshiplist)
     for (var i =0; i < this.relationshiplist.length; i++) {
       var item = this.relationshiplist[i]
       if (item.Id == id) {
-        console.log("check name relationshiplist")
-        console.log(item.Relationship)
         //this.applicant.CurrencyID = item.Id;
         return item.Relationship
       }
@@ -426,14 +424,9 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   mapGenderToName(id) {
-    console.log("map gender")
-    console.log(id)
-    console.log(this.genderlist)
     for (var i =0; i < this.genderlist.length; i++) {
       var item = this.genderlist[i]
       if (item.Id == id) {
-        console.log("check name gender")
-        console.log(item.Gender)
         //this.applicant.CurrencyID = item.Id;
         return item.Gender
       }
@@ -441,14 +434,9 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   mapCurrencyToId(name) {
-    console.log("map currency")
-    console.log(name)
-    console.log(this.currencies)
     for (var i =0; i < this.currencies.length; i++) {
       var item = this.currencies[i]
       if (item.Currency == name) {
-        console.log("check id currency")
-        console.log(item.Id)
         //this.applicant.CurrencyID = item.Id;
         return item.Id
       }
@@ -456,14 +444,9 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   mapCurrencyToName(id) {
-    console.log("map currency id")
-    console.log(id)
-    console.log(this.currencies)
     for (var i =0; i < this.currencies.length; i++) {
       var item = this.currencies[i]
       if (item.Id == id) {
-        console.log("check id currency")
-        console.log(item.Currency)
         //this.applicant.CurrencyID = item.Id;
         return item.Currency
       }
@@ -471,13 +454,9 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   _refreshData() {
-    console.log("check refresh applicant")
-    //this.applicant.CurrencyID = '98';
-    //console.log(this.standbyRates)
-    //this.applicant.StandbyRate = this.standbyRates
-    console.log(this.applicant)
     this.applicant.CurrencyID = this.mapCurrencyToId(this.applicant.Currency) 
     this.applicant.GenderName = this.mapGenderToName(this.applicant.Gender)
+    console.log(this.applicant)
     //this.applicant.EmergencyContactRelationship = this.mapRelationshipToName(this.applicant.EmergencyContactRelationship)
     //this.standbyRates = this.standby_rate
     /*this.source.load(
@@ -599,7 +578,6 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     //if(this.applicant.length >= 1) {
     // this.applicant = this.applicant[0]
     this.getApplicantNextOfKin(this.applicant.LoginEmail)
-    //console.log("applicant_documents: ", this.applicant.Id, " email: ", this.applicant.LoginEmail, " ApplyPositionID: ", this.applicant.ApplyPositionID)
     this.getApplicantDocument(
       this.applicant.Id,
       this.applicant.LoginEmail,
@@ -639,9 +617,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   currencyOnChange(value) {
-    console.log("currency on change")
     this.applicant.Currency = this.mapCurrencyToName(value)
-    console.log(value)
   }
 
   onCancel(event) {
@@ -681,8 +657,8 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   mapVesselIdToString(VesselIdToMap) {
     for (var i = 0; i < this.vessels.length; i++) {
       var item = this.vessels[i]
-      if (item.VesselID == VesselIdToMap) {
-        return item.HullNo
+      if (item.Id == VesselIdToMap) {
+        return item.VesselName
       }
     }
   }
@@ -734,21 +710,14 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
       this.applicant.ApplyPositionID
     )
 
-    /*console.log("Value in string: Allowance: ", this.applicant.Allowance,
-      "IMONo: ", this.applicant.IMONo,
-      "NameofVessel: ", this.applicant.NameofVessel,
-      "PortofRegistry: ", this.applicant.PortofRegistry,
-      "Status: ", this.applicant.Status
-    )*/
+
   }
 
   onUpdate(event) {
     if (window.confirm('Do you really want to update?')) {
       this.onSaveValueMapping()
       this.onSaveSanitize()
-      //this.applicant.StandbyRateName = this.mapStandByRateToId(this.applicant.StandbyRate)
-      /*console.log(" applicant.ContractPeriodFrom: ", this.applicant.ContractPeriodFrom)
-      console.log(" applicant.ContractPeriodTo: ", this.applicant.ContractPeriodTo)*/
+
       if (this.applicant.ContractPeriodTo < this.applicant.ContractPeriodFrom) {
         alert('Invalid Contract Period')
       } else {
@@ -810,7 +779,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   getSignature() {
-    console.log(this.signature,this.signatureAdmin)
+
     if (this.signature != null && this.signature != '') {
       if (this.signatureAdmin != null && this.signatureAdmin != '') {
         this.onConfirm();
@@ -831,24 +800,19 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
       this.onConfirmValueMapping()
       this.onSaveSanitize()
 
-      /*console.log(" applicant.ContractPeriodFrom: ", this.applicant.ContractPeriodFrom)
-          console.log(" applicant.ContractPeriodTo: ", this.applicant.ContractPeriodTo)*/
-
       if (this.applicant.ContractPeriodTo < this.applicant.ContractPeriodFrom) {
         alert('Invalid Contract Period')
       } else {
         // find a way to save/update data
+        // console.log("check submit data")
+        // console.log(this.applicant)
         const subscription = this.service
         .updateConfirmApplicant(JSON.stringify(this.applicant))
         .subscribe((res: any) => {
           if (res.Id == null) {
             alert('Failed to confirm applicant')
-            console.log('response Error == null!')
-            console.log(res)
           } else {
             alert('Confirm Record Successful, email Sent to the Applicant!')
-            console.log('response Error != null!')
-            console.log(res)
             //event.confirm.resolve(event.newData)
           }
           subscription.unsubscribe()

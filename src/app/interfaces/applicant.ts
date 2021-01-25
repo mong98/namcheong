@@ -260,6 +260,8 @@ export interface Applicant {
   Contact_Home: string
   PCountry: string
   RCountry: string
+  Salary: string
+  OtherAllowance: string
 }
 
 export interface Charterer {

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { MatrixService } from '../../services/matrix.service'
 import { MatrixTemplateService } from '../../services/matrix-template.service'
 import { VesselNameService } from '../../services/vessel-name.service'
+import { VesselService } from '../../services/vessel.service'
 import { MatrixDataService } from '../../services/matrix-data.service'
 import * as XLSX from 'xlsx'
 import { Subscription } from 'rxjs'
@@ -71,7 +72,9 @@ export class MatrixComponent implements OnDestroy, OnInit {
     this._vesselNameSubscription = this.vesselNameService.getVesselName().subscribe(
       (result: any) => {
         this.vessels = result,
+        console.log("check vessels")
         console.log(this.vessels)
+        
       },
       (err) => alert('Failed to load Vessel Name')
     )
@@ -116,10 +119,18 @@ export class MatrixComponent implements OnDestroy, OnInit {
 
     const subscription = this.matrixDataService.getMatrixData(this.selectedDate, this.vesselName).subscribe(
       (result: any) => {
+        console.log("check matrix data")
+        console.log(result)
         if (result && result.length > 0) {
           // Only take the first result
           const matrixData = result[0]
+          matrixData.Position = matrixData.ApplyPosition
           const selectedMatrix = this.matrixTemplates.find(t => t.matrixName === this.selectedTemplate)
+
+          console.log("matrix data")
+          console.log(matrixData)
+          console.log("selected matrix")
+          console.log(selectedMatrix)
 
           for (let key in matrixData) {
             var index = selectedMatrix.Item.indexOf(key)

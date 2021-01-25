@@ -18,8 +18,6 @@ import { map } from 'rxjs/operators';
 })
 export class BaseService {
   private apiServer = 'http://localhost:9000'
-  // private apiServer = 'http://192.168.1.8:9000'
-
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -38,7 +36,6 @@ export class BaseService {
         'Authorization': 'Bearer ' + this.getAccessToken()
       })
     }
-    console.log("append constructHttpOptions: ", this.httpOptions)
   }
 
   registerAdmin(email: string, username: string, password: string, retyped_password: string) {
@@ -124,7 +121,6 @@ export class BaseService {
     localStorage.removeItem('user_name');
     localStorage.removeItem('user_email');
     localStorage.clear();
-    console.log("remove token: ", localStorage.getItem('access_token'))
   }
 
   logoutAdmin() {
@@ -132,7 +128,6 @@ export class BaseService {
     localStorage.removeItem('admin_user_name');
     localStorage.removeItem('admin_user_email');
     localStorage.clear();
-    console.log("remove token: ", localStorage.getItem('admin_access_token'))
   }
 
   getAccessToken(): string {
@@ -324,7 +319,6 @@ export class BaseService {
       if(error.status == 401) {
         this.router.navigate(['applicant-login']);
       }
-      console.log("error: ", error, " status: ", error.status, "error message: ", error.message)
     }
 
     return throwError(errorMessage)

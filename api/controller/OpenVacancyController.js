@@ -6,7 +6,7 @@ var queries = JSON.parse(rawdata)
 class OpenVacancyController {
   
   async getOpenVacancy(req, res) {
-    console.log("go in open vacancy");
+    //console.log("go in open vacancy");
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getOpenVacancy)
@@ -24,10 +24,10 @@ class OpenVacancyController {
       // }
       // Added by Hakim on 14 Jan 2021 - End
 
-      console.log("retun open vacancy")
-      console.log(result.recordset)
+      //console.log("retun open vacancy")
+      //console.log(result.recordset)
       res.json(result.recordset)
-      // console.log(vacanciesListNonExpiry) // Added by Hakim on 14 Jan 2021
+      // //console.log(vacanciesListNonExpiry) // Added by Hakim on 14 Jan 2021
       // res.json(vacanciesListNonExpiry) // Added by Hakim on 14 Jan 2021
     } catch (error) {
       res.status(500)
@@ -36,14 +36,14 @@ class OpenVacancyController {
   }
 
   async getAppliedOpenVacancy(req, res) {
-    console.log("go in getAppliedOpenVacancy");
+    //console.log("go in getAppliedOpenVacancy");
     try {
       const pool = await poolPromise
       const result = await pool.request()
       .input('LoginEmail', sql.VarChar, req.params.LoginEmail)
       .query(queries.getAppliedOpenVacancy)
-      console.log("getAppliedOpenVacancy")
-      console.log(result.recordset)
+      //console.log("getAppliedOpenVacancy")
+      //console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -53,7 +53,7 @@ class OpenVacancyController {
 
   async addOpenVacancy(req, res) {
     try {
-      console.log('addOpenVacancy: ', req.body)
+      //console.log('addOpenVacancy: ', req.body)
       if (req.body.Position != null) {
         const pool = await poolPromise
         const result = await pool
@@ -63,7 +63,7 @@ class OpenVacancyController {
           .input('HullNo', sql.VarChar, req.body.HullNo)
           .input('Qualification', sql.VarChar, req.body.Qualification)
           .query(queries.addOpenVacancy)
-        console.log('addOpenVacancy result: ', result.recordset[0].Id)
+        //console.log('addOpenVacancy result: ', result.recordset[0].Id)
         res.json(result.recordset[0])
       } else {
         res.send('Please fill all the details!')
@@ -75,7 +75,7 @@ class OpenVacancyController {
   }
   async updateOpenVacancy(req, res) {
     try {
-      console.log('updateOpenVacancy: ', req.body)
+      //console.log('updateOpenVacancy: ', req.body)
       if (req.body.Id != null && req.body.Position != null) {
         const pool = await poolPromise
         const result = await pool

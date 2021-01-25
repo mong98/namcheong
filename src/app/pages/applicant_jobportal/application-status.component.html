@@ -4,13 +4,25 @@
 <br><br><br>
 <table width="98%" border="0" cellpadding="0" cellspacing="0" style="text-align: center;">
   <tr style="height:30px">
-    <td align="center" width="50%" bgcolor="#4FBEC9"><b>Job Title</b></td>
-    <td align="center" width="50%" bgcolor="#DDDDDD" class="Header"><b>Status</b></td>
+    <td align="center" width="25%" bgcolor="#4FBEC9"><b>Job Title</b></td>
+    <td align="center" width="25%" bgcolor="#DDDDDD" class="Header"><b>Date Apply</b></td>
+    <td align="center" width="25%" bgcolor="#DDDDDD" class="Header"><b>Last Update</b></td>
+    <td align="center" width="25%" bgcolor="#DDDDDD" class="Header"><b>Status</b></td>
     <!--<td align="center" width="33%" bgcolor="#DDDDDD" class="Header"><a href="ApplicationStatus.aspx"><b>Application Status</b></a></td>-->
   </tr>
   <tr *ngFor="let status of allStatus" style="height:40px">
     <td>{{ status.Position }}</td>
-    <td>{{ status.Status }}</td>
+    <td>{{ status.DateSubmit }}</td>
+    <td>{{ status.DateUpdate }}</td>
+    <td>
+      {{ status.Status }}
+      <button nbButton ngDefaultControl
+      *ngIf="status.Status == 'New' || status.Status == 'Review'"
+      type="button" status="primary" 
+      (click)="navigatePage(status.VacancyID,status.PositionID)" id="{{status.VacancyID}}">
+        Update
+      </button>
+    </td>
   </tr>
 </table>
 

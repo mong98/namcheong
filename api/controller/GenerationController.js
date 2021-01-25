@@ -37,14 +37,16 @@ class GenerationController {
           //.input('LoginEmail', sql.VarChar, req.body.LoginEmail)
           .input('Id', sql.VarChar, req.body.ApplyID)
           .query(queries.getApplicantApplyById)
-
+       
         const Status = await pool
           .request()
           .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
           .input('Position', sql.VarChar, checkApplicant.recordset[0].Position)
+          .input('ApplyID', sql.VarChar, req.body.ApplyID)
           //.input('Position', sql.VarChar, 'Master')
           .query(queries.getApplicantApplyAllStatus)
 
+          
         if (
           Status.recordset[0].Status == 'Review' ||
           Status.recordset[0].Status == 'Offered'
@@ -96,14 +98,14 @@ class GenerationController {
 
           //get full documents
           const resultApplicantDocument = await pool
-            .request()
-            .input('ApplyID', sql.VarChar, req.body.ApplyID)
-            .query(queries.getApplicantDocumentById)
+        .request()
+        .input('ApplyID', sql.VarChar, req.body.ApplyID)
+        .query(queries.getApplicantDocumentById)
 
-          document = resultApplicantDocument.recordset
+        document = resultApplicantDocument.recordset
           documentData = resultApplicantDocument.recordset[0]
 
-          console.log(checkApplicant)
+          ////console.log(checkApplicant)
 
           //comment 15/1/2021
           //get passport result
@@ -117,11 +119,12 @@ class GenerationController {
           // PassportDocument = resultPassport.recordset[0]
 
           //condition
-          if (checkApplicant.recordset[0].Position != null) {
-            Position = checkApplicant.recordset[0].Position
-          } else {
-            Position = '-'
-          }
+            if (checkApplicant.recordset[0].Position != null) {
+              Position = checkApplicant.recordset[0].Position;
+            } else {
+              Position = '-'
+            }
+          
 
           if (applicant != []) {
             if (applicant.Name != null) {
@@ -421,17 +424,20 @@ class GenerationController {
             .input('FileCVCreateDt', sql.DateTime, Date())
             .query(queries.updateCVDate)
 
-          // console.log(
+          // //console.log(
           //   'updateCv: ',
           //   checkApplicant.recordset[0].Position,
           //   ' applicant.LoginEmail: ',
           //   applicant.LoginEmail
           // )
           //create docx file
+
+          checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(/[/\\?%*:|"<>]/g, '-');
+
           fs.writeFileSync(
             path.resolve(
               '../src/assets/UserDoc/' +
-                checkApplicant.recordset[0].Position +
+              checkApplicant.recordset[0].Position +
                 '_' +
                 applicant.LoginEmail +
                 '_CV_' +
@@ -454,22 +460,22 @@ class GenerationController {
 
           //res.send("Successfully generated CV for " + applicant.Name);
           // return success code
-          console.log('Successfully generated CV for ' + applicant.Name)
+          //console.log('Successfully generated CV for ' + applicant.Name)
           return true
         } else {
           //res.send("This Applicant Record's Status is not SET as Review !");
-          console.log("This Applicant Record's Status is not SET as Review !")
+          //console.log("This Applicant Record's Status is not SET as Review !")
           return false
         }
       } else {
         //res.send("Login Email and ApplyID are required!");
-        console.log('Login Email and ApplyID are required!')
+        //console.log('Login Email and ApplyID are required!')
         return false
       }
     } catch (error) {
       //res.status(500);
       //res.send(error.message);
-      console.log('Error: ', error)
+      //console.log('Error: ', error)
       return false
     }
   }
@@ -478,26 +484,27 @@ class GenerationController {
     try {
       if (req.body.LoginEmail != null && req.body.ApplyID != null) {
         //checking status
-        console.log('inside generateafe')
+        //console.log("inside generateafe")
         const pool = await poolPromise
 
         const checkApplicant = await pool
           .request()
-          // .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
+         // .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
           .input('Id', sql.VarChar, req.body.ApplyID)
           .query(queries.getApplicantApplyById)
 
-        console.log('after generate')
-        //console.log(checkApplicant)
+          //console.log("after generate")
+          ////console.log(checkApplicant)
 
         const Status = await pool
           .request()
           .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
           .input('Position', sql.VarChar, checkApplicant.recordset[0].Position)
+          .input('ApplyID', sql.VarChar, req.body.ApplyID)
           .query(queries.getApplicantApplyAllStatus)
-
-        console.log('after Status')
-        //console.log(Status)
+        
+          //console.log("after Status")
+          ////console.log(Status)
 
         if (
           Status.recordset[0].Status == 'Review' ||
@@ -623,7 +630,7 @@ class GenerationController {
 
           admin = resultAdmin.recordset[0]
 
-          console.log('abc admin')
+          //console.log("abc admin")
 
           // get applicant data
           const resultApplicant = await pool
@@ -633,7 +640,7 @@ class GenerationController {
 
           applicant = resultApplicant.recordset[0]
 
-          console.log('abc applicant')
+          //console.log("abc applicant")
 
           //get full documents
           // const resultApplicantDocument = await pool
@@ -646,17 +653,17 @@ class GenerationController {
           // documentData = resultApplicantDocument.recordset[0]
 
           const resultApplicantDocument = await pool
-            .request()
-            .input('ApplyID', sql.VarChar, req.body.ApplyID)
-            .query(queries.getApplicantDocumentById)
+        .request()
+        .input('ApplyID', sql.VarChar, req.body.ApplyID)
+        .query(queries.getApplicantDocumentById)
 
-          document = resultApplicantDocument.recordset
+        document = resultApplicantDocument.recordset
           documentData = resultApplicantDocument.recordset[0]
 
-          console.log('abc doc')
-          //console.log(document)
-          console.log('abc doc data')
-          //console.log(documentData)
+          //console.log("abc doc")
+          ////console.log(document)
+          //console.log("abc doc data")
+          ////console.log(documentData)
 
           //comment 15/1/2021
           //get passport result
@@ -671,12 +678,12 @@ class GenerationController {
 
           //get PMU result
           const resultPMU = await pool
-            .request()
-            .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
-            .input('QuestionId', sql.SmallInt, 1)
-            .input('ApplyID', sql.VarChar, req.body.ApplyID)
-            .query(queries.generalMedicalAnswer)
-
+          .request()
+          .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
+          .input('QuestionId', sql.SmallInt, 1)
+          .input('ApplyID', sql.VarChar, req.body.ApplyID)
+          .query(queries.generalMedicalAnswer)
+          
           if (resultPMU.recordset.length != 0) {
             if (resultPMU.recordset[0].CheckupDt != null) {
               let date1 = new Date(resultPMU.recordset[0].CheckupDt)
@@ -696,12 +703,13 @@ class GenerationController {
 
           //get Marine result
           const resultMarine = await pool
-            .request()
-            .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
-            .input('QuestionId', sql.SmallInt, 2)
-            .input('ApplyID', sql.VarChar, req.body.ApplyID)
-            .query(queries.generalMedicalAnswer)
+          .request()
+          .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
+          .input('QuestionId', sql.SmallInt, 2)
+          .input('ApplyID', sql.VarChar, req.body.ApplyID)
+          .query(queries.generalMedicalAnswer)
 
+          
           if (resultMarine.recordset.length != 0) {
             if (resultMarine.recordset[0].CheckupDt != null) {
               let date1 = new Date(resultMarine.recordset[0].CheckupDt)
@@ -718,6 +726,7 @@ class GenerationController {
               MarineDtExpiry = '-'
             }
           }
+    
 
           //getNOK data
           const resultNOK = await pool
@@ -956,9 +965,9 @@ class GenerationController {
             }
           }
 
-          if (checkApplicant.recordset[0].Position != null) {
-            Position = checkApplicant.recordset[0].Position
-          } else {
+          if(checkApplicant.recordset[0].Position != null){
+            Position = checkApplicant.recordset[0].Position;
+          }else{
             Position = '-'
           }
 
@@ -1152,7 +1161,7 @@ class GenerationController {
               EmergencyContactRelationship = relationship.recordset[0].TableField }catch(e){
                 EmergencyContactRelationship =applicant.EmergencyContactRelationship;
               }
-              
+			  
             } else {
               EmergencyContactRelationship = '-'
             }
@@ -1249,14 +1258,15 @@ class GenerationController {
 
               //now calculate the age of the user
               Ager = Math.abs(year - 1970)
+              DOB = moment(DOB).format('DD/MM/YYYY')
               // DOB =
               //   applicant.DOB.getDate() +
               //   '/' +
               //   (applicant.DOB.getMonth() + 1) +
               //   '/' +
               //   applicant.DOB.getFullYear()
-              console.log(Ager)
-            } else {
+              ////console.log(Ager)
+            }else{
               DOB = '-'
             }
 
@@ -1264,8 +1274,8 @@ class GenerationController {
               //profileImage = applicant.FilePath + applicant.FileName;
               profileImage = '../src/assets/UserDoc/' + applicant.FileName
 
-              console.log('check profile image')
-              //console.log(profileImage)
+              //console.log("check profile image")
+              ////console.log(profileImage)
               //profileImage = ""
             }
 
@@ -1462,7 +1472,7 @@ class GenerationController {
                   nokRelationship = relationship.recordset[0].TableField}catch{
                     nokRelationship = NOK[i].NOKRelationship
                 }
-              
+			  
               }
               if (NOK[i].NOKEmployment == null || NOK[i].NOKEmployment == '') {
                 nokOccupaction = '-'
@@ -1475,7 +1485,7 @@ class GenerationController {
                 nokAge = NOK[i].NOKAge
               }
               if (NOK[i].NOKGender == null || NOK[i].NOKGender == '') {
-                
+				
                 nokGender = '-'
               } else {
                 try{ const gender = await pool
@@ -1485,7 +1495,7 @@ class GenerationController {
                 nokGender = gender.recordset[0].TableField}catch(e){
                   nokGender =NOK[i].NOKGender
                 }
-               
+			   
               }
               NOKList.push({
                 NOKName: nokName,
@@ -1502,8 +1512,8 @@ class GenerationController {
           }
 
           if (document.length != 0 && document != []) {
-            console.log('document!!!!!!!!!!!!!')
-            //console.log(document)
+            //console.log("document!!!!!!!!!!!!!")
+            ////console.log(document)
             for (let i = 0; i < document.length; i++) {
               let Document = ''
               let DocNo = ''
@@ -1586,7 +1596,7 @@ class GenerationController {
           // } else {
           //   PassDtIssue = '-'
           //   PassDtExpiry = '-'
-          // }
+          // }   
 
           var content = fs.readFileSync(
             path.resolve('./Templates/', 'AFEtemp.docx'),
@@ -1698,6 +1708,7 @@ class GenerationController {
               SignatureIcPassport: SignatureIcPassport,
               SignatureDate: SignatureDate,
             })
+
             doc.render() //apply them
 
             var buf = doc
@@ -1755,16 +1766,20 @@ class GenerationController {
               )
               .input('GenDoc', '1')
               .query(queries.updategenDoc)
-            // console.log(
+            // //console.log(
             //   'updateAFE: ',
             //   checkApplicant.recordset[0].Position,
             //   ' applicant.LoginEmail: ',
             //   applicant.LoginEmail
             // )
+
+            //remove the special character from position value to create doc
+            checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(/[/\\?%*:|"<>]/g, '-');
+
             fs.writeFileSync(
               path.resolve(
                 '../src/assets/UserDoc/' +
-                  checkApplicant.recordset[0].Position +
+                checkApplicant.recordset[0].Position +
                   '_' +
                   applicant.LoginEmail +
                   '_AFE_' +
@@ -1776,28 +1791,28 @@ class GenerationController {
 
             //res.send("Successfully generated AFE for " + applicant.Name);
             // return success code
-            console.log('Successfully generated AFE for ' + applicant.Name)
+            //console.log('Successfully generated AFE for ' + applicant.Name)
             return true
           } catch (error) {
             res.status(400)
             res.send('Error Message: ' + error.message)
-            console.log('Error: ', error)
+            //console.log('Error: ', error)
             return false
           }
         } else {
           //res.send("This Applicant Record's Status is not SET as Review !");
-          console.log("This Applicant Record's Status is not SET as Review !")
+          //console.log("This Applicant Record's Status is not SET as Review !")
           return false
         }
       } else {
         //res.send("All fields are required!");
-        console.log('All fields are required!')
+        //console.log('All fields are required!')
         return false
       }
     } catch (error) {
       //res.status(500);
       //res.send("Error Message: " + error.message);
-      console.log('Error: ', error)
+      //console.log('Error: ', error)
       return false
     }
   }
@@ -1814,12 +1829,13 @@ class GenerationController {
           .input('Id', sql.VarChar, req.body.ApplyID)
           .query(queries.getApplicantApplyById)
 
-        //console.log(checkApplicant)
+        ////console.log(checkApplicant)
 
         const Status = await pool
           .request()
           .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
           .input('Position', sql.VarChar, checkApplicant.recordset[0].Position)
+          .input('ApplyID', sql.VarChar, req.body.ApplyID)
           .query(queries.getApplicantApplyAllStatus)
 
         if (Status.recordset[0].Status == 'Offered') {
@@ -1922,12 +1938,12 @@ class GenerationController {
 
           //get full documents
           const resultApplicantDocument = await pool
-            .request()
-            .input('ApplyID', sql.VarChar, req.body.ApplyID)
-            .query(queries.getApplicantDocumentById)
-
+          .request()
+          .input('ApplyID', sql.VarChar, req.body.ApplyID)
+          .query(queries.getApplicantDocumentById)
+  
           document = resultApplicantDocument.recordset
-          documentData = resultApplicantDocument.recordset[0]
+            documentData = resultApplicantDocument.recordset[0]
 
           //get applicant apply
           const resultApplicantApply = await pool
@@ -1938,12 +1954,13 @@ class GenerationController {
               sql.VarChar,
               checkApplicant.recordset[0].Position
             )
+            .input('ApplyID', sql.VarChar, req.body.ApplyID)
             .query(queries.getApplicantApplyAllStatus)
 
           applicantApply = resultApplicantApply.recordset[0]
 
-          console.log('applicantApply')
-          //console.log(resultApplicantApply)
+          //console.log("applicantApply")
+          ////console.log(resultApplicantApply)
 
           const resultNOK = await pool
             .request()
@@ -1986,7 +2003,11 @@ class GenerationController {
               Allowance = '-'
             }
             if (applicantApply.StandbyRate != null) {
-              StandbyRate = applicantApply.StandbyRate
+              if(applicantApply.StandbyRate == '1'){
+                StandbyRate = applicantApply.DailyRate*0.5
+              }else if(applicantApply.StandbyRate == '2'){
+                StandbyRate = applicantApply.DailyRate*1.0
+              }
             } else {
               StandbyRate = '-'
             }
@@ -2032,7 +2053,7 @@ class GenerationController {
               OtherAllowanceRate = '-'
             }
           }
-        
+
           //comment 15/1/2021
           // if (PassportDocument != []) {
           //   if (PassportDocument.DtExpiry != null) {
@@ -2311,7 +2332,7 @@ class GenerationController {
             } else {
               NOKAddress3 = '-'
             }
-           
+		   
           }
 
           if (admin != null || admin != []) {
@@ -2480,11 +2501,13 @@ class GenerationController {
               )
               .input('GenDoc', '2')
               .query(queries.updategenDoc)
+            
+            checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(/[/\\?%*:|"<>]/g, '-');
 
             fs.writeFileSync(
               path.resolve(
                 '../src/assets/UserDoc/' +
-                  checkApplicant.recordset[0].Position +
+                checkApplicant.recordset[0].Position +
                   '_' +
                   applicant.LoginEmail +
                   '_SEA_' +
@@ -2496,28 +2519,28 @@ class GenerationController {
 
             //res.send("Successfully generated SEA for " + applicant.Name);
             // return success code
-            console.log('Successfully generated SEA for ' + applicant.Name)
+            //console.log('Successfully generated SEA for ' + applicant.Name)
             return true
           } catch (error) {
             res.status(400)
             res.send('Error Message: ' + error.message)
-            console.log('Error: ', error)
+            //console.log('Error: ', error)
             return false
           }
         } else {
           //res.send("This Applicant Record's Status is not SET as Approved !");
-          console.log("This Applicant Record's Status is not SET as Approved !")
+          //console.log("This Applicant Record's Status is not SET as Approved !")
           return false
         }
       } else {
         //res.send("All fields are required!");
-        console.log('All fields are required!')
+        //console.log('All fields are required!')
         return false
       }
     } catch (error) {
       //res.status(500);
       //res.send(error.message);
-      console.log('Error: ', error)
+      //console.log('Error: ', error)
       return false
     }
   }

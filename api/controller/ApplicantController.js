@@ -11,12 +11,12 @@ const { PDFNet } = require('@pdftron/pdfnet-node')
 
 class ApplicantController {
   async getApplicant(req, res) {
-    console.log('getApplicant')
+    //console.log('getApplicant')
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getApplicant)
 
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -28,8 +28,9 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCurrency)
+								 
 
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -38,11 +39,12 @@ class ApplicantController {
   }
 
   async getApplicantApply(req, res) {
+			  
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getApplicantApply)
 
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -56,14 +58,16 @@ class ApplicantController {
       const result = await pool
         .request()
         .query(queries.getApplicantGeneralQuestion)
+			   
 
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
       res.send(error.message)
     }
   }
+
 
   async getApplicantGeneralAnswerById(req, res) {
     try {
@@ -72,7 +76,7 @@ class ApplicantController {
         .request()
         .input('ApplyID', sql.SmallInt, req.params.ApplyID)
         .query(queries.getApplicantGeneralAnswerById)
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -87,7 +91,7 @@ class ApplicantController {
       const result = await pool
         .request()
         .query(queries.getApplicantMedicalReportQuestion)
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -102,7 +106,7 @@ class ApplicantController {
         .request()
         .input('ApplyID', sql.SmallInt, req.params.ApplyID)
         .query(queries.getApplicantMedicalReportAnswerById)
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -116,7 +120,7 @@ class ApplicantController {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getApplicantApply)
 
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -130,7 +134,7 @@ class ApplicantController {
       const result = await pool
         .request()
         .query(queries.getApplicantGeneralQuestion)
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -145,7 +149,7 @@ class ApplicantController {
         .request()
         .input('ApplyID', sql.SmallInt, req.params.ApplyID)
         .query(queries.getApplicantGeneralAnswerById)
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -161,7 +165,7 @@ class ApplicantController {
         .input('Id', sql.SmallInt, req.params.Id)
         .query(queries.getApplicantById)
 
-      console.log(result.recordset[0])
+      ////console.log(result.recordset[0])
       res.json(result.recordset[0])
     } catch (error) {
       res.status(500)
@@ -176,9 +180,9 @@ class ApplicantController {
         .request()
         .input('LoginEmail', sql.VarChar, req.params.LoginEmail)
         .query(queries.getApplicantApplyByLoginEmail)
-      console.log('getApplicantApplyByLoginEmail')
+      //console.log('getApplicantApplyByLoginEmail')
 
-      console.log(result.recordset[0])
+      ////console.log(result.recordset[0])
       res.json(result.recordset[0])
     } catch (error) {
       res.status(500)
@@ -194,7 +198,7 @@ class ApplicantController {
         .input('LoginEmail', sql.VarChar, req.params.LoginEmail)
         .query(queries.getApplicantByLoginEmail)
 
-      console.log(result.recordset[0])
+      ////console.log(result.recordset[0])
       res.json(result.recordset[0])
     } catch (error) {
       res.status(500)
@@ -205,15 +209,15 @@ class ApplicantController {
   async getApplicantDropdownId(req, res) {
     try {
       var queryStr = queries.getApplicantDropdownId.join(' ')
-      console.log(queryStr)
-      console.log('req.params.Id: ', req.params.Id)
+      //console.log(queryStr)
+      //console.log('req.params.Id: ', req.params.Id)
       const pool = await poolPromise
       const result = await pool
         .request()
         .input('Id', sql.SmallInt, req.params.Id)
         .query(queryStr)
 
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
       //res.json("ok")
     } catch (error) {
@@ -224,11 +228,12 @@ class ApplicantController {
 
   async getApplicantStatus(req, res) {
     try {
+			
       const pool = await poolPromise
-
+										 
       const result = await pool.request().query(queries.getApplicantStatus)
 
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -243,7 +248,7 @@ class ApplicantController {
         .request()
         .input('UserID', sql.VarChar, req.params.UserID)
         .query(queries.getApplicantNextOfKin)
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -259,7 +264,7 @@ class ApplicantController {
         .request()
         .input('UserID', sql.VarChar, req.params.UserID)
         .query(queries.getApplicantCertificates)
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -272,8 +277,8 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCharterer)
-
-      console.log(result.recordset)
+									
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -285,8 +290,8 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCompetency)
-
-      console.log(result.recordset)
+									 
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -298,8 +303,8 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getWorking)
-
-      console.log(result.recordset)
+								  
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -311,8 +316,8 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getGender)
-
-      console.log(result.recordset)
+								 
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -324,8 +329,8 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getEducation)
-
-      console.log(result.recordset)
+									
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -337,8 +342,8 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getDynamicPos)
-
-      console.log(result.recordset)
+									 
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -348,13 +353,15 @@ class ApplicantController {
 
   async getApplicantDocument(req, res) {
     try {
-      /* console.log(req.query)
-      console.log(req.query.Id)
-      console.log(req.query.LoginEmail)
-      console.log(req.query.PositionID)
-      console.log(queries.getApplicantDocument) */
+      //console.log("getApplicantDocument")
+      //console.log(req.query)
+      /* //console.log(req.query)
+      //console.log(req.query.Id)
+      //console.log(req.query.LoginEmail)
+      //console.log(req.query.PositionID)
+      //console.log(queries.getApplicantDocument) */
       var queryStr = queries.getApplicantDocument.join(' ')
-      //console.log(queryStr)
+      ////console.log(queryStr)
       const pool = await poolPromise
       const result = await pool
         .request()
@@ -363,15 +370,17 @@ class ApplicantController {
         .input('PositionID', sql.VarChar, req.query.PositionID)
         .query(queryStr)
       // loop thru to get single Document name
+      //console.log("get document result")
+      ////console.log(result.recordset)
       if (result.recordset != null) {
         for (var documentItem of Object.values(result.recordset)) {
-          //console.log("documentItem: ", documentItem)
+          ////console.log("documentItem: ", documentItem)
           if (documentItem != null && Array.isArray(documentItem.Document)) {
             documentItem.Document = documentItem.Document[0]
           }
         }
       }
-      console.log(result.recordset)
+      ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
       res.status(500)
@@ -381,7 +390,7 @@ class ApplicantController {
 
   async updateApplicant(req, res) {
     try {
-      console.log('updateApplicant: ', req.body)
+      //console.log('updateApplicant: ', req.body)
       if (
         req.body.Id != null &&
         req.body.ApplyPosition != null &&
@@ -393,7 +402,7 @@ class ApplicantController {
         req.body.Status != null
       ) {
         var queryStr = queries.updateApplicant.join(' ')
-        console.log('queryStr: ', queryStr, ' IMONo: ', req.body.IMONo)
+        //console.log('queryStr: ', queryStr, ' IMONo: ', req.body.IMONo)
         const pool = await poolPromise
         const result = await pool
           .request()
@@ -415,8 +424,10 @@ class ApplicantController {
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
           .input('Status', sql.VarChar, req.body.Status)
           .input('Currency', sql.VarChar, req.body.Currency)
+          .input('Salary', sql.VarChar, req.body.Salary)
+          .input('OtherAllowance', sql.VarChar, req.body.OtherAllowance)
           .query(queryStr)
-        console.log('updateApplicant result: ', req.body.Id)
+        //console.log('updateApplicant result: ', req.body.Id)
 
         // Set ApplyID for doc generation
         req.body.ApplyID = req.body.Id
@@ -424,11 +435,12 @@ class ApplicantController {
         // Generate AFE/CV doc if Status = 'Review'
         // Generate SEA doc if Status = 'Offered'
         if (req.body.Status == 'Review') {
-          console.log('generate AFE/CV ', req.body.Id)
+          //console.log('generate AFE/CV ', req.body.Id)
           var afe_result = await GenerationController.generateAFE(req, res)
           var cv_result = await GenerationController.generateCV(req, res)
         } else if (req.body.Status == 'Offered') {
-          console.log('generate SEA ', req.body.Id)
+											   
+          //console.log('generate SEA ', req.body.Id)
           var afe_result = await GenerationController.generateAFE(req, res)
           var cv_result = await GenerationController.generateCV(req, res)
           var sea_result = await GenerationController.generateSEA(req, res)
@@ -445,20 +457,22 @@ class ApplicantController {
 
   async updateConfirmApplicant(req, res) {
     try {
-      console.log('updateConfirmApplicant: ', req.body)
+      //console.log('updateConfirmApplicant: ', req.body)
       if (
         req.body.Id != null &&
         req.body.OfferPosition != null &&
         req.body.Status != null
       ) {
         var queryStr = queries.updateConfirmApplicant.join(' ')
-        console.log('queryStr: ', queryStr)
+        //console.log('queryStr: ', queryStr)
         const pool = await poolPromise
 
         const applicant = await pool
           .request()
           .input('Id', sql.SmallInt, req.body.Id)
           .query(queries.getApplicantById)
+
+        //console.log(applicant)
 
         const result = await pool
           .request()
@@ -479,7 +493,10 @@ class ApplicantController {
           .input('IMONo', sql.VarChar, req.body.IMONo)
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
           .input('Currency', sql.VarChar, req.body.Currency)
+          .input('Salary', sql.VarChar, req.body.Salary)		
+          .input('OtherAllowance', sql.VarChar, req.body.OtherAllowance)								
           .query(queryStr)
+
 
         // Set ApplyID & Status for doc generation
         req.body.ApplyID = req.body.Id
@@ -492,10 +509,9 @@ class ApplicantController {
           console.log('AFE not generated due to file not found!')
           res.send('AFE not generated due to file not found!')
         }
-
+        
         var cv_result = await GenerationController.generateCV(req, res)
-        // console.log('CV')
-        // console.log(res)
+
         // Set ApplyID & Status for doc generation
         req.body.Status = 'Offered'
 
@@ -505,8 +521,6 @@ class ApplicantController {
           console.log('SEA not generated due to file not found!')
           res.send('SEA not generated due to file not found!')
         }
-        // console.log('SEA')
-        // console.log(res)
 
         if (
           result != null &&
@@ -556,6 +570,8 @@ class ApplicantController {
             '.docx',
             extend
           )
+
+
           //send email
           sgMail.setApiKey(
             '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'
@@ -591,7 +607,7 @@ class ApplicantController {
         res.send('All fields are required!')
       }
     } catch (error) {
-      console.log('Error generating file!')
+      //console.log('Error generating file!')
       res.status(500)
       res.send(error)
     }

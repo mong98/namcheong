@@ -102,13 +102,17 @@
 </div>
 <div class="form-group">
   <label for="name">Identification Card No. (Malaysian Only)</label>
+  <!-- Updated by Hakim on 19 Jan 2021 - Start -->
+  <!-- Add format checking function -->
   <input
     type="text"
     class="form-control mb-2 mr-sm-2"
     id="ic_number"
     placeholder="800212-09-5012"
     [(ngModel)]="applicant.IC"
+    (ngModelChange)="icChange($event)"
   />
+  <!-- Updated by Hakim on 19 Jan 2021 - End -->
 </div>
 <!-- Commented by Hakim on 16 Jan 2021 - Start -->
 <!-- Extra field “Validity” – need to remove -->
@@ -158,8 +162,10 @@
     <nb-datepicker format="dd.MM.yyyy" #Passport_DtIssue></nb-datepicker> -->
     <!-- Added by Hakim on 19 Jan 2021 - Start -->
     <input class="form-control mb-2 mr-sm-2" type="date"
+      name="input_PassportDtIssue"
       [ngModel]="applicant.Passport_DtIssue | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.Passport_DtIssue = $event">
+      (ngModelChange)="applicant.Passport_DtIssue = $event"
+      (change)="dateIssueExpiryCheck($event, applicant.Passport_DtIssue, applicant.Passport_DtExpiry)">
     <!-- Added by Hakim on 19 Jan 2021 - End -->
   </div>
   <!-- Added by Hakim on 14 Jan 2021 - Start -->
@@ -174,8 +180,10 @@
     <nb-datepicker format="dd.MM.yyyy" #Passport_DtExpiry></nb-datepicker> -->
     <!-- Added by Hakim on 19 Jan 2021 - Start -->
     <input class="form-control mb-2 mr-sm-2" type="date"
+      name="input_PassportDtExpiry"
       [ngModel]="applicant.Passport_DtExpiry | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.Passport_DtExpiry = $event">
+      (ngModelChange)="applicant.Passport_DtExpiry = $event"
+      (change)="dateIssueExpiryCheck($event, applicant.Passport_DtIssue, applicant.Passport_DtExpiry)">
     <!-- Added by Hakim on 19 Jan 2021 - End -->
   </div>
 </div>
@@ -195,8 +203,10 @@
     <nb-datepicker format="dd.MM.yyyy" #SubsePassport_DtIssue></nb-datepicker> -->
     <!-- Added by Hakim on 19 Jan 2021 - Start -->
     <input class="form-control mb-2 mr-sm-2" type="date"
+      name="input_SubsePassportDtIssue"
       [ngModel]="applicant.SubsePassport_DtIssue | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.SubsePassport_DtIssue = $event">
+      (ngModelChange)="applicant.SubsePassport_DtIssue = $event"
+      (change)="dateIssueExpiryCheck($event, applicant.SubsePassport_DtIssue, applicant.SubsePassport_DtExpiry)">
     <!-- Added by Hakim on 19 Jan 2021 - End -->
   </div>
   <div class="col">
@@ -210,8 +220,10 @@
     <nb-datepicker format="dd.MM.yyyy" #SubsePassport_DtExpiry></nb-datepicker> -->
     <!-- Added by Hakim on 19 Jan 2021 - Start -->
     <input class="form-control mb-2 mr-sm-2" type="date"
+      name="input_SubsePassportDtExpiry"
       [ngModel]="applicant.SubsePassport_DtExpiry | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.SubsePassport_DtExpiry = $event">
+      (ngModelChange)="applicant.SubsePassport_DtExpiry = $event"
+      (change)="dateIssueExpiryCheck($event, applicant.SubsePassport_DtIssue, applicant.SubsePassport_DtExpiry)">
     <!-- Added by Hakim on 19 Jan 2021 - End -->
   </div>
 </div>
@@ -231,8 +243,10 @@
     <nb-datepicker format="dd.MM.yyyy" #SeamanBook_DtIssue></nb-datepicker> -->
     <!-- Added by Hakim on 19 Jan 2021 - Start -->
     <input class="form-control mb-2 mr-sm-2" type="date"
+      name="input_SeamanBookDtIssue"
       [ngModel]="applicant.SeamanBook_DtIssue | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.SeamanBook_DtIssue = $event">
+      (ngModelChange)="applicant.SeamanBook_DtIssue = $event"
+      (change)="dateIssueExpiryCheck($event, applicant.SeamanBook_DtIssue, applicant.SeamanBook_DtExpiry)">
     <!-- Added by Hakim on 19 Jan 2021 - End -->
   </div>
   <div class="col">
@@ -246,8 +260,10 @@
     <nb-datepicker format="dd.MM.yyyy" #SeamanBook_DtExpiry></nb-datepicker> -->
     <!-- Added by Hakim on 19 Jan 2021 - Start -->
     <input class="form-control mb-2 mr-sm-2" type="date"
+      name="input_SeamanBookDtExpiry"
       [ngModel]="applicant.SeamanBook_DtExpiry | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.SeamanBook_DtExpiry = $event">
+      (ngModelChange)="applicant.SeamanBook_DtExpiry = $event"
+      (change)="dateIssueExpiryCheck($event, applicant.SeamanBook_DtIssue, applicant.SeamanBook_DtExpiry)">
     <!-- Added by Hakim on 19 Jan 2021 - End -->
   </div>
 </div>
@@ -267,8 +283,10 @@
     <nb-datepicker format="dd.MM.yyyy" #Date_SeamanCard_DtIssue></nb-datepicker> -->
     <!-- Added by Hakim on 19 Jan 2021 - Start -->
     <input class="form-control mb-2 mr-sm-2" type="date"
+      name="input_SeamanCardDtIssue"
       [ngModel]="applicant.SeamanCard_DtIssue | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.SeamanCard_DtIssue = $event">
+      (ngModelChange)="applicant.SeamanCard_DtIssue = $event"
+      (change)="dateIssueExpiryCheck($event, applicant.SeamanCard_DtIssue, applicant.SeamanCard_DtExpiry)">
     <!-- Added by Hakim on 19 Jan 2021 - End -->
   </div>
   <div class="col">
@@ -282,8 +300,10 @@
     <nb-datepicker format="dd.MM.yyyy" #Date_SeamanCard_DtExpiry></nb-datepicker> -->
     <!-- Added by Hakim on 19 Jan 2021 - Start -->
     <input class="form-control mb-2 mr-sm-2" type="date"
+      name="input_SeamanCardDtExpiry"
       [ngModel]="applicant.SeamanCard_DtExpiry | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.SeamanCard_DtExpiry = $event">
+      (ngModelChange)="applicant.SeamanCard_DtExpiry = $event"
+      (change)="dateIssueExpiryCheck($event, applicant.SeamanCard_DtIssue, applicant.SeamanCard_DtExpiry)">
     <!-- Added by Hakim on 19 Jan 2021 - End -->
   </div>
 </div>
@@ -486,7 +506,7 @@
             class="form-control"
             id="country_code"
             placeholder="country code"
-            [(ngModel)]="applicant.Contact_HomeCtryCode"
+            [(ngModel)]="applicant.Contact_HouseCtryCode"
           />
         </div>
       </div>
@@ -496,7 +516,7 @@
           class="form-control mb-2 mr-sm-2"
           id="contact_home"
           placeholder="phone number"
-          [(ngModel)]="applicant.Contact_Home"
+          [(ngModel)]="applicant.Contact_House"
         />
       </div>
     </div>
@@ -789,7 +809,7 @@
 <!-- Added by Hakim on 12 Jan 2021 - End -->
 
 <div class="form-group">
-  <label><b>Employment Data</b></label>
+  <label><b>Income Tax No.</b></label>
   <input
     type="text"
     class="form-control mb-2 mr-sm-2"
@@ -1027,7 +1047,8 @@
               <label for="">Date of expiry</label>
               <input class="form-control mb-2 mr-sm-2" type="date"
               [ngModel]="medicalReportAnswer[question.Id-1].AnsExpiryDt | date:'yyyy-MM-dd'"
-              (ngModelChange)="medicalReportAnswer[question.Id-1].AnsCheckupDt = $event">
+              (ngModelChange)="medicalReportAnswer[question.Id-1].AnsExpiryDt = $event"
+              (change)="dateIssueExpiryCheck($event, medicalReportAnswer[question.Id-1].AnsCheckupDt, medicalReportAnswer[question.Id-1].AnsExpiryDt)">
             </div>
           </div>
 
@@ -1224,7 +1245,7 @@
       <label><b>Date</b></label>
       <input class="form-control mb-2 mr-sm-2" type="date"
       [ngModel]="applicant.SignatureDate | date:'yyyy-MM-dd'"
-      (ngModelChange)="applicant.SignatureDate = $event">
+      (ngModelChange)="applicant.SignatureDate = $event" disabled>
     </div>
   </div>
   <div class="col"></div>

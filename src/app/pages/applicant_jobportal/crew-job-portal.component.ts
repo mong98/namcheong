@@ -67,6 +67,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   races: any[]
   religions: any[]
   relationships: any = []
+						  
   states: any = []
   countries: any = []
   maritalStatus = ['', 'Married', 'Single', 'Divorced', 'Other']
@@ -231,6 +232,22 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     )
   }
 
+											 
+											
+						  
+								   
+											
+																 
+																	 
+
+											   
+							   
+			   
+	   
+	 
+									
+   
+
   private _refreshVacancyData(result: any[]) {
     this.allVacancies = result.map((openvacancy: OpenVacancy) => {
       return {
@@ -267,12 +284,45 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   // Added by Hakim on 19 Jan 2021 - Start
+  // User ic format checking
   icChange($event) {
     let inputIC = this.applicant.IC
-    if (inputIC.length > 10) {
+    if (inputIC.length == 6 || inputIC.length == 9) {
+      this.applicant.IC += '-'
+    }
 
-    } else {
-      alert('Invalid length')
+    if (inputIC.length > 14) {
+      this.applicant.IC = inputIC.slice(0, -1)
+      alert('Invalid identification card number format. Please insert ic in the folowing format 000000-00-0000')
+    }
+  }
+
+  // Date issue and expiry checking
+  dateIssueExpiryCheck($event, issueDate, expiryDate) {
+    
+    let date1 = new Date(issueDate)
+    let date2 = new Date(expiryDate)
+    if (issueDate != null && expiryDate != null) {
+      if (date1 >= date2) {
+        $event.target.value = ""
+
+        // Reset value in applicant data
+        if ($event.target.name == "input_PassportDtExpiry") {
+          this.applicant.Passport_DtExpiry = ""
+        } else if ($event.target.name == "input_SubsePassportDtExpiry") {
+          this.applicant.SubsePassport_DtExpiry = ""
+        } else if ($event.target.name == "input_SeamanBookDtExpiry") {
+          this.applicant.SeamanBook_DtExpiry = ""
+        } else if ($event.target.name == "input_SeamanCardDtExpiry") {
+          this.applicant.SeamanCard_DtExpiry = ""
+        }
+
+        console.log(this.applicant.Passport_DtExpiry)
+        console.log(this.applicant.SubsePassport_DtExpiry)
+        console.log(this.applicant.SeamanBook_DtExpiry)
+        console.log(this.applicant.SeamanCard_DtExpiry)
+        alert('Date expiry cannot be earlier')
+      }
     }
   }
   // Added by Hakim on 19 Jan 2021 - End
@@ -285,6 +335,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       this.applicant.Residentialaddress3 = this.applicant.PermanentAddress3
       this.applicant.RPostcode = this.applicant.PPostcode
       this.applicant.RState = this.applicant.PState
+			this.applicant.RCity = this.applicant.PCity									 
       this.applicant.RCountry = this.applicant.PCountry
     }
   }
@@ -856,6 +907,10 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
           }
         }
         else {
+					if (this.activatedRoute.snapshot.queryParamMap.get('psid')) {
+            this.applicantapply.PositionID = this.activatedRoute.snapshot.queryParamMap.get('psid');
+            this.getDocumentChecklist()
+          }												   
           this._refreshApplicantApplyData()
         }
       },
@@ -1347,6 +1402,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       this.url = "assets/UserDoc/" + this.applicant.FileName
     this.getApplicantDropdown(this.applicant.Id)
     this.getApplicantNextOfKin(localStorage.getItem("user_email")) // Added by Hakim on 13 Jan 2021
+    this.applicant.SignatureDate = new Date() // Added by Hakim on 19 Jan 2021
 
     // this.getApplicantNextOfKin(this.applicant.LoginEmail)
     //this.getApplicantDocument(this.applicant.Id, this.applicant.LoginEmail, this.applicantapply.PositionID)
@@ -1356,6 +1412,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
 
   _refreshApplicantApplyData() {
     // retry loading
+	
     this.getApplicantGeneralAnswer(this.applicantapply.Id)
     this.getApplicantMedicalReportAnswer(this.applicantapply.Id)
     this.getApplicantDocument(this.applicantapply.Id, this.applicant.LoginEmail, this.applicantapply.PositionID)
@@ -1645,7 +1702,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
 
     const dialogRef = this.dialog.open(DialogContentExampleDialog, {
-      width: '400px',
+      width: '100%', // Update by Hakim on 19 Jan 2021
       panelClass: 'custom-dialog'
     });
 
@@ -1718,6 +1775,8 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
         //if(this.applicantapply != null && this.applicantapply.LoginEmail != null) {
         // find a way to save/update data
         // submit existing application
+											
+									  
         const subscription = this.applicationService.updateApplicationSubmit(
           JSON.stringify(this.applicant))
           .subscribe((res: any) => {

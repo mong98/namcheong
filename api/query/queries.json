@@ -62,7 +62,6 @@
     "getGender" : "SELECT [Id], [TableField] AS [Gender] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Gender'",
     "getEducation" : "SELECT [Id], [TableField] AS [Education] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Education'",
     "getDynamicPos" : "SELECT [Id], [TableField] AS [DynamicPos] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='DynamicPos'",
-    "getNameById" : "SELECT * FROM [JobPortal].[dbo].[SystemTable] WHERE id=@id",
 
     "getCountry" : "SELECT [Id], [TableField] AS [Country] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Country'",
     "addCountry" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('Country', @Country); SELECT SCOPE_IDENTITY() AS [Id]",
@@ -121,23 +120,24 @@
     "removeMatrixTemplate" : "DELETE FROM [JobPortal].[dbo].[MatrixDetail] WHERE [Matrix] = @MatrixName",
 
     "getMatrixField" : "SELECT DISTINCT [Item], [ItemDesc] FROM MatrixItem ORDER BY [ItemDesc]",
-
+    "getNameById" : "SELECT * FROM [JobPortal].[dbo].[SystemTable] WHERE id=@id",
     "getApplicantApply" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE ApplyStatus='Offered'",
     "getApplicant" : "SELECT [Id], [ApplyPosition], [ApplyPositionID], [LoginEmail], [Name], [MiddleName], [LastName], [ApplyDtApplication], [ApplyStatus] FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE SubmitFlag='Y'",
     "getCurrency": "SELECT [Id], [TableField] AS [Currency] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Currency' ORDER BY SeqNo",
     "getApplicantStatus": "SELECT [Id], [TableField] AS [ApplicantStatus] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Applicant Status' ORDER BY SeqNo",
     "getApplicantById" : "SELECT * FROM v_ApplicantApply WHERE Id=@Id",
     "getApplicantByLoginEmailApplyPosition" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE [LoginEmail]=@LoginEmail AND ApplyPositionID=@ApplyPositionID AND ApplyStatus<>'Offered'",
+    "getApplicantByLoginEmailApplyId" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE [LoginEmail]=@LoginEmail AND Id=@Id",
     "getApplicantApplyByLoginEmail" : "SELECT TOP 1 * FROM [ApplicantApply] WHERE [LoginEmail]=@LoginEmail ORDER BY DtApplication DESC, ID DESC",
     "getApplicantByLoginEmail" : "Select * FROM [Applicant] where [LoginEmail]=@LoginEmail",
     "getApplicantApplyById" : "SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [Id]=@Id",
     "getApplicantDocumentById" : "Select * FROM [JobPortal].[dbo].[ApplicantDocument] where [ApplyID]=@ApplyID",   
     "deleteApplicantDocument" : "DELETE FROM [JobPortal].[dbo].[ApplicantDocument] WHERE PositionID=@PositionID AND UserID=@UserID AND ApplyID=@ApplyID; ",
     "addApplicantDocument" : ["INSERT INTO [JobPortal].[dbo].[ApplicantDocument] (UserID, ApplyID, Position, Document, PositionID, "
-                                , "DocumentID, DocNo, DtIssue, DtExpiry, type, FilePath, FileName, FileExtension, "
+                                , "DocumentID, DocNo, DtIssue, DtExpiry, Type, FilePath, FileName, FileExtension, "
                                 , "Charterer, ChartererOthers, DynamicPositionCertType, DynamicPositionCertFileName, Grade, IssuingAuthority) "
                                 , "VALUES (@UserID, @ApplyID, @Position, @Document, @PositionID, "
-                                , "@DocumentID, @DocNo, @DtIssue, @DtExpiry, @type, @FilePath, @FileName, @FileExtension, "
+                                , "@DocumentID, @DocNo, @DtIssue, @DtExpiry, @Type, @FilePath, @FileName, @FileExtension, "
                                 , "@Charterer, @ChartererOthers, @DynamicPositionCertType, @DynamicPositionCertFileName, @Grade, @IssuingAuthority)"],
     "getApplicantDocument" : ["SELECT dbo.[ApplicantDocument].[Id] as Id, dbo.[Document].[ID] as DocumentID, dbo.[PositionDocument].[Document] as Document, dbo.PositionDocument.Chk, dbo.PositionDocument.DocNo as DocNo, dbo.PositionDocument.DtExpiry as DtExpiry, dbo.PositionDocument.DtIssue as DtIssue, "
                                 , "dbo.PositionDocument.[Document] AS Document, dbo.PositionDocument.Position, dbo.PositionDocument.[DocType] AS DocType, dbo.PositionDocument.[DocFile] AS DocFile, " 
@@ -178,7 +178,7 @@
                                 , "NOKContactNumber = @NOKContactNumber, NOKDOB = @NOKDOB "
                                 , "WHERE UserID = @UserID AND Id=@Id "],																																							   
 	"getApplicantDropdownId" : ["SELECT [STAllowance].[id] AS [AllowanceId], [STPortOfRegistry].[id] AS [PORId], "
-                                , "[STApplicantStatus].[id] AS [ApplyStatusId], [IMONoTbl].[Id] AS [ImonoId], [VesselType].[VesselID] AS [VesselId]  "
+                                , "[STApplicantStatus].[id] AS [ApplyStatusId], [IMONoTbl].[Id] AS [ImonoId], [VesselType].[Id] AS [VesselId]  "
                                 , "FROM v_ApplicantApply"
                                 , "LEFT JOIN [dbo].[SystemTable] AS [STAllowance] "
                                 , "ON [STAllowance].[TableField] = [v_ApplicantApply].[TypesofAllowance] "
@@ -188,8 +188,8 @@
                                 , "ON [STApplicantStatus].[TableField] = [v_ApplicantApply].[ApplyStatus] "
                                 , "LEFT JOIN [JobPortal].[dbo].[IMONo] AS [IMONoTbl] "
                                 , "ON [IMONoTbl].[IMONo] = [v_ApplicantApply].[IMONo] "
-                                , "LEFT JOIN [dbo].[v_VesselType] AS [VesselType] "
-                                , "ON [VesselType].[HullNo] = [v_ApplicantApply].[NameofVessel] "
+                                , "LEFT JOIN [dbo].[Vessel] AS [VesselType] "
+                                , "ON [VesselType].[VesselName] = [v_ApplicantApply].[NameofVessel] "
                                 , "WHERE [v_ApplicantApply].[Id] = @Id "],
     "updateApplicant" : ["UPDATE [ApplicantApply] SET OfferPosition = @ApplyPosition, DailyRate = @DailyRate, StandbyRate = @StandbyRate,"
                             , "Allowance = @Allowance, TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth,"
@@ -197,7 +197,10 @@
                             , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry,"
                             , "Status = @Status, "
                             , "Currency = @Currency "
+                            , "Salary = @Salary "
+                            , "OtherAllowance = @OtherAllowance "
                             , "WHERE Id=@Id "],
+                            
     "updateConfirmApplicant" : ["DECLARE @ConfirmNo int; DECLARE @SerialNumber varchar(100); "
                                 , "SET @ConfirmNo = (SELECT top 1 ConfirmNo FROM  [JobPortal].[dbo].[v_ApplicantApply] "
                                 , "WHERE year(ConfirmDt)=YEAR(getdate()) AND month(ConfirmDt)=MONTH(getdate()) AND day(ConfirmDt)=Day(getdate()) "
@@ -215,12 +218,93 @@
                                 , "DailyRate = @DailyRate, StandbyRate = @StandbyRate, Allowance = @Allowance, "
                                 , "TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth, "
                                 , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
-                                , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry, "
-                                , "Status = 'Offered', Currency = @Currency, ConfirmNo = @ConfirmNo, SerialNumber = @SerialNumber, "
+                                , "NameofVessel = @NameofVessel, IMONo = @IMONo, DtApplication = getdate(), PortofRegistry = @PortofRegistry, "
+                                , "Status = 'Offered', OtherAllowance = @OtherAllowance, Currency = @Currency, Salary = @Salary, ConfirmNo = @ConfirmNo, SerialNumber = @SerialNumber, "
                                 , "ConfirmFlag = '1', GenDoc = '0', ConfirmBy = '88', ConfirmByName = 'admin', ConfirmDt = GetDate() "
                                 , "WHERE Id=@Id "],
 
     "saveAsDraftApplication" : ["UPDATE [Applicant]"
+                                , "SET Name = @Name"
+                                , ", MiddleName = @MiddleName"
+                                , ", LastName = @LastName"
+                                , ", Email = @Email"
+                                , ", Gender = @Gender"
+                                , ", IC = @IC"
+                                , ", Education = @Education"
+                                , ", Passport = @Passport"
+                                , ", Passport_DtIssue = @Passport_DtIssue"
+                                , ", Passport_DtExpiry = @Passport_DtExpiry"
+                                , ", SubsePassport = @SubsePassport"
+                                , ", SubsePassport_DtIssue = @SubsePassport_DtIssue"
+                                , ", SubsePassport_DtExpiry = @SubsePassport_DtExpiry"
+                                , ", SeamanBookNo = @SeamanBookNo"
+                                , ", SeamanBook_DtIssue = @SeamanBook_DtIssue"
+                                , ", SeamanBook_DtExpiry = @SeamanBook_DtExpiry"
+                                , ", SeamanCardNo = @SeamanCardNo"
+                                , ", SeamanCard_DtIssue = @SeamanCard_DtIssue"
+                                , ", SeamanCard_DtExpiry = @SeamanCard_DtExpiry"
+                                , ", ValidityDate = @ValidityDate"
+                                , ", DOB = @DOB"
+                                , ", PlaceofBirth = @PlaceofBirth"
+                                , ", CountryOfOrigin = @CountryOfOrigin"
+                                , ", MaritalStatus = @MaritalStatus"
+                                , ", Nationality = @Nationality"
+                                , ", NationalityOthers = @NationalityOthers"
+                                , ", Race = @Race"
+                                , ", RaceOthers = @RaceOthers"
+                                , ", Religion = @Religion"
+                                , ", ReligionOthers = @ReligionOthers"
+                                , ", PermanentAddress = @PermanentAddress"
+                                , ", PermanentAddress2 = @PermanentAddress2"
+                                , ", PermanentAddress3 = @PermanentAddress3"
+                                , ", PPostcode = @PPostcode"
+                                , ", PCity = @PCity"
+                                , ", PState = @PState"
+                                , ", PStateOthers = @PStateOthers"
+                                , ", PCountry = @PCountry"
+                                , ", Residentialaddress = @Residentialaddress"
+                                , ", Residentialaddress2 = @Residentialaddress2"
+                                , ", Residentialaddress3 = @Residentialaddress3"
+                                , ", RPostcode = @RPostcode"
+                                , ", RCity = @RCity"
+                                , ", RState = @RState"
+                                , ", RStateOthers = @RStateOthers"
+                                , ", RCountry = @RCountry"
+                                , ", Contact_MobileCtryCode = @Contact_MobileCtryCode"
+                                , ", Contact_Mobile = @Contact_Mobile"
+								, ", Contact_HouseCtryCode = @Contact_HouseCtryCode"
+                                , ", Contact_House = @Contact_House"																					
+                                , ", RepatriationHomePort = @RepatriationHomePort"
+                                , ", EmergencyContactName = @EmergencyContactName"
+                                , ", EmergencyContactMiddleName = @EmergencyContactMiddleName"
+                                , ", EmergencyContactLastName = @EmergencyContactLastName"
+                                , ", EmergencyContactRelationship = @EmergencyContactRelationship"
+                                , ", EmergencyContact_Address = @EmergencyContact_Address"
+                                , ", EmergencyContact_Address2 = @EmergencyContact_Address2"
+                                , ", EmergencyContact_Address3 = @EmergencyContact_Address3"
+                                , ", EmergencyContact_City = @EmergencyContact_City"
+                                , ", EmergencyContact_Postcode = @EmergencyContact_Postcode"
+                                , ", EmergencyContact_State = @EmergencyContact_State"
+                                , ", EmergencyContact_Country = @EmergencyContact_Country"
+                                , ", EmergencyContact_HouseCtryCode = @EmergencyContact_HouseCtryCode"
+                                , ", EmergencyContact_House = @EmergencyContact_House"
+                                , ", EmergencyContact_MobileCtryCode = @EmergencyContact_MobileCtryCode"
+                                , ", EmergencyContact_Mobile = @EmergencyContact_Mobile"
+                                , ", Ref1Name = @Ref1Name"
+                                , ", Ref1Company = @Ref1Company"
+                                , ", Ref1Designation = @Ref1Designation"
+                                , ", Ref1Contact = @Ref1Contact"
+                                , ", Ref2Name = @Ref2Name"
+                                , ", Ref2Company = @Ref2Company"
+                                , ", Ref2Designation = @Ref2Designation"
+                                , ", Ref2Contact = @Ref2Contact"
+                                , ", IncomeTaxNo = @IncomeTaxNo"
+                                , ", DtUpdated = GetDate()"
+								, ", SignatureName = @SignatureName"
+                                , ", SignatureIcPassport = @SignatureIcPassport"
+                                , ", SignatureDate = @SignatureDate"
+                                , "WHERE [LoginEmail]=@LoginEmail"],
+    "updateApplicantSubmit" : ["UPDATE [Applicant]"
                                 , "SET Name = @Name"
                                 , ", MiddleName = @MiddleName"
                                 , ", LastName = @LastName"
@@ -295,6 +379,9 @@
                                 , ", Ref2Contact = @Ref2Contact"
                                 , ", IncomeTaxNo = @IncomeTaxNo"
                                 , ", DtUpdated = GetDate()"
+								, ", SignatureName = @SignatureName"
+                                , ", SignatureIcPassport = @SignatureIcPassport"
+                                , ", SignatureDate = @SignatureDate"
                                 , "WHERE [LoginEmail]=@LoginEmail"],
     "submitApplication" : ["UPDATE [JobPortal].[dbo].ApplicantApply "
                                 , "SET Position=@Position ,"
@@ -307,7 +394,7 @@
                                 , "AND PositionID=@PositionID"],
     "addApplication" : ["INSERT INTO [JobPortal].[dbo].[ApplicantApply] "
                                 , "(Position, PositionID, DtApplication, LoginEmail, Status, SubmitFlag, SubmitBy, SubmitDt) "
-                                , "VALUES (@Position, @PositionID, getdate(), @LoginEmail, @Status, @SubmitFlag, @SubmitBy, @SubmitDt)"],
+                                , "VALUES (@Position, @PositionID, getdate(), @LoginEmail, @Status, @SubmitFlag, @SubmitBy, @SubmitDt); SELECT SCOPE_IDENTITY() AS [Id]"],
     "updateApplication" : "UPDATE [JobPortal].[dbo].ApplicantApply SET Position=@Position, DtApplication=getdate(), Status='New', SubmitFlag='N' WHERE [LoginEmail]=@LoginEmail AND PositionID=@PositionID",
     "registerApplicant" : "INSERT INTO [Applicant] (LoginEmail, Name, Password, Status, DtCreated) VALUES (@LoginEmail, @Name, @Password, 'Active', GetDate())",
     
@@ -346,8 +433,7 @@
 
     "getApplicationDocumentsTest" : "SELECT * FROM [JobPortal].[dbo].[ApplicantDocument] WHERE [UserID] = @LoginEmail",
 
-    "getApplicantApplyAllStatus":"SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
-
+    "getApplicantApplyAllStatus":"SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position AND [Id] = @ApplyID",
     "getApplicantApplyTest":"SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [LoginEmail] = @LoginEmail",
 
     "getPassport" : "SELECT UserID,Document,DocumentID,DtIssue,DtExpiry FROM [JobPortal].[dbo].[ApplicantDocument] WHERE [UserID] = @LoginEmail AND [ApplyID] = @ApplyID AND [Document] = @Document",

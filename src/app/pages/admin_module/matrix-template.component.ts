@@ -4,6 +4,7 @@ import { DocumentComponent } from './document.component'
 import { MatrixService } from '../../services/matrix.service'
 import { MatrixFieldService } from '../../services/matrix-field.service'
 import { MatrixTemplateService } from '../../services/matrix-template.service'
+import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -22,6 +23,7 @@ export class MatrixTemplateComponent {
   isDisabledLeftButton = true
   isDisabledRightButton = true
   constructor(private documentComponent: DocumentComponent,
+              private router: Router,
               private matrixService: MatrixService,
               private matrixField: MatrixFieldService,
               private matrixTemplateService: MatrixTemplateService) {
@@ -325,6 +327,7 @@ export class MatrixTemplateComponent {
     // }
     this.addMatrixNames()
     alert("Changes submitted successfully")
+    location.reload();
     // console.log(this.matrixTemplates)
     // var matrixFields;
     // this.matrixService.getMatrix().subscribe(
