@@ -19,7 +19,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 
 import { Injectable } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { Applicant, ApplicantDocument, ApplicantStatus, ApplicantNextOfKin, ApplicantGeneralQuestion, ApplicantGeneralAnswer, ApplicantMedicalAnswer, ApplicantMedicalQuestion } from '../../interfaces/applicant'
+import { Applicant, ApplicantDocument, ApplicantStatus, ApplicantNextOfKin, ApplicantGeneralQuestion, ApplicantGeneralAnswer, ApplicantMedicalAnswer, ApplicantMedicalQuestion, ApplicantSEAExperience } from '../../interfaces/applicant'
 import { Position } from '../../interfaces/position'
 import { DocumentChecklist } from '../../interfaces/documentchecklist'
 import { ImoNo, VesselType } from '../../interfaces/imono'
@@ -159,6 +159,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit(): void {
+    this.applicant.SEAExp = []
     this.applicant.next_of_kin = []
     this.applicant.beneficiary = [] // Added by Hakim on 12 Jan 2021 - Update for changes no. 6 in Application For Employment (0106 NC Comment_11012021.docx) 
     this.applicant.applicant_dropdown = []
@@ -174,7 +175,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     this.getAllowances()
     this.getGender()
     this.getNOKListData()
-    // this.getCertListData() // Added by Hakim on 12 Jan 2021 
+    this.getSeaExperienceListData() // Added by Hakim on 26 Jan 2021 
     //this.getApplicantById(135)
     //this.getApplicantById(1274)
     this.getApplicantByLoginEmail(this.applicant.LoginEmail)
@@ -231,22 +232,6 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       (err) => alert('Failed to load vacancies')
     )
   }
-
-											 
-											
-						  
-								   
-											
-																 
-																	 
-
-											   
-							   
-			   
-	   
-	 
-									
-   
 
   private _refreshVacancyData(result: any[]) {
     this.allVacancies = result.map((openvacancy: OpenVacancy) => {
@@ -618,8 +603,8 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Added by Hakim on 12 Jan 2021 - Start
-  // Update for changes no. 7/6 in Application For Employment (0106 NC Comment_11012021.docx)
+  // Added by Hakim on 26 Jan 2021 - Start
+  // Update for changes no. 17 in Application For Employment (SKOM 210122 comment.docx)
   settings2 = {
     delete: {
       confirmDelete: true
@@ -637,48 +622,20 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
         hide: true,
         filter: false
       },
-      CertQualification: {
-        title: 'Certificate/Qualification title',
+      SeaExpCompany: {
+        title: 'Company',
         filter: false
       },
-      CertCompetencyType: {
-        title: 'Type of Certificate of Competency Held',
+      SeaExpVesselName: {
+        title: 'Vessel Name',
         filter: false,
-        type: 'html',
-        editor: {
-          type: 'list',
-          config: {
-            selectText: 'Select...',
-            list: this.certTypeList,
-          },
-        },
       },
-      CertNumber: {
-        title: 'Certificate No',
+      SeaExpRank: {
+        title: 'Rank',
         filter: false
       },
-      CertGrade: {
-        title: 'Grade',
-        filter: false,
-        type: 'html',
-        editor: {
-          type: 'list',
-          config: {
-            selectText: 'Select...',
-            list: this.certGradeList,
-          },
-        },
-      },
-      CertIssueAuthor: {
-        title: 'Issuing Authority',
-        filter: false
-      },
-      CertIssueDate: {
-        title: 'Date of Issue',
-        filter: false,
-      },
-      CertExpiryDate: {
-        title: 'Date of Expiry',
+      SeaExpPeriod: {
+        title: 'Period',
         filter: false,
       },
     },
@@ -688,7 +645,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Added by Hakim on 12 Jan 2021 - End
+  // Added by Hakim on 26 Jan 2021 - End
 
   getNOKListData() {
     this._subscription = this.relationshipService.getAllRelationships().subscribe(
@@ -806,8 +763,8 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     )
   }
 
-  // Added by Hakim on 12 Jan 2021 - Start
-  getCertListData() {
+  // Added by Hakim on 25 Jan 2021 - Start
+  getSeaExperienceListData() {
     this._subscription = this.relationshipService.getAllRelationships().subscribe(
       (result: any) => {
         this.relationships = result
@@ -835,48 +792,20 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
               hide: true,
               filter: false
             },
-            CertQualification: {
-              title: 'Certificate/Qualification title',
+            SeaExpCompany: {
+              title: 'Company',
               filter: false
             },
-            CertCompetencyType: {
-              title: 'Type of Certificate of Competency Held',
+            SeaExpVesselName: {
+              title: 'Vessel Name',
               filter: false,
-              type: 'html',
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.certTypeList,
-                },
-              },
             },
-            CertNumber: {
-              title: 'Certificate No',
+            SeaExpRank: {
+              title: 'Rank',
               filter: false
             },
-            CertGrade: {
-              title: 'Grade',
-              filter: false,
-              type: 'html',
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.certGradeList,
-                },
-              },
-            },
-            CertIssueAuthor: {
-              title: 'Issuing Authority',
-              filter: false
-            },
-            CertIssueDate: {
-              title: 'Date of Issue',
-              filter: false,
-            },
-            CertExpiryDate: {
-              title: 'Date of Expiry',
+            SeaExpPeriod: {
+              title: 'Period',
               filter: false,
             },
           },
@@ -888,10 +817,10 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
         this.settings2 = Object.assign(newSettings)
 
       },
-      (err) => alert('Failed to load certificate')
+      (err) => alert('Failed to load sea experience')
     )
   }
-  // Added by Hakim on 12 Jan 2021 - End
+  // Added by Hakim on 25 Jan 2021 - End
 
   getApplicantApplyByLoginEmail(LoginEmail) {
     console.log("inside getApplicantApplyByLoginEmail")
@@ -1323,78 +1252,48 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     })
   }
 
-  // Added by Hakim on 12 Jan 2021 - Start
-  // Update for changes no. 6 in Application For Employment (0106 NC Comment_11012021.docx)
-  getApplicantBeneficiary(LoginEmail) {
-    this.applicant.beneficiary = []
-    this.service.getApplicantNextOfKin(LoginEmail).subscribe( // Need to update service
+  // Added by Hakim on 26 Jan 2021 - Start
+  // Update for changes no. 17 in Application For Employment (SKOM 210122 comment.docx)
+  getApplicantSeaExperience(LoginEmail) {
+    this.applicant.SEAExp = []
+    this.service.getApplicantSeaExperience(LoginEmail).subscribe(
       (result: any) => {
-        // this.applicant.beneficiary = result
-        // this._refreshBenficiaryData()
-      },
-        (err) => alert('Failed to load Next Of Kin')
-    )
-  }
-
-  _refreshBenficiaryData() {}
-  // Added by Hakim on 12 Jan 2021 - End
-
-  // Added by Hakim on 12 Jan 2021 - Start
-  // Update for changes no. 7/8 in Application For Employment (0106 NC Comment_11012021.docx)
-  getApplicantCertification(LoginEmail) {
-    this.applicant.next_of_kin = []
-    this.service.getApplicantNextOfKin(LoginEmail).subscribe(
-      (result: any) => {
-        this.applicant.next_of_kin = result
-        this.data = result
-        // this._refreshCertificationData()
+        this.applicant.SEAExp = result
+        this.data2 = result
+        this._refreshSeaExperienceData()
       },
         (err) => alert('Failed to load certification')
     )
   }
 
-  _refreshCertificationData() {
-    this.applicant.next_of_kin.map((item: ApplicantNextOfKin) => {
+  _refreshSeaExperienceData() {
+    this.applicant.SEAExp = this.applicant.SEAExp.map((item: ApplicantSEAExperience) => {
       return {
         Id: item.Id,
         ApplyID: item.ApplyID,
         UserID: item.UserID,
-        // Added by Hakim on 12 Jan 2021 - Start
-        // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
-        NOKName: item.NOKName,
-        NOKMiddlename: item.NOKMiddleName,
-        NOKLastname: item.NOKLastName,
-        // Added by Hakim on 12 Jan 2021 - End
-        NOKRelationship: item.NOKRelationship,
-        NOKOccupaction: item.NOKOccupaction,
-        NOKGender: item.NOKGender,
-        NOKAge: item.NOKAge,
-        NOKContactNumber: item.NOKContactNumber,
-        NOKDOB: item.NOKDOB,
-					 
+        SeaExpCompany: item.Company,
+        SeaExpVesselName: item.VesselName,
+        SeaExpRank: item.ExpRank,
+        SeaExpPeriod: item.ExpPeriod,
       }
     })
 
-    this.data2.map((item: ApplicantNextOfKin) => {
+    this.data2 = this.data2.map((item: ApplicantSEAExperience) => {
       return {
         Id: item.Id,
+        ApplyID: item.ApplyID,
         UserID: item.UserID,
-        // Added by Hakim on 12 Jan 2021 - Start
-        // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
-        NOKName: item.NOKName,
-        NOKMiddleName: item.NOKMiddleName,
-        NOKLastName: item.NOKLastName,
-        // Added by Hakim on 12 Jan 2021 - End        NOKRelationship: item.NOKRelationship,
-        NOKOccupaction: item.NOKOccupaction,
-        NOKGender: item.NOKGender,
-        NOKAge: item.NOKAge,
-        NOKContactNumber: item.NOKContactNumber,
-        NOKDOB: item.NOKDOB,
-					 
+        SeaExpCompany: item.Company,
+        SeaExpVesselName: item.VesselName,
+        SeaExpRank: item.ExpRank,
+        SeaExpPeriod: item.ExpPeriod,
       }
     })
+
+    console.log("Number of experience: ", this.data2.length)
   }
-  // Added by Hakim on 12 Jan 2021 - End
+  // Added by Hakim on 26 Jan 2021 - End
 
   _refreshData() {
     console.log(this.applicant)
@@ -1403,6 +1302,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       this.url = "assets/UserDoc/" + this.applicant.FileName
     this.getApplicantDropdown(this.applicant.Id)
     this.getApplicantNextOfKin(localStorage.getItem("user_email")) // Added by Hakim on 13 Jan 2021
+    this.getApplicantSeaExperience(localStorage.getItem("user_email")) // Added by Hakim on 26 Jan 2021
     this.applicant.SignatureDate = new Date() // Added by Hakim on 19 Jan 2021
 
     // this.getApplicantNextOfKin(this.applicant.LoginEmail)
@@ -1876,16 +1776,17 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Placeholder for certification smart table
-  onDeleteConfirmCert(event) {
-    if (window.confirm(`Are you sure you want to delete certification?`)) {
-      event.newData.UserID = localStorage.getItem("user_email")
-      const subscription = this.applicationService.deleteApplicantCertificate(event.data.Id).subscribe((res: any) => {
+  // Added by Hakim on 25 Jan 2021 - Start
+  // Placeholder for sea experience smart table
+  onDeleteConfirmSEAExp(event) {
+    if (window.confirm(`Are you sure you want to delete SEA experience?`)) {
+      // event.newData.UserID = localStorage.getItem("user_email")
+      const subscription = this.applicationService.deleteApplicantSEAExp(event.data.Id).subscribe((res: any) => {
         if (res.Id == null) {
-          alert(`Failed to delete certification`)
+          alert(`Failed to delete SEA experience`)
         } else {
-          this.applicant.next_of_kin = this.applicant.next_of_kin.filter(a => a.Id !== event.data.Id)
-          this._refreshNextOfKinData()
+          this.applicant.SEAExp = this.applicant.SEAExp.filter(a => a.Id !== event.data.Id)
+          // this._refreshSeaExperienceData()
           event.confirm.resolve(event.newData)
         }
         subscription.unsubscribe()
@@ -1895,15 +1796,15 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSaveConfirmCert(event) {
-    if (window.confirm('Are you sure you want to save certification?')) {
+  onSaveConfirmSEAExp(event) {
+    if (window.confirm('Are you sure you want to save SEA sxperience?')) {
       event.confirm.resolve(event.newData)
       event.newData.UserID = localStorage.getItem("user_email")
-      const subscription = this.applicationService.updateApplicantCertificate(
+      const subscription = this.applicationService.updateApplicantSEAExp(
         JSON.stringify(event.newData))
         .subscribe((res: any) => {
           if (res.Id == null) {
-            alert('Failed to update certification')
+            alert('Failed to update SEA experience')
           } else {
             event.confirm.resolve(event.newData)
           }
@@ -1914,19 +1815,19 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCreateConfirmCert(event) {
-    if (window.confirm(`Are you sure you want to add certification?`)) {
+  onCreateConfirmSEAExp(event) {
+    if (window.confirm(`Are you sure you want to add SEA sxperience?`)) {
       //event.newData.Id = this.applicant.Id
       event.newData.UserID = localStorage.getItem("user_email")
-      const subscription = this.applicationService.addApplicantCertificate(
+      const subscription = this.applicationService.addApplicantSEAExp(
         JSON.stringify(event.newData)
       ).subscribe((res: any) => {
         if (res.Id == null) {
-          alert(`Failed to create certification`)
+          alert(`Failed to create SEA experience`)
         } else {
-          event.newData.No = this.applicant.next_of_kin.length + 1
+          event.newData.No = this.applicant.SEAExp.length + 1
           event.newData.Id = res.Id
-          this.applicant.next_of_kin.push(event.newData)
+          this.applicant.SEAExp.push(event.newData)
           event.confirm.resolve(event.newData)
         }
         subscription.unsubscribe()
@@ -1935,6 +1836,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       event.confirm.reject()
     }
   }
+  // Added by Hakim on 25 Jan 2021 - End
 }
 
 @Component({

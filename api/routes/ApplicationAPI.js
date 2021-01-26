@@ -15,9 +15,9 @@ router.post('/add_applicantnextofkin/', controller.addApplicantNextOfKin);
 router.put('/update_applicantnextofkin/',controller.updateApplicantNextOfKin);
 
 // Added by Hakim on 13 Jan 2021 - Start
-router.delete('/delete_applicantcertificate/:Id',controller.deleteApplicantCertificate);
-router.post('/add_applicantcertificate/', controller.addApplicantCertificate);
-router.put('/update_applicantcertificate/',controller.updateApplicantCertificate);
+router.delete('/delete_applicantseaexperience/:Id',controller.deleteApplicantExperience);
+router.post('/add_applicantseaexperience/', controller.addApplicantExperience);
+router.put('/update_applicantseaexperience/',controller.updateApplicantExperience);
 // Added by Hakim on 13 Jan 2021 - End
 
 router.delete('/delete_document/:Id', fileUploadController.deleteDocument)

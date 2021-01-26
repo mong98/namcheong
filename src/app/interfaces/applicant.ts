@@ -69,6 +69,18 @@ export interface ApplicantMedicalAnswer {
 }
 // Added by Hakim on 14 Jan 2021 - End
 
+// Added by Hakim on 26 Jan 2021 - Start
+export interface ApplicantSEAExperience {
+  Id: number
+  ApplyID: number
+  UserID: string
+  Company: string
+  VesselName: string
+  ExpRank: string
+  ExpPeriod: string
+}
+// Added by Hakim on 26 Jan 2021 - End
+
 export interface ApplicantDocument {
   Id: number
   DocumentID: number

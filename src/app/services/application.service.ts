@@ -47,19 +47,19 @@ export class ApplicationService {
     return this.service.deleteSecondaryEntity(this._entity, "applicantnextofkin", id)
   }
 
-  // Added by Hakim on 13 Jan 2021 - Start
-  addApplicantCertificate(data: any) {
-    return this.service.addSecondaryEntity(this._entity, "applicantcertificate", data)
+  // Added by Hakim on 26 Jan 2021 - Start
+  addApplicantSEAExp(data: any) {
+    return this.service.addSecondaryEntity(this._entity, "applicantseaexperience", data)
   }
 
-  updateApplicantCertificate(data: any) {
-    return this.service.updateSecondaryEntity(this._entity, "applicantcertificate", data)
+  updateApplicantSEAExp(data: any) {
+    return this.service.updateSecondaryEntity(this._entity, "applicantseaexperience", data)
   }
 
-  deleteApplicantCertificate(id: string) {
-    return this.service.deleteSecondaryEntity(this._entity, "applicantcertificate", id)
+  deleteApplicantSEAExp(id: string) {
+    return this.service.deleteSecondaryEntity(this._entity, "applicantseaexperience", id)
   }
-  // Added by Hakim on 13 Jan 2021 - End
+  // Added by Hakim on 26 Jan 2021 - End
 
   uploadDocument(Id: string, userId: string, document: File, columnType: string) {
     return this.service.uploadFile(Id, userId, document, columnType)

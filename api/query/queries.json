@@ -168,14 +168,14 @@
                                 , "NOKRelationship = @NOKRelationship, NOKEmployment = @NOKEmployment, "
                                 , "NOKAge = @NOKAge, NOKHandicap = @NOKHandicap "
                                 , "WHERE UserID = @UserID AND Id=@Id "],
-	"getApplicantCertificates" : " SELECT *, (year(getdate()) - year(NOKDOB)) as Age  FROM [JobPortal].[dbo].[ApplicantNOK] WHERE UserID = @UserID ORDER BY SeqNo",
-    "addApplicantCertificates" : ["INSERT INTO [JobPortal].[dbo].[ApplicantNOK] (UserID, NOKName, NOKRelationship, NOKOccupaction, NOKContactNumber, NOKDOB, SeqNo) "
-                                , "VALUES (@UserID, @NOKName, @NOKRelationship, @NOKOccupaction, @NOKContactNumber, @NOKDOB, @SeqNo); "
+    "getApplicantExperience" : " SELECT *  FROM [JobPortal].[dbo].[ApplicantExperience] WHERE UserID = @UserID",
+    "addApplicantExperience" : ["INSERT INTO [JobPortal].[dbo].[ApplicantExperience] (UserID, Company, VesselName, ExpRank, ExpPeriod) "
+                                , "VALUES (@UserID, @Company, @VesselName, @ExpRank, @ExpPeriod); "
                                 , "SELECT SCOPE_IDENTITY() AS [Id]"],
-    "deleteApplicantCertificate" : "DELETE FROM [ApplicantNOK] WHERE Id=@Id",
-    "updateApplicantCertificate" : ["UPDATE [ApplicantNOK] SET NOKName = @NOKName, "
-                                , "NOKRelationship = @NOKRelationship, NOKOccupaction = @NOKOccupaction, "
-                                , "NOKContactNumber = @NOKContactNumber, NOKDOB = @NOKDOB "
+    "deleteApplicantExperience" : "DELETE FROM [ApplicantExperience] WHERE Id=@Id",
+    "updateApplicantExperience" : ["UPDATE [ApplicantExperience] SET Company = @Company, "
+                                , "VesselName = @VesselName, "
+                                , "ExpRank = @ExpRank, ExpPeriod = @ExpPeriod "
                                 , "WHERE UserID = @UserID AND Id=@Id "],																																							   
 	"getApplicantDropdownId" : ["SELECT [STAllowance].[id] AS [AllowanceId], [STPortOfRegistry].[id] AS [PORId], "
                                 , "[STApplicantStatus].[id] AS [ApplyStatusId], [IMONoTbl].[Id] AS [ImonoId], [VesselType].[Id] AS [VesselId]  "

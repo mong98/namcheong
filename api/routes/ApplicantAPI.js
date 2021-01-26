@@ -22,7 +22,7 @@ router.get('/get_applicantdocument/?', controller.getApplicantDocument);
 router.get('/get_applicantstatus', controller.getApplicantStatus);
 													
 router.get('/get_applicantnextofkin/:UserID', controller.getApplicantNextOfKin);
-router.get('/get_applicantcertificates/:UserID', controller.getApplicantCertificates); // Added by Hakim on 13 Jan 2021
+router.get('/get_applicantseaexperience/:UserID', controller.getApplicantExperience); // Added by Hakim on 26 Jan 2021
 
 router.get('/get_applicantmedicalreportquestion', controller.getApplicantMedicalReportQuestion); // Added by Hakim on 14 Jan 2021
 router.get('/get_applicantmedicalreportanswer/:ApplyID', controller.getApplicantMedicalReportAnswerById); // Added by Hakim on 14 Jan 2021

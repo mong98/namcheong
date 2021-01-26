@@ -256,14 +256,14 @@ class ApplicantController {
     }
   }
 
-  // Added by Hakim on 13 Jan 2021 - Start
-  async getApplicantCertificates(req, res) {
+  // Added by Hakim on 26 Jan 2021 - Start
+  async getApplicantExperience(req, res) {
     try {
       const pool = await poolPromise
       const result = await pool
         .request()
         .input('UserID', sql.VarChar, req.params.UserID)
-        .query(queries.getApplicantCertificates)
+        .query(queries.getApplicantExperience)
       ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -271,7 +271,7 @@ class ApplicantController {
       res.send(error.message)
     }
   }
-  // Added by Hakim on 13 Jan 2021 - End
+  // Added by Hakim on 26 Jan 2021 - End
 
   async getCharterer(req, res) {
     try {

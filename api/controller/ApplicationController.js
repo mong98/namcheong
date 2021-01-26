@@ -261,30 +261,24 @@ class ApplicationController {
     }
   }
 
-  // Added by Hakim on 13 Jan 2021 - Start
-  async addApplicantCertificate(req, res) {
+  // Added by Hakim on 26 Jan 2021 - Start
+  async addApplicantExperience(req, res) {
     try {
-      //console.log('addApplicantCertificate: ', req.body)
+      //console.log('addApplicantExperience: ', req.body)
       if (req.body.Id != null && req.body.UserID != null) {
-        var queryStr = queries.addApplicantNextOfKin.join(' ')
+        var queryStr = queries.addApplicantExperience.join(' ')
         //console.log("queryStr: ", queryStr, " UserID: ", req.body.UserID)
         const pool = await poolPromise
         const result = await pool
           .request()
           .input('UserID', sql.VarChar, req.body.UserID)
-          .input('NOKName', sql.VarChar, req.body.NOKName)
-          .input('NOKMiddleName', sql.VarChar, req.body.NOKName) // Added by Hakim on 13 Jan 2021
-          .input('NOKLastName', sql.VarChar, req.body.NOKName) // Added by Hakim on 13 Jan 2021
-          .input('NOKRelationship', sql.VarChar, req.body.NOKRelationship)
-          .input('NOKOccupaction', sql.VarChar, req.body.NOKOccupaction)
-          .input('NOKContactNumber', sql.VarChar, req.body.NOKContactNumber)
-          .input('NOKAge', sql.VarChar, req.body.Age) 
-          .input('NOKDOB', sql.Date, req.body.NOKDOB) 
-          .input('NOKWorkStudy', sql.VarChar, req.body.NOKWorkStudy) // Added by Hakim on 13 Jan 2021
-          .input('NOKHandicap', sql.VarChar, req.body.NOKHandicap) // Added by Hakim on 13 Jan 2021
-          .input('SeqNo', sql.Int, 1)
+          .input('ApplyID', sql.VarChar, req.body.ApplyID)
+          .input('Company', sql.VarChar, req.body.SeaExpCompany)
+          .input('VesselName', sql.VarChar, req.body.SeaExpVesselName) 
+          .input('ExpRank', sql.VarChar, req.body.SeaExpRank)
+          .input('ExpPeriod', sql.VarChar, req.body.SeaExpPeriod)
           .query(queryStr)
-        //console.log('addApplicantCertificate result: ', result.recordset[0].Id)
+        //console.log('addApplicantExperience result: ', result.recordset[0].Id)
         res.json(result.recordset[0])
       } else {
         res.send('All fields are required!')
@@ -295,17 +289,17 @@ class ApplicationController {
     }
   }
 
-  async deleteApplicantCertificate(req, res) {
+  async deleteApplicantExperience(req, res) {
     try {
-      //console.log('deleteApplicantCertificate: ', req.body)
+      //console.log('deleteApplicantExperience: ', req.body)
       if (req.params.Id != null) {
         //console.log("req.params.Id: ", req.params.Id)
         const pool = await poolPromise
         const result = await pool
           .request()
           .input('Id', sql.SmallInt, req.params.Id)
-          .query(queries.deleteApplicantNextOfKin)
-        //console.log('deleteApplicantCertificate result: ', req.params.Id)
+          .query(queries.deleteApplicantExperience)
+        //console.log('deleteApplicantExperience result: ', req.params.Id)
         res.json({ Id: req.params.Id })
       } else {
         res.send('All fields are required!')
@@ -316,25 +310,24 @@ class ApplicationController {
     }
   }
 
-  async updateApplicantCertificate(req, res) {
+  async updateApplicantExperience(req, res) {
     try {
-      //console.log('updateApplicantCertificate: ', req.body)
+      //console.log('updateApplicantExperience: ', req.body)
       if (req.body.Id != null && req.body.UserID != null) {
-        var queryStr = queries.updateApplicantNextOfKin.join(' ')
+        var queryStr = queries.updateApplicantExperience.join(' ')
         //console.log("queryStr: ", queryStr, " UserID: ", req.body.UserID)
         const pool = await poolPromise
         const result = await pool
           .request()
           .input('Id', sql.SmallInt, req.body.Id)
+          .input('ApplyID', sql.VarChar, req.body.ApplyID)
           .input('UserID', sql.VarChar, req.body.UserID)
-          .input('NOKName', sql.VarChar, req.body.NOKName)
-          .input('NOKRelationship', sql.VarChar, req.body.NOKRelationship)
-          .input('NOKOccupaction', sql.VarChar, req.body.NOKOccupaction)
-          .input('NOKContactNumber', sql.VarChar, req.body.NOKContactNumber)
-          .input('NOKDOB', sql.Date, req.body.NOKDOB)
-          .input('SeqNo', sql.Int, req.body.SeqNo)
+          .input('Company', sql.VarChar, req.body.SeaExpCompany)
+          .input('VesselName', sql.VarChar, req.body.SeaExpVesselName) 
+          .input('ExpRank', sql.VarChar, req.body.SeaExpRank)
+          .input('ExpPeriod', sql.VarChar, req.body.SeaExpPeriod)
           .query(queryStr)
-        //console.log('updateApplicantCertificate result: ', req.body.Id)
+        //console.log('updateApplicantExperience result: ', req.body.Id)
         res.json({ Id: req.body.Id })
       } else {
         res.send('All fields are required!')
@@ -344,7 +337,7 @@ class ApplicationController {
       res.send(error.message)
     }
   }
-  // Added by Hakim on 13 Jan 2021 - End
+  // Added by Hakim on 26 Jan 2021 - End
 
   async getApplicantByLoginEmailApplyPosition(req) {
     const pool = await poolPromise

@@ -549,10 +549,12 @@
   </div>
   <div class="col"></div>
 </div>
-<div class="form-group">
+<!-- Comment by Hakim on 26 Jan 2021 - Start -->
+<!-- <div class="form-group">
   <label for="repatriation port">Repatriation Home Port</label>
   <input type="text" class="form-control mb-2 mr-sm-2" id="repatriation_port" [(ngModel)]="applicant.RepatriationHomePort" />
-</div>
+</div> -->
+<!-- Comment by Hakim on 26 Jan 2021 - End -->
 <div class="form-group">
   <label for="repatriation port">Highest Education Level</label>
   <select class="custom-select my-1 mr-sm-2" id="education" [(ngModel)]="applicant.Education">
@@ -837,15 +839,16 @@
   </div>
 </div>
 
-<!-- Added by Hakim on 12 Jan 2021 -->
-<!-- Update for changes no. 7/8 in Application For Employment (0106 NC Comment_11012021.docx) -->
-<!-- <div class="form-group">
+<!-- Added by Hakim on 26 Jan 2021 -->
+<!-- Update for changes no. 17 in Application For Employment (SKOM 210122.docx) -->
+<div class="form-group">
+  <label><b>SEA Experience</b></label>
   <ng2-smart-table [settings]="settings2" [source]="data2"
-  (deleteConfirm)="onDeleteConfirmCert($event)"
-  (editConfirm)="onSaveConfirmCert($event)"
-  (createConfirm)="onCreateConfirmCert($event)"></ng2-smart-table>
-</div> -->
-<!-- Added by Hakim on 12 Jan 2021 -->
+  (deleteConfirm)="onDeleteConfirmSEAExp($event)"
+  (editConfirm)="onSaveConfirmSEAExp($event)"
+  (createConfirm)="onCreateConfirmSEAExp($event)"></ng2-smart-table>
+</div>
+<!-- Added by Hakim on 26 Jan 2021 -->
 
 	
 <div class="form-group">

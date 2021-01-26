@@ -95,6 +95,12 @@ export class ApplicantService {
     return this.service.getSecondaryEntityById(this._entity, "applicantnextofkin", LoginEmail)
   }
 
+  // Added by Hakim on 26 Jan 2021 - Start
+  getApplicantSeaExperience(LoginEmail: string) {
+    return this.service.getSecondaryEntityById(this._entity, "applicantseaexperience", LoginEmail)
+  }
+  // Added by Hakim on 26 Jan 2021 - End
+
   getApplicantDropdown(id: string) {
     return this.service.getSecondaryEntityById(this._entity, "applicantdropdown", id)
   }
