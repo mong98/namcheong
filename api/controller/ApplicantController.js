@@ -28,7 +28,6 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCurrency)
-								 
 
       ////console.log(result.recordset)
       res.json(result.recordset)
@@ -39,7 +38,6 @@ class ApplicantController {
   }
 
   async getApplicantApply(req, res) {
-			  
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getApplicantApply)
@@ -58,7 +56,6 @@ class ApplicantController {
       const result = await pool
         .request()
         .query(queries.getApplicantGeneralQuestion)
-			   
 
       ////console.log(result.recordset)
       res.json(result.recordset)
@@ -67,7 +64,6 @@ class ApplicantController {
       res.send(error.message)
     }
   }
-
 
   async getApplicantGeneralAnswerById(req, res) {
     try {
@@ -228,9 +224,8 @@ class ApplicantController {
 
   async getApplicantStatus(req, res) {
     try {
-			
       const pool = await poolPromise
-										 
+
       const result = await pool.request().query(queries.getApplicantStatus)
 
       ////console.log(result.recordset)
@@ -277,7 +272,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCharterer)
-									
+
       ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -290,7 +285,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getCompetency)
-									 
+
       ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -303,7 +298,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getWorking)
-								  
+
       ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -316,7 +311,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getGender)
-								 
+
       ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -329,7 +324,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getEducation)
-									
+
       ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -342,7 +337,7 @@ class ApplicantController {
     try {
       const pool = await poolPromise
       const result = await pool.request().query(queries.getDynamicPos)
-									 
+
       ////console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {
@@ -410,7 +405,7 @@ class ApplicantController {
           .input('ApplyPosition', sql.VarChar, req.body.ApplyPosition)
           .input('DailyRate', sql.VarChar, req.body.DailyRate)
           .input('StandbyRate', sql.VarChar, req.body.StandbyRate)
-          .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021								
+          .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021
           .input('Allowance', sql.VarChar, req.body.Allowance)
           .input('TypesofAllowance', sql.VarChar, req.body.TypesofAllowance)
           .input(
@@ -440,7 +435,6 @@ class ApplicantController {
           var afe_result = await GenerationController.generateAFE(req, res)
           var cv_result = await GenerationController.generateCV(req, res)
         } else if (req.body.Status == 'Offered') {
-											   
           //console.log('generate SEA ', req.body.Id)
           var afe_result = await GenerationController.generateAFE(req, res)
           var cv_result = await GenerationController.generateCV(req, res)
@@ -481,7 +475,7 @@ class ApplicantController {
           .input('OfferPosition', sql.VarChar, req.body.OfferPosition)
           .input('DailyRate', sql.VarChar, req.body.DailyRate)
           .input('StandbyRate', sql.VarChar, req.body.StandbyRate)
-          .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021								
+          .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021
           .input('Allowance', sql.VarChar, req.body.Allowance)
           .input('TypesofAllowance', sql.VarChar, req.body.TypesofAllowance)
           .input(
@@ -495,10 +489,9 @@ class ApplicantController {
           .input('IMONo', sql.VarChar, req.body.IMONo)
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
           .input('Currency', sql.VarChar, req.body.Currency)
-          .input('Salary', sql.VarChar, req.body.Salary)		
+          .input('Salary', sql.VarChar, req.body.Salary)
           .input('OtherAllowance', sql.VarChar, req.body.OtherAllowance)
           .query(queryStr)
-
 
         // Set ApplyID & Status for doc generation
         req.body.ApplyID = req.body.Id
@@ -511,7 +504,7 @@ class ApplicantController {
           console.log('AFE not generated due to file not found!')
           res.send('AFE not generated due to file not found!')
         }
-        
+
         var cv_result = await GenerationController.generateCV(req, res)
 
         // Set ApplyID & Status for doc generation
@@ -573,31 +566,53 @@ class ApplicantController {
             extend
           )
 
+          //added 26/1/2021
+          let AdminName = localStorage.getItem('adminUsername');
+          let AdminEmail = localStorage.getItem('adminEmail');
 
           //send email
           sgMail.setApiKey(
             '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'
           )
           const msg = {
-            to:'desmond@wiserobot.com',
+            to: 'desmond@wiserobot.com',
             //to: applicant.recordset[0].LoginEmail, // Change to your recipient
             from: 'desomond17@gmail.com', // Change to your verified sender
             subject: '[TEST]: SKOM eCrew Job Portal',
-            html: '<strong>Dear <strong>'+ applicant.recordset[0].Name,
-            html: '<strong>Thank you for your application.<strong> ',
-            html: '<strong>We are pleased to make the following offer of employment.<strong>',
-            html: '·' + applicantApply.recordset[0].Position,
-            html: '·' + applicantApply.recordset[0].NameofVessel,
-            html: '·' + applicantApply.recordset[0].DailyRate,
-            html: '·' + applicantApply.recordset[0].Allowance,
-            html: '·'+ applicantApply.recordset[0].OtherAllowance,
-            html: '·'+ applicantApply.recordset[0].ContractPeriodFromInMth +'	/month – this may subject to your final acceptance and sign on date.',
-
-            html: 'Please acknowledge your acceptance of the above offer and email signed SEA to [email address]',
-            html: 'Should you need further clarification, please contact [Crewing Executive] at [email address]',
-
-            html: 'SKOM Sdn. Bhd.',
-            html: 'This is a computer generated message and no signature is required.',
+            html:
+              '<strong>Dear <strong>' +
+              applicant.recordset[0].Name +
+              '<br />' +
+              '<strong>Thank you for your application.<strong>' +
+              '<br />' +
+              '<strong>We are pleased to make the following offer of employment.<strong>' +
+              '<br />' +
+              '· ' +
+              applicantApply.recordset[0].Position +
+              '<br />' +
+              '· ' +
+              applicantApply.recordset[0].NameofVessel +
+              '<br />' +
+              '· ' +
+              applicantApply.recordset[0].DailyRate +
+              '<br />' +
+              '· ' +
+              applicantApply.recordset[0].Allowance +
+              '<br />' +
+              '· ' +
+              applicantApply.recordset[0].OtherAllowance +
+              '<br />' +
+              '· ' +
+              applicantApply.recordset[0].ContractPeriodFromInMth +
+              '	/month – this may subject to your final acceptance and sign on date.' +
+              '<br />' +
+              'Please acknowledge your acceptance of the above offer and email signed SEA to ' +applicant.recordset[0].LoginEmail+
+              '<br />' +
+              'Should you need further clarification, please contact '+ AdminName +' at '+ AdminEmail +
+              '<br />' +
+              'SKOM Sdn. Bhd.' +
+              '<br />' +
+              'This is a computer generated message and no signature is required.',
 
             attachments: [
               {

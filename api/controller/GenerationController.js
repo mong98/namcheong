@@ -37,7 +37,7 @@ class GenerationController {
           //.input('LoginEmail', sql.VarChar, req.body.LoginEmail)
           .input('Id', sql.VarChar, req.body.ApplyID)
           .query(queries.getApplicantApplyById)
-       
+
         const Status = await pool
           .request()
           .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
@@ -46,7 +46,6 @@ class GenerationController {
           //.input('Position', sql.VarChar, 'Master')
           .query(queries.getApplicantApplyAllStatus)
 
-          
         if (
           Status.recordset[0].Status == 'Review' ||
           Status.recordset[0].Status == 'Offered'
@@ -85,6 +84,10 @@ class GenerationController {
 
           let documentList = []
 
+          //added 26/1/2021
+          let SEA = []
+          let SEAList = []
+
           //poolPromise
           const pool = await poolPromise
 
@@ -98,33 +101,26 @@ class GenerationController {
 
           //get full documents
           const resultApplicantDocument = await pool
-        .request()
-        .input('ApplyID', sql.VarChar, req.body.ApplyID)
-        .query(queries.getApplicantDocumentById)
+            .request()
+            .input('ApplyID', sql.VarChar, req.body.ApplyID)
+            .query(queries.getApplicantDocumentById)
 
-        document = resultApplicantDocument.recordset
-          documentData = resultApplicantDocument.recordset[0]
+          document = resultApplicantDocument.recordset
 
-          ////console.log(checkApplicant)
+          //added 26/1/2021
+          const resltApplicantExperience = await pool
+            .request()
+            .input('UserID', sql.VarChar, req.body.LoginEmail)
+            .query(queries.getApplicantExperience)
 
-          //comment 15/1/2021
-          //get passport result
-          // const resultPassport = await pool
-          //   .request()
-          //   .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
-          //   .input('ApplyID', sql.VarChar, req.body.ApplyID)
-          //   .input('Document', sql.VarChar, 'International Passport')
-          //   .query(queries.getPassport)
-
-          // PassportDocument = resultPassport.recordset[0]
+            SEA = resltApplicantExperience.recordset
 
           //condition
-            if (checkApplicant.recordset[0].Position != null) {
-              Position = checkApplicant.recordset[0].Position;
-            } else {
-              Position = '-'
-            }
-          
+          if (checkApplicant.recordset[0].Position != null) {
+            Position = checkApplicant.recordset[0].Position
+          } else {
+            Position = '-'
+          }
 
           if (applicant != []) {
             if (applicant.Name != null) {
@@ -275,30 +271,6 @@ class GenerationController {
             }
           }
 
-          //comment 15/1/2021
-          // if (PassportDocument != []) {
-          //   if (
-          //     PassportDocument.DtIssue != null ||
-          //     PassportDocument.DtIssue != ''
-          //   ) {
-          //     let date1 = new Date(PassportDocument.DtIssue)
-          //     var date2 = moment(date1).format('DD/MM/YYYY')
-          //     PassDtIssue = date2
-          //   } else {
-          //     PassDtIssue = '-'
-          //   }
-          //   if (
-          //     PassportDocument.DtExpiry != null ||
-          //     PassportDocument.DtExpiry != ''
-          //   ) {
-          //     let date1 = new Date(PassportDocument.DtExpiry)
-          //     var date2 = moment(date1).format('DD/MM/YYYY')
-          //     PassDtExpiry = date2
-          //   } else {
-          //     PassDtExpiry = '-'
-          //   }
-          // }
-
           if (document.length != 0) {
             for (let i = 0; i < document.length; i++) {
               let Document = '-'
@@ -335,6 +307,45 @@ class GenerationController {
                 DocNo: DocNo,
                 DtIssue: DtIssue,
                 DtExpiry: DtExpiry,
+              })
+            }
+          }
+
+          //added 26/1/2021
+          if (SEA.length != 0 && SEA != []) {
+            for (let i = 0; i < SEA.length; i++) {
+              let SEACompany = '-'
+              let SEAVessel = '-'
+              let SEARank = '-'
+              let SEAPeriod = '-'
+
+              if (SEA[i].Company == null || document[i].Company == '') {
+                SEACompany = '-'
+              } else {
+                SEACompany = SEA[i].Company 
+              }
+              if (SEA[i].VesselName == null || SEA[i].VesselName == '') {
+                SEAVessel = '-'
+              } else {
+                SEAVessel = SEA[i].VesselName
+              }
+              if (SEA[i].ExpRank == null || SEA[i].ExpRank == '') {
+                SEARank = '-'
+              } else {
+            
+                SEARank = SEA[i].ExpRank
+              }
+              if (SEA[i].ExpPeriod == null || SEA[i].ExpPeriod == '') {
+                SEAPeriod = '-'
+              } else {
+             
+                SEAPeriod = SEA[i].ExpPeriod
+              }
+              SEAList.push({
+                SEACompany: SEACompany,
+                SEAVessel: SEAVessel,
+                SEARank: SEARank,
+                SEAPeriod: SEAPeriod,
               })
             }
           }
@@ -376,6 +387,8 @@ class GenerationController {
             PCity: PCity,
             PCountry: PCountry,
             Nationality: Nationality,
+            //added 26/1/2021
+            SEA: SEAList,
           })
 
           doc.render() //apply them
@@ -432,12 +445,15 @@ class GenerationController {
           // )
           //create docx file
 
-          checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(/[/\\?%*:|"<>]/g, '-');
+          checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(
+            /[/\\?%*:|"<>]/g,
+            '-'
+          )
 
           fs.writeFileSync(
             path.resolve(
               '../src/assets/UserDoc/' +
-              checkApplicant.recordset[0].Position +
+                checkApplicant.recordset[0].Position +
                 '_' +
                 applicant.LoginEmail +
                 '_CV_' +
@@ -489,12 +505,12 @@ class GenerationController {
 
         const checkApplicant = await pool
           .request()
-         // .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
+          // .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
           .input('Id', sql.VarChar, req.body.ApplyID)
           .query(queries.getApplicantApplyById)
 
-          //console.log("after generate")
-          ////console.log(checkApplicant)
+        //console.log("after generate")
+        ////console.log(checkApplicant)
 
         const Status = await pool
           .request()
@@ -502,9 +518,9 @@ class GenerationController {
           .input('Position', sql.VarChar, checkApplicant.recordset[0].Position)
           .input('ApplyID', sql.VarChar, req.body.ApplyID)
           .query(queries.getApplicantApplyAllStatus)
-        
-          //console.log("after Status")
-          ////console.log(Status)
+
+        //console.log("after Status")
+        ////console.log(Status)
 
         if (
           Status.recordset[0].Status == 'Review' ||
@@ -653,11 +669,11 @@ class GenerationController {
           // documentData = resultApplicantDocument.recordset[0]
 
           const resultApplicantDocument = await pool
-        .request()
-        .input('ApplyID', sql.VarChar, req.body.ApplyID)
-        .query(queries.getApplicantDocumentById)
+            .request()
+            .input('ApplyID', sql.VarChar, req.body.ApplyID)
+            .query(queries.getApplicantDocumentById)
 
-        document = resultApplicantDocument.recordset
+          document = resultApplicantDocument.recordset
           documentData = resultApplicantDocument.recordset[0]
 
           //console.log("abc doc")
@@ -678,12 +694,12 @@ class GenerationController {
 
           //get PMU result
           const resultPMU = await pool
-          .request()
-          .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
-          .input('QuestionId', sql.SmallInt, 1)
-          .input('ApplyID', sql.VarChar, req.body.ApplyID)
-          .query(queries.generalMedicalAnswer)
-          
+            .request()
+            .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
+            .input('QuestionId', sql.SmallInt, 1)
+            .input('ApplyID', sql.VarChar, req.body.ApplyID)
+            .query(queries.generalMedicalAnswer)
+
           if (resultPMU.recordset.length != 0) {
             if (resultPMU.recordset[0].CheckupDt != null) {
               let date1 = new Date(resultPMU.recordset[0].CheckupDt)
@@ -703,13 +719,12 @@ class GenerationController {
 
           //get Marine result
           const resultMarine = await pool
-          .request()
-          .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
-          .input('QuestionId', sql.SmallInt, 2)
-          .input('ApplyID', sql.VarChar, req.body.ApplyID)
-          .query(queries.generalMedicalAnswer)
+            .request()
+            .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
+            .input('QuestionId', sql.SmallInt, 2)
+            .input('ApplyID', sql.VarChar, req.body.ApplyID)
+            .query(queries.generalMedicalAnswer)
 
-          
           if (resultMarine.recordset.length != 0) {
             if (resultMarine.recordset[0].CheckupDt != null) {
               let date1 = new Date(resultMarine.recordset[0].CheckupDt)
@@ -726,7 +741,6 @@ class GenerationController {
               MarineDtExpiry = '-'
             }
           }
-    
 
           //getNOK data
           const resultNOK = await pool
@@ -965,9 +979,9 @@ class GenerationController {
             }
           }
 
-          if(checkApplicant.recordset[0].Position != null){
-            Position = checkApplicant.recordset[0].Position;
-          }else{
+          if (checkApplicant.recordset[0].Position != null) {
+            Position = checkApplicant.recordset[0].Position
+          } else {
             Position = '-'
           }
 
@@ -1033,12 +1047,15 @@ class GenerationController {
               Contact_Mobile = '-'
             }
             if (applicant.Gender != null) {
-              try{ const gender = await pool
-                .request()
-                .input('id', sql.VarChar, applicant.Gender)
-                .query(queries.getNameById)
-              Gender = gender.recordset[0].TableField}catch{Gender = applicant.Gender}
-             
+              try {
+                const gender = await pool
+                  .request()
+                  .input('id', sql.VarChar, applicant.Gender)
+                  .query(queries.getNameById)
+                Gender = gender.recordset[0].TableField
+              } catch {
+                Gender = applicant.Gender
+              }
             } else {
               Gender = '-'
             }
@@ -1153,15 +1170,22 @@ class GenerationController {
               EmergencyContactName = '-'
             }
             if (applicant.EmergencyContactRelationship != null) {
-              if(applicant.EmergencyContactRelationship )
-              try{const relationship = await pool
-                .request()
-                .input('id', sql.VarChar, applicant.EmergencyContactRelationship)
-                .query(queries.getNameById)
-              EmergencyContactRelationship = relationship.recordset[0].TableField }catch(e){
-                EmergencyContactRelationship =applicant.EmergencyContactRelationship;
-              }
-			  
+              if (applicant.EmergencyContactRelationship)
+                try {
+                  const relationship = await pool
+                    .request()
+                    .input(
+                      'id',
+                      sql.VarChar,
+                      applicant.EmergencyContactRelationship
+                    )
+                    .query(queries.getNameById)
+                  EmergencyContactRelationship =
+                    relationship.recordset[0].TableField
+                } catch (e) {
+                  EmergencyContactRelationship =
+                    applicant.EmergencyContactRelationship
+                }
             } else {
               EmergencyContactRelationship = '-'
             }
@@ -1252,7 +1276,7 @@ class GenerationController {
               //   '/' +
               //   applicant.DOB.getFullYear()
               ////console.log(Ager)
-            }else{
+            } else {
               DOB = '-'
             }
 
@@ -1408,7 +1432,7 @@ class GenerationController {
             } else {
               SignatureManagerName = '-'
             }
-            
+
             if (SignatureExecutive != null && SignatureExecutive != '') {
               var today = new Date()
               var dd = String(today.getDate()).padStart(2, '0')
@@ -1421,7 +1445,7 @@ class GenerationController {
               today = dd + '/' + mm + '/' + yyyy
               SignDtExecutive = today
               SignDtManager = today
-            }else{
+            } else {
               SignDtExecutive = '-'
               SignDtManager = '-'
             }
@@ -1470,14 +1494,15 @@ class GenerationController {
               ) {
                 nokRelationship = '-'
               } else {
-                try{  const relationship = await pool
-                  .request()
-                  .input('id', sql.VarChar, NOK[i].NOKRelationship)
-                  .query(queries.getNameById)
-                  nokRelationship = relationship.recordset[0].TableField}catch{
-                    nokRelationship = NOK[i].NOKRelationship
+                try {
+                  const relationship = await pool
+                    .request()
+                    .input('id', sql.VarChar, NOK[i].NOKRelationship)
+                    .query(queries.getNameById)
+                  nokRelationship = relationship.recordset[0].TableField
+                } catch {
+                  nokRelationship = NOK[i].NOKRelationship
                 }
-			  
               }
               if (NOK[i].NOKEmployment == null || NOK[i].NOKEmployment == '') {
                 nokOccupaction = '-'
@@ -1490,17 +1515,17 @@ class GenerationController {
                 nokAge = NOK[i].NOKAge
               }
               if (NOK[i].NOKGender == null || NOK[i].NOKGender == '') {
-				
                 nokGender = '-'
               } else {
-                try{ const gender = await pool
-                  .request()
-                  .input('id', sql.VarChar, NOK[i].NOKGender)
-                  .query(queries.getNameById)
-                nokGender = gender.recordset[0].TableField}catch(e){
-                  nokGender =NOK[i].NOKGender
+                try {
+                  const gender = await pool
+                    .request()
+                    .input('id', sql.VarChar, NOK[i].NOKGender)
+                    .query(queries.getNameById)
+                  nokGender = gender.recordset[0].TableField
+                } catch (e) {
+                  nokGender = NOK[i].NOKGender
                 }
-			   
               }
               NOKList.push({
                 NOKName: nokName,
@@ -1601,7 +1626,7 @@ class GenerationController {
           // } else {
           //   PassDtIssue = '-'
           //   PassDtExpiry = '-'
-          // }   
+          // }
 
           var content = fs.readFileSync(
             path.resolve('./Templates/', 'AFEtemp.docx'),
@@ -1779,12 +1804,15 @@ class GenerationController {
             // )
 
             //remove the special character from position value to create doc
-            checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(/[/\\?%*:|"<>]/g, '-');
+            checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(
+              /[/\\?%*:|"<>]/g,
+              '-'
+            )
 
             fs.writeFileSync(
               path.resolve(
                 '../src/assets/UserDoc/' +
-                checkApplicant.recordset[0].Position +
+                  checkApplicant.recordset[0].Position +
                   '_' +
                   applicant.LoginEmail +
                   '_AFE_' +
@@ -1948,12 +1976,12 @@ class GenerationController {
 
           //get full documents
           const resultApplicantDocument = await pool
-          .request()
-          .input('ApplyID', sql.VarChar, req.body.ApplyID)
-          .query(queries.getApplicantDocumentById)
-  
+            .request()
+            .input('ApplyID', sql.VarChar, req.body.ApplyID)
+            .query(queries.getApplicantDocumentById)
+
           document = resultApplicantDocument.recordset
-            documentData = resultApplicantDocument.recordset[0]
+          documentData = resultApplicantDocument.recordset[0]
 
           //get applicant apply
           const resultApplicantApply = await pool
@@ -2013,19 +2041,19 @@ class GenerationController {
               Allowance = '-'
             }
             if (applicantApply.StandbyRate != null) {
-              if(applicantApply.StandbyRate == '1'){
+              if (applicantApply.StandbyRate == '1') {
                 StandbyRateSelection = 'x0.5'
-              }else if(applicantApply.StandbyRate == '2'){
+              } else if (applicantApply.StandbyRate == '2') {
                 StandbyRateSelection = 'x1.0'
               }
             } else {
               StandbyRateSelection = '-'
             }
             if (applicantApply.StandbyRate != null) {
-              if(applicantApply.StandbyRate == '1'){
-                StandbyRate = applicantApply.DailyRate*0.5
-              }else if(applicantApply.StandbyRate == '2'){
-                StandbyRate = applicantApply.DailyRate*1.0
+              if (applicantApply.StandbyRate == '1') {
+                StandbyRate = applicantApply.DailyRate * 0.5
+              } else if (applicantApply.StandbyRate == '2') {
+                StandbyRate = applicantApply.DailyRate * 1.0
               }
             } else {
               StandbyRate = '-'
@@ -2328,16 +2356,19 @@ class GenerationController {
               NOKLastName = '-'
             }
             if (applicant.EmergencyContactRelationship != null) {
-              try{
+              try {
                 const relationship = await pool
-                .request()
-                .input('id', sql.VarChar, applicant.EmergencyContactRelationship)
-                .query(queries.getNameById)
+                  .request()
+                  .input(
+                    'id',
+                    sql.VarChar,
+                    applicant.EmergencyContactRelationship
+                  )
+                  .query(queries.getNameById)
                 NOKRelationship = relationship.recordset[0].TableField
-              }catch{
-                NOKRelationship =applicant.EmergencyContactRelationship
+              } catch {
+                NOKRelationship = applicant.EmergencyContactRelationship
               }
-             
             } else {
               NOKRelationship = '-'
             }
@@ -2366,7 +2397,6 @@ class GenerationController {
             } else {
               NOKAddress3 = '-'
             }
-		   
           }
 
           if (admin != null || admin != []) {
@@ -2473,12 +2503,12 @@ class GenerationController {
               NOKAddress2: NOKAddress2,
               NOKAddress3: NOKAddress3,
               //added 20/1/2021
-              Salary:Salary,
-              OtherAllowanceRate:OtherAllowanceRate,
+              Salary: Salary,
+              OtherAllowanceRate: OtherAllowanceRate,
               //added 26/1/2021
-              PeriodFrom:PeriodFrom,
-              PeriodTo:PeriodTo,
-              StandbyRateSelection:StandbyRateSelection
+              PeriodFrom: PeriodFrom,
+              PeriodTo: PeriodTo,
+              StandbyRateSelection: StandbyRateSelection,
             })
 
             doc.render() //apply them
@@ -2539,13 +2569,16 @@ class GenerationController {
               )
               .input('GenDoc', '2')
               .query(queries.updategenDoc)
-            
-            checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(/[/\\?%*:|"<>]/g, '-');
+
+            checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(
+              /[/\\?%*:|"<>]/g,
+              '-'
+            )
 
             fs.writeFileSync(
               path.resolve(
                 '../src/assets/UserDoc/' +
-                checkApplicant.recordset[0].Position +
+                  checkApplicant.recordset[0].Position +
                   '_' +
                   applicant.LoginEmail +
                   '_SEA_' +
