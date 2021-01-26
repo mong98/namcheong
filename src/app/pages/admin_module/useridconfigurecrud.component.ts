@@ -156,7 +156,7 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
 
   viewSignature() {
     if (this.signaturePath && this.signaturePath.length > 0) {
-      window.open('../'+`${environment.documentPathPrefix}/${this.signaturePath}`, '_blank')
+      window.open(`${environment.documentPathPrefix}/${this.signaturePath}`, '_blank')
     }
   }
 
@@ -178,7 +178,7 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
   
   viewSignatureAdmin() {
     if (this.signatureAdminPath && this.signatureAdminPath.length > 0) {
-      window.open('../'+`${environment.documentPathPrefix}/${this.signatureAdminPath}`, '_blank')
+      window.open(`${environment.documentPathPrefix}/${this.signatureAdminPath}`, '_blank')
     }
   }
 
@@ -189,7 +189,7 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
           console.log(result)
           if(result.success_code == 0) {
             alert('Successfully removed manager\'s Signature')
-            this.signaturePath = null
+            this.signatureAdminPath = null
           }
         },
         (err) => alert('Failed to remove manager\'s signature')

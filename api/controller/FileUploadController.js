@@ -183,12 +183,15 @@ class FileUploadController {
         new Promise((resolve) => {
           try {
             let path = `../src/assets/UserDoc/`
-            fs.unlink(path + FileName, function (err) {
-              if (err) {
-                throw err
-              }
-              resolve()
-            })
+            if(result.recordset != undefined){
+              fs.unlink(path + FileName, function (err) {
+                if (err) {
+                  throw err;
+                }
+                resolve()
+              })
+            }
+           
           } catch (e) {
             console.error(err)
             resolve()

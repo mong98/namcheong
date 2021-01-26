@@ -1228,20 +1228,6 @@ class GenerationController {
               Ref2Contact = '-'
             }
 
-            if (SignDtManager == null && SignDtManager == '') {
-              var today = new Date()
-              var dd = String(today.getDate()).padStart(2, '0')
-              var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
-              var yyyy = today.getFullYear()
-              var hh = today.getHours()
-              var min = today.getMinutes()
-              var sec = today.getSeconds()
-
-              today = dd + '/' + mm + '/' + yyyy
-              SignDtExecutive = today
-              SignDtManager = today
-            }
-
             if (applicant.DOB != null) {
               DOB = new Date(applicant.DOB)
 
@@ -1375,7 +1361,9 @@ class GenerationController {
               SignatureIcPassport = '-'
             }
             if (applicant.SignatureDate != null) {
-              SignatureDate = applicant.SignatureDate
+              let date1 = new Date(applicant.SignatureDate)
+              var date2 = moment(date1).format('DD/MM/YYYY')
+              SignatureDate = date2
             } else {
               SignatureDate = '-'
             }
@@ -1419,6 +1407,23 @@ class GenerationController {
               SignatureManagerName = admin.ManagerName
             } else {
               SignatureManagerName = '-'
+            }
+            
+            if (SignatureExecutive != null && SignatureExecutive != '') {
+              var today = new Date()
+              var dd = String(today.getDate()).padStart(2, '0')
+              var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
+              var yyyy = today.getFullYear()
+              var hh = today.getHours()
+              var min = today.getMinutes()
+              var sec = today.getSeconds()
+
+              today = dd + '/' + mm + '/' + yyyy
+              SignDtExecutive = today
+              SignDtManager = today
+            }else{
+              SignDtExecutive = '-'
+              SignDtManager = '-'
             }
           }
 
@@ -1917,6 +1922,11 @@ class GenerationController {
           let OtherAllowanceRate = '-'
           let Salary = '-'
 
+          //added 26/1/2021
+          let PeriodFrom = '-'
+          let PeriodTo = '-'
+          let StandbyRateSelection = '-'
+
           //get data from dbo.applicant
           const pool = await poolPromise
 
@@ -2004,6 +2014,15 @@ class GenerationController {
             }
             if (applicantApply.StandbyRate != null) {
               if(applicantApply.StandbyRate == '1'){
+                StandbyRateSelection = 'x0.5'
+              }else if(applicantApply.StandbyRate == '2'){
+                StandbyRateSelection = 'x1.0'
+              }
+            } else {
+              StandbyRateSelection = '-'
+            }
+            if (applicantApply.StandbyRate != null) {
+              if(applicantApply.StandbyRate == '1'){
                 StandbyRate = applicantApply.DailyRate*0.5
               }else if(applicantApply.StandbyRate == '2'){
                 StandbyRate = applicantApply.DailyRate*1.0
@@ -2051,6 +2070,21 @@ class GenerationController {
               OtherAllowanceRate = applicantApply.OtherAllowance
             } else {
               OtherAllowanceRate = '-'
+            }
+            //added 26/1/2021
+            if (applicantApply.ContractPeriodFrom != null) {
+              let date1 = new Date(applicantApply.ContractPeriodFrom)
+              var date2 = moment(date1).format('DD/MM/YYYY')
+              PeriodFrom = date2
+            } else {
+              PeriodFrom = '-'
+            }
+            if (applicantApply.ContractPeriodTo != null) {
+              let date1 = new Date(applicantApply.ContractPeriodTo)
+              var date2 = moment(date1).format('DD/MM/YYYY')
+              PeriodTo = date2
+            } else {
+              PeriodTo = '-'
             }
           }
 
@@ -2441,6 +2475,10 @@ class GenerationController {
               //added 20/1/2021
               Salary:Salary,
               OtherAllowanceRate:OtherAllowanceRate,
+              //added 26/1/2021
+              PeriodFrom:PeriodFrom,
+              PeriodTo:PeriodTo,
+              StandbyRateSelection:StandbyRateSelection
             })
 
             doc.render() //apply them

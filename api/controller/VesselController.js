@@ -7,9 +7,11 @@ class VesselController {
 
     async getVesselType(req , res){
       try {
+        console.log("Get Vessel!")
         const pool = await poolPromise
         const result = await pool.request()
           .query(queries.getVesselType)
+          
           console.log(result.recordset)
           res.json(result.recordset)
 

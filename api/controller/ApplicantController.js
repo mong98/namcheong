@@ -579,11 +579,26 @@ class ApplicantController {
             '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'
           )
           const msg = {
-            to: applicant.recordset[0].LoginEmail, // Change to your recipient
+            to:'desmond@wiserobot.com',
+            //to: applicant.recordset[0].LoginEmail, // Change to your recipient
             from: 'desomond17@gmail.com', // Change to your verified sender
             subject: '[TEST]: SKOM eCrew Job Portal',
-            text: '<strong>You Have Been Offered!</strong>',
-            html: '<strong>You Have Been Offered!</strong>',
+            html: '<strong>Dear <strong>'+ applicant.recordset[0].Name,
+            html: '<strong>Thank you for your application.<strong> ',
+            html: '<strong>We are pleased to make the following offer of employment.<strong>',
+            html: '·' + applicantApply.recordset[0].Position,
+            html: '·' + applicantApply.recordset[0].NameofVessel,
+            html: '·' + applicantApply.recordset[0].DailyRate,
+            html: '·' + applicantApply.recordset[0].Allowance,
+            html: '·'+ applicantApply.recordset[0].OtherAllowance,
+            html: '·'+ applicantApply.recordset[0].ContractPeriodFromInMth +'	/month – this may subject to your final acceptance and sign on date.',
+
+            html: 'Please acknowledge your acceptance of the above offer and email signed SEA to [email address]',
+            html: 'Should you need further clarification, please contact [Crewing Executive] at [email address]',
+
+            html: 'SKOM Sdn. Bhd.',
+            html: 'This is a computer generated message and no signature is required.',
+
             attachments: [
               {
                 content: attachmentPDF,
