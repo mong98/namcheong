@@ -696,7 +696,7 @@ class GenerationController {
           const resultPMU = await pool
             .request()
             .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
-            .input('QuestionId', sql.SmallInt, 1)
+            .input('QuestionId', sql.SmallInt, '1')
             .input('ApplyID', sql.VarChar, req.body.ApplyID)
             .query(queries.generalMedicalAnswer)
 
@@ -721,7 +721,7 @@ class GenerationController {
           const resultMarine = await pool
             .request()
             .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
-            .input('QuestionId', sql.SmallInt, 2)
+            .input('QuestionId', sql.SmallInt, '2')
             .input('ApplyID', sql.VarChar, req.body.ApplyID)
             .query(queries.generalMedicalAnswer)
 
@@ -1955,6 +1955,10 @@ class GenerationController {
           let PeriodTo = '-'
           let StandbyRateSelection = '-'
 
+          //added 27/1/2021
+          let SalaryRemark = '-'
+          let AllowanceRemark = '-'
+
           //get data from dbo.applicant
           const pool = await poolPromise
 
@@ -2114,18 +2118,23 @@ class GenerationController {
             } else {
               PeriodTo = '-'
             }
+            //added 27/1/2021
+            if (applicantApply.SalaryRemarks != null) {
+              SalaryRemark = applicantApply.SalaryRemarks
+            } else {
+              SalaryRemark = '-'
+            }
+            if (applicantApply.AllowanceRemarks != null) {
+              AllowanceRemark = applicantApply.AllowanceRemarks
+            } else {
+              AllowanceRemark = '-'
+            }
+            if (applicantApply.RepatriationHomePort != null) {
+              RepatriationHomePort = applicantApply.RepatriationHomePort
+            } else {
+              RepatriationHomePort = '-'
+            }
           }
-
-          //comment 15/1/2021
-          // if (PassportDocument != []) {
-          //   if (PassportDocument.DtExpiry != null) {
-          //     let date1 = new Date(PassportDocument.DtExpiry)
-          //     var date2 = moment(date1).format('DD/MM/YYYY')
-          //     PassportDtExpiry = date2
-          //   } else {
-          //     PassportDtExpiry = '-'
-          //   }
-          // }
 
           if (applicant != [] || applicant != null) {
             if (applicant.Passport_DtExpiry != null) {
@@ -2279,11 +2288,7 @@ class GenerationController {
             } else {
               Position = '-'
             }
-            if (applicant.RepatriationHomePort != null) {
-              RepatriationHomePort = applicant.RepatriationHomePort
-            } else {
-              RepatriationHomePort = '-'
-            }
+            
 
             if (SignDtManager == null || SignDtManager == '') {
               var today = new Date()
@@ -2509,6 +2514,9 @@ class GenerationController {
               PeriodFrom: PeriodFrom,
               PeriodTo: PeriodTo,
               StandbyRateSelection: StandbyRateSelection,
+              //added 27/1/2021
+              SalaryRemark:SalaryRemark,
+              AllowanceRemark:AllowanceRemark,
             })
 
             doc.render() //apply them

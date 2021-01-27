@@ -430,7 +430,6 @@ class ApplicantController {
           .input('NameofVessel', sql.VarChar, req.body.NameofVessel)
           .input('IMONo', sql.VarChar, req.body.IMONo)
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
-          .input('RepatriationHomePort', sql.VarChar, req.body.RepatriationHomePort) // Added by Hakim on 27 Jan 2021
           .input('Status', sql.VarChar, req.body.Status)
           .input('Currency', sql.VarChar, req.body.Currency)
           .input('Salary', sql.VarChar, req.body.Salary)
@@ -493,6 +492,7 @@ class ApplicantController {
           .input('Allowance', sql.VarChar, req.body.Allowance)
           .input('AllowanceRemarks', sql.VarChar, req.body.AllowanceRemarks) // Added by Hakim on 27 Jan 2021
           .input('TypesofAllowance', sql.VarChar, req.body.TypesofAllowance)
+          .input('RepatriationHomePort', sql.VarChar, req.body.RepatriationHomePort) // Added by Hakim on 27 Jan 2021
           .input(
             'ContractPeriodFromInMth',
             sql.VarChar,
@@ -503,7 +503,6 @@ class ApplicantController {
           .input('NameofVessel', sql.VarChar, req.body.NameofVessel)
           .input('IMONo', sql.VarChar, req.body.IMONo)
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
-          .input('RepatriationHomePort', sql.VarChar, req.body.RepatriationHomePort) // Added by Hakim on 27 Jan 2021
           .input('Currency', sql.VarChar, req.body.Currency)
           .input('Salary', sql.VarChar, req.body.Salary)
           .input('SalaryRemarks', sql.VarChar, req.body.SalaryRemarks) // Added by Hakim on 27 Jan 2021
@@ -569,85 +568,100 @@ class ApplicantController {
                 if (err) {
                   res.status(500)
                   res.send(err)
+                  console.log('PDF ERROR 1!')
                 }
               })
             })
             .catch((err) => {
               res.status(500)
               res.send(err)
+              console.log('PDF ERROR 2!')
             })
           //added 20/1/2021
-          let attachmentPDF = fs.readFileSync(outputPath).toString('base64')
+          let attachmentPDF = fs.readFileSync(outputPath).toString('base64')    
           let Filename = applicantApply.recordset[0].FileSEA.replace(
             '.docx',
             extend
           )
-
+          console.log('req result')
+          console.log(req)
           //added 26/1/2021
-          let AdminName = localStorage.getItem('adminUsername');
+          let AdminName = req.body.adminName;
           let AdminEmail = localStorage.getItem('adminEmail');
 
-          //send email
-          sgMail.setApiKey(
-            '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'
-          )
-          const msg = {
-            to: 'desmond@wiserobot.com',
-            //to: applicant.recordset[0].LoginEmail, // Change to your recipient
-            from: 'desomond17@gmail.com', // Change to your verified sender
-            subject: '[TEST]: SKOM eCrew Job Portal',
-            html:
-              '<strong>Dear <strong>' +
-              applicant.recordset[0].Name +
-              '<br />' +
-              '<strong>Thank you for your application.<strong>' +
-              '<br />' +
-              '<strong>We are pleased to make the following offer of employment.<strong>' +
-              '<br />' +
-              '· ' +
-              applicantApply.recordset[0].Position +
-              '<br />' +
-              '· ' +
-              applicantApply.recordset[0].NameofVessel +
-              '<br />' +
-              '· ' +
-              applicantApply.recordset[0].DailyRate +
-              '<br />' +
-              '· ' +
-              applicantApply.recordset[0].Allowance +
-              '<br />' +
-              '· ' +
-              applicantApply.recordset[0].OtherAllowance +
-              '<br />' +
-              '· ' +
-              applicantApply.recordset[0].ContractPeriodFromInMth +
-              '	/month – this may subject to your final acceptance and sign on date.' +
-              '<br />' +
-              'Please acknowledge your acceptance of the above offer and email signed SEA to ' +applicant.recordset[0].LoginEmail+
-              '<br />' +
-              'Should you need further clarification, please contact '+ AdminName +' at '+ AdminEmail +
-              '<br />' +
-              'SKOM Sdn. Bhd.' +
-              '<br />' +
-              'This is a computer generated message and no signature is required.',
+        
 
-            attachments: [
-              {
-                content: attachmentPDF,
-                filename: Filename,
-                type: 'application/pdf',
-                disposition: 'attachment',
-              },
-            ],
-          }
-          sgMail
-            .send(msg)
-            .then(() => {
-              console.log('Email sent to ' + applicant.recordset[0].LoginEmail)
-            })
-            .catch((error) => {
-              console.error(error)
-            })
+          //send email
+          // try{
+          //   sgMail.setApiKey(
+          //     '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'
+          //   )
+          //   let htmlText= '<strong>Dear <strong>' +
+          //   applicant.recordset[0].Name +
+          //   '<br />' +
+          //   '<strong>Thank you for your application.<strong>' +
+          //   '<br />' +
+          //   '<strong>We are pleased to make the following offer of employment.<strong>' +
+          //   '<br />' +
+          //   '· ' +
+          //   applicantApply.recordset[0].Position +
+          //   '<br />' +
+          //   '· ' +
+          //   applicantApply.recordset[0].NameofVessel +
+          //   '<br />' +
+          //   '· ' +
+          //   applicantApply.recordset[0].DailyRate +
+          //   '<br />' +
+          //   '· ' +
+          //   applicantApply.recordset[0].Allowance +
+          //   '<br />' +
+          //   '· ' +
+          //   applicantApply.recordset[0].OtherAllowance +
+          //   '<br />' +
+          //   '· ' +
+          //   applicantApply.recordset[0].ContractPeriodFromInMth +
+          //   '	/month – this may subject to your final acceptance and sign on date.' +
+          //   '<br />' +
+          //   'Please acknowledge your acceptance of the above offer and email signed SEA to ' +applicant.recordset[0].LoginEmail+
+          //   '<br />' +
+          //   'Should you need further clarification, please contact '+ AdminName +' at '+ AdminEmail +
+          //   '<br />' +
+          //   'SKOM Sdn. Bhd.' +
+          //   '<br />' +
+          //   'This is a computer generated message and no signature is required.';
+          //   console.log('htmlText');
+          //   console.log(htmlText);
+          //   const msg = {
+          //     to: 'desmond@wiserobot.com',
+          //     //to: applicant.recordset[0].LoginEmail, // Change to your recipient
+          //     from: 'desomond17@gmail.com', // Change to your verified sender
+          //     subject: '[TEST]: SKOM eCrew Job Portal',
+          //     text:'SKOM eCrew Job Portal',
+          //     html: htmlText,
+  
+          //     attachments: [
+          //       {
+          //         content: attachmentPDF,
+          //         filename: Filename,
+          //         type: 'application/pdf',
+          //         disposition: 'attachment',
+          //       },
+          //     ],
+          //   }
+          //   sgMail
+          //     .send(msg)
+          //     .then(() => {
+          //       console.log('Email sent to ' + applicant.recordset[0].LoginEmail)
+          //     })
+          //     .catch((error) => {
+          //       console.error(error)
+          //     })
+           
+          // }
+          // catch(err){
+          //   res.status(400)
+          //   res.send("Email Can't be sent!")
+          // }
           console.log('3 File is Generated inside userDoc folder!')
         }
 
@@ -656,7 +670,6 @@ class ApplicantController {
         res.send('All fields are required!')
       }
     } catch (error) {
-      //console.log('Error generating file!')
       res.status(500)
       res.send(error)
     }
