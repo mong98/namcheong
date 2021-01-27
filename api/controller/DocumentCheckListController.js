@@ -61,7 +61,10 @@ class DocumentCheckListController {
             values[i].DtExpiry == null ||
             values[i].DocType == null ||
             values[i].DocFile == null ||
-            values[i].DocumentID == null
+            values[i].DocumentID == null ||
+            values[i].TypeCompetencyChk == null || // Added by Hakim 0n 27 Jan 2021
+            values[i].IssuingAuthorityChk == null || // Added by Hakim 0n 27 Jan 2021
+            values[i].GradeChk == null // Added by Hakim 0n 27 Jan 2021
           ) {
             success_val = false
             break
@@ -72,6 +75,9 @@ class DocumentCheckListController {
           queries_updateDocumentCheckList += `[DtIssue] = '${values[i].DtIssue}', `
           queries_updateDocumentCheckList += `[DtExpiry] = '${values[i].DtExpiry}', `
           queries_updateDocumentCheckList += `[DocType] = '${values[i].DocType}', `
+          queries_updateDocumentCheckList += `[TypeCompetencyChk] = '${values[i].TypeCompetencyChk}', ` // Added by Hakim 0n 27 Jan 2021
+          queries_updateDocumentCheckList += `[IssuingAuthorityChk] = '${values[i].IssuingAuthorityChk}', ` // Added by Hakim 0n 27 Jan 2021
+          queries_updateDocumentCheckList += `[GradeChk] = '${values[i].GradeChk}', ` // Added by Hakim 0n 27 Jan 2021
           queries_updateDocumentCheckList += `[DocFile] = '${values[i].DocFile}' `
           queries_updateDocumentCheckList += `WHERE [PositionID] = '${req.params.PositionID}' `
           queries_updateDocumentCheckList += `AND [DocumentID] = '${values[i].DocumentID}';`

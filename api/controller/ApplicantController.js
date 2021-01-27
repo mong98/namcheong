@@ -430,6 +430,7 @@ class ApplicantController {
           .input('NameofVessel', sql.VarChar, req.body.NameofVessel)
           .input('IMONo', sql.VarChar, req.body.IMONo)
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
+          .input('RepatriationHomePort', sql.VarChar, req.body.RepatriationHomePort) // Added by Hakim on 27 Jan 2021
           .input('Status', sql.VarChar, req.body.Status)
           .input('Currency', sql.VarChar, req.body.Currency)
           .input('Salary', sql.VarChar, req.body.Salary)
@@ -502,6 +503,7 @@ class ApplicantController {
           .input('NameofVessel', sql.VarChar, req.body.NameofVessel)
           .input('IMONo', sql.VarChar, req.body.IMONo)
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
+          .input('RepatriationHomePort', sql.VarChar, req.body.RepatriationHomePort) // Added by Hakim on 27 Jan 2021
           .input('Currency', sql.VarChar, req.body.Currency)
           .input('Salary', sql.VarChar, req.body.Salary)
           .input('SalaryRemarks', sql.VarChar, req.body.SalaryRemarks) // Added by Hakim on 27 Jan 2021

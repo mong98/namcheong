@@ -85,7 +85,7 @@ export class DocumentCheckListComponent {
         addable: false,
       },
       Chk: {
-        title: 'Check',
+        title: 'Check (Mandatory)',
         type: 'custom',
         filter: false,
         renderComponent: CheckboxComponent,
@@ -94,16 +94,43 @@ export class DocumentCheckListComponent {
         }
       },
       Name: {
-        title: 'Document',
+        title: 'Certificate or Qualification title',
         filter: false,
       },
+      TypeCompetencyChk: {
+        title: 'Type of Certificate of Competency Held',
+        type: 'custom',
+        filter: false,
+        renderComponent: CheckboxComponent,
+        valuePrepareFunction: (value) => {
+          return { value, column: 'TypeCompetencyChk' }
+        }
+      },
       DocNo: {
-        title: 'Document No',
+        title: 'Certificate No',
         type: 'custom',
         filter: false,
         renderComponent: CheckboxComponent,
         valuePrepareFunction: (value) => {
           return { value, column: 'DocNo' }
+        }
+      },
+      GradeChk: {
+        title: 'Grade',
+        type: 'custom',
+        filter: false,
+        renderComponent: CheckboxComponent,
+        valuePrepareFunction: (value) => {
+          return { value, column: 'GradeChk' }
+        }
+      },
+      IssuingAuthorityChk: {
+        title: 'Issuing Authority',
+        type: 'custom',
+        filter: false,
+        renderComponent: CheckboxComponent,
+        valuePrepareFunction: (value) => {
+          return { value, column: 'IssuingAuthorityChk' }
         }
       },
       DtIssue: {
@@ -124,15 +151,15 @@ export class DocumentCheckListComponent {
           return { value, column: 'DtExpiry' }
         }
       },
-      DocType: {
-        title: 'Doc Type',
-        type: 'custom',
-        filter: false,
-        renderComponent: CheckboxComponent,
-        valuePrepareFunction: (value) => {
-          return { value, column: 'DocType' }
-        }
-      },
+      // DocType: {
+      //   title: 'Doc Type',
+      //   type: 'custom',
+      //   filter: false,
+      //   renderComponent: CheckboxComponent,
+      //   valuePrepareFunction: (value) => {
+      //     return { value, column: 'DocType' }
+      //   }
+      // },
       DocFile: {
         title: 'Doc File',
         type: 'custom',
@@ -165,7 +192,10 @@ export class DocumentCheckListComponent {
                 DtIssue: item.DtIssue,
                 DtExpiry: item.DtExpiry,
                 DocType: item.DocType,
-                DocFile: item.DocFile
+                DocFile: item.DocFile,
+                TypeCompetencyChk: item.TypeCompetencyChk, // Added by Hakim on 27 Jan 2021
+                GradeChk: item.GradeChk, // Added by Hakim on 27 Jan 2021
+                IssuingAuthorityChk: item.IssuingAuthorityChk, // Added by Hakim on 27 Jan 2021
               }
             })
         )
@@ -196,8 +226,11 @@ export class DocumentCheckListComponent {
             Id: item.DocumentID,
             Position: item.PositionID,
             Name: item.Document,
+            TypeCompetencyChk: item.TypeCompetencyChk, // Added by Hakim on 27 Jan 2021
             DocNo: item.DocNo,
+            GradeChk: item.GradeChk, // Added by Hakim on 27 Jan 2021
             Chk: item.Chk,
+            IssuingAuthorityChk: item.IssuingAuthorityChk, // Added by Hakim on 27 Jan 2021
             DtIssue: item.DtIssue,
             DtExpiry: item.DtExpiry,
             DocType: item.DocType,

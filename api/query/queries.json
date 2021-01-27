@@ -84,9 +84,9 @@
     "deleteOpenVacancy" : "DELETE FROM [JobPortal].[dbo].[OpenVacancy] WHERE [Id] = @Id",
     "updateOpenVacancy" : "UPDATE [JobPortal].[dbo].[OpenVacancy] SET [Position] = @Position, [DateEnd] = @DateEnd, [HullNo] = @HullNo, [Qualification] = @Qualification WHERE [Id] = @Id",
 
-    "getDocumentCheckList" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile] FROM [JobPortal].[dbo].[PositionDocument] ORDER BY CAST(DocumentID as int)",
-    "getDocumentCheckListById" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile] FROM [JobPortal].[dbo].[PositionDocument] WHERE [PositionId] = @Id ORDER BY CAST(DocumentID as int)",
-    "updateDocumentCheckList" : "UPDATE [JobPortal].[dbo].[PositionDocument] SET [DocNo] = @DocNo, [Chk] = @Chk, [DtIssue] = @DtIssue, [DtExpiry] = @DtExpiry, [DocType] = @DocType, [DocFile] = @DocFile, [UpdatedDate] = GETDATE() WHERE [PositionID] = @PositionID AND [DocumentID] = @DocumentID",
+    "getDocumentCheckList" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile], [TypeCompetencyChk], [GradeChk], [IssuingAuthorityChk] FROM [JobPortal].[dbo].[PositionDocument] ORDER BY CAST(DocumentID as int)",
+    "getDocumentCheckListById" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile], [TypeCompetencyChk], [GradeChk], [IssuingAuthorityChk] FROM [JobPortal].[dbo].[PositionDocument] WHERE [PositionId] = @Id ORDER BY CAST(DocumentID as int)",
+    "updateDocumentCheckList" : "UPDATE [JobPortal].[dbo].[PositionDocument] SET [DocNo] = @DocNo, [Chk] = @Chk, [DtIssue] = @DtIssue, [DtExpiry] = @DtExpiry, [DocType] = @DocType, [DocFile] = @DocFile, TypeCompetencyChk = @TypeCompetencyChk, GradeChk = @GradeChk, IssuingAuthorityChk = @IssuingAuthorityChk, [UpdatedDate] = GETDATE() WHERE [PositionID] = @PositionID AND [DocumentID] = @DocumentID",
 
     "getManagerList": [
 		"SELECT DISTINCT UsersTbl.[UserID], UsersTbl.[FirstName], UsersTbl.[LastName], UsersTbl.[Email], UsersTbl.[SuperiorID] ",
@@ -140,7 +140,7 @@
                                 , "@DocumentID, @DocNo, @DtIssue, @DtExpiry, @Type, @FilePath, @FileName, @FileExtension, "
                                 , "@Charterer, @ChartererOthers, @DynamicPositionCertType, @DynamicPositionCertFileName, @Grade, @IssuingAuthority)"],
     "getApplicantDocument" : ["SELECT dbo.[ApplicantDocument].[Id] as Id, dbo.[Document].[ID] as DocumentID, dbo.[PositionDocument].[Document] as Document, dbo.PositionDocument.Chk, dbo.PositionDocument.DocNo as DocNo, dbo.PositionDocument.DtExpiry as DtExpiry, dbo.PositionDocument.DtIssue as DtIssue, "
-                                , "dbo.PositionDocument.[Document] AS Document, dbo.PositionDocument.Position, dbo.PositionDocument.[DocType] AS DocType, dbo.PositionDocument.[DocFile] AS DocFile, " 
+                                , "dbo.PositionDocument.[Document] AS Document, dbo.PositionDocument.Position, dbo.PositionDocument.[DocType] AS DocType, dbo.PositionDocument.[DocFile] AS DocFile, dbo.PositionDocument.[GradeChk] AS GradeChk, dbo.PositionDocument.[IssuingAuthorityChk] AS IssuingAuthorityChk, dbo.PositionDocument.[TypeCompetencyChk] AS TypeCompetencyChk, " 
                                 , "ApplicantDocument.DocNo as [ApplicantDocNo], "
                                 , "ApplicantDocument.dtIssue as [ApplicantDocDtIssue], "
                                 , "ApplicantDocument.dtExpiry as [ApplicantDocDtExpiry], "
@@ -194,7 +194,7 @@
     "updateApplicant" : ["UPDATE [ApplicantApply] SET OfferPosition = @ApplyPosition, DailyRate = @DailyRate, StandbyRate = @StandbyRate, StandbyAllowance = @StandbyAllowance, "
                             , "Allowance = @Allowance, TypesofAllowance = @TypesofAllowance, AllowanceRemarks = @AllowanceRemarks, "
                             , "ContractPeriodFromInMth = @ContractPeriodFromInMth, ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
-                            , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry, "
+                            , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry, RepatriationHomePort = @RepatriationHomePort, "
                             , "Status = @Status, "
                             , "Currency = @Currency, "
                             , "Salary = @Salary, SalaryRemarks = @SalaryRemarks, "
@@ -218,7 +218,7 @@
                                 , "DailyRate = @DailyRate, StandbyRate = @StandbyRate, StandbyAllowance = @StandbyAllowance, Allowance = @Allowance, "
                                 , "TypesofAllowance = @TypesofAllowance, AllowanceRemarks = @AllowanceRemarks, ContractPeriodFromInMth = @ContractPeriodFromInMth, "
                                 , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
-                                , "NameofVessel = @NameofVessel, IMONo = @IMONo, DtApplication = getdate(), PortofRegistry = @PortofRegistry, "
+                                , "NameofVessel = @NameofVessel, IMONo = @IMONo, DtApplication = getdate(), PortofRegistry = @PortofRegistry, RepatriationHomePort = @RepatriationHomePort, "
                                 , "Status = 'Offered', OtherAllowance = @OtherAllowance, Currency = @Currency, Salary = @Salary, SalaryRemarks = @SalaryRemarks, ConfirmNo = @ConfirmNo, SerialNumber = @SerialNumber, "
                                 , "ConfirmFlag = '1', GenDoc = '0', ConfirmBy = '88', ConfirmByName = 'admin', ConfirmDt = GetDate() "
                                 , "WHERE Id=@Id "],
