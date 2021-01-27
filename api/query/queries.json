@@ -42,7 +42,7 @@
     "getUser" : "SELECT [UserID], [UserName], [Password], [Email] FROM [Namcheong].[dbo].[tblUser] WHERE [UserName] = @UserName AND [Password] = @Password",
     "deleteUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [Deleted] = 1 WHERE [Id] = @Id",
     "updateUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [LoginEmail] = @LoginEmail, [Name] = @Name, [Email] = @Email, [Password] = @Password WHERE [Id] = @Id",
-    "getLoginAdmin" : "SELECT [UserID], [UserName], [Password], [Email] FROM [Namcheong].[dbo].[tblUser] WHERE [UserName] = @UserName",
+    "getLoginAdmin" : "SELECT [UserID], [UserName], [Password], [Email],[FirstName],[LastName] FROM [Namcheong].[dbo].[tblUser] WHERE [UserName] = @UserName",
     "getEmailAdmin" : "SELECT [UserID] FROM [Namcheong].[dbo].[tblUser] WHERE [Email] = @Email",
     "addAdmin" :"INSERT INTO [Namcheong].[dbo].[tblUser] ([UserName], [Password], [Email], [StatusID], [DepartmentID], [FirstName], [LastName], [CreatedOn], [ModifiedOn]) VALUES (@UserName, @Password, @Email, @StatusID, @DepartmentID, @FirstName, @LastName, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY() AS [UserID]",
     "updatePasswordAdmin" : "UPDATE [Namcheong].[dbo].[tblUser] SET [Password] = @Password WHERE [Email] = @Email",

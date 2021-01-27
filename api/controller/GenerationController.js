@@ -701,15 +701,15 @@ class GenerationController {
             .query(queries.generalMedicalAnswer)
 
           if (resultPMU.recordset.length != 0) {
-            if (resultPMU.recordset[0].CheckupDt != null) {
-              let date1 = new Date(resultPMU.recordset[0].CheckupDt)
+            if (resultPMU.recordset[0].AnsCheckupDt != null) {
+              let date1 = new Date(resultPMU.recordset[0].AnsCheckupDt)
               var date2 = moment(date1).format('DD/MM/YYYY')
               PMUDtIssue = date2
             } else {
               PMUDtIssue = '-'
             }
-            if (resultPMU.recordset[0].ExpiryDt != null) {
-              let date1 = new Date(resultPMU.recordset[0].ExpiryDt)
+            if (resultPMU.recordset[0].AnsExpiryDt != null) {
+              let date1 = new Date(resultPMU.recordset[0].AnsExpiryDt)
               var date2 = moment(date1).format('DD/MM/YYYY')
               PMUDtExpiry = date2
             } else {
@@ -726,15 +726,15 @@ class GenerationController {
             .query(queries.generalMedicalAnswer)
 
           if (resultMarine.recordset.length != 0) {
-            if (resultMarine.recordset[0].CheckupDt != null) {
-              let date1 = new Date(resultMarine.recordset[0].CheckupDt)
+            if (resultMarine.recordset[0].AnsCheckupDt != null) {
+              let date1 = new Date(resultMarine.recordset[0].AnsCheckupDt)
               var date2 = moment(date1).format('DD/MM/YYYY')
               MarineDtIssue = date2
             } else {
               MarineDtIssue = '-'
             }
-            if (resultMarine.recordset[0].ExpiryDt != null) {
-              let date1 = new Date(resultMarine.recordset[0].ExpiryDt)
+            if (resultMarine.recordset[0].AnsExpiryDt != null) {
+              let date1 = new Date(resultMarine.recordset[0].AnsExpiryDt)
               var date2 = moment(date1).format('DD/MM/YYYY')
               MarineDtExpiry = date2
             } else {
