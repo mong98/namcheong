@@ -456,7 +456,7 @@
       <tr>
         <th scope="col">Contract Period (in Months)</th>
         <td scope="col">
-          <input type="text" class="form-control mb-2 mr-sm-2" id="contract_period" [(ngModel)]="applicant.ContractPeriodFromInMth" />
+          <input type="text" class="form-control mb-2 mr-sm-2" id="contract_period" [(ngModel)]="applicant.ContractPeriodFromInMth" (ngModelChange)="contractPeriodFromInMthOnChange($event)" />
         </td>
       </tr>
       <tr>
@@ -475,7 +475,7 @@
         <td scope="col">
           <input class="form-control mb-2 mr-sm-2" type="date"
           [ngModel]="applicant.ContractPeriodTo | date:'yyyy-MM-dd'"
-          (ngModelChange)="applicant.ContractPeriodTo = $event"
+          (ngModelChange)="contractPeriodToOnChange($event)"
           id="contract_period_to" name="begin" value="applicant.ContractPeriodTo">
           <!--<input id="contract_period_to" [nbDatepicker]="rangepicker" />
           <nb-rangepicker #rangepicker></nb-rangepicker>-->
@@ -558,22 +558,33 @@
           </select>
         </td>
       </tr>
+      <!-- Added by Hakim on 27 Jan 2021 - Start -->
+      <tr>
+        <th scope="col">Daily Rate</th>
+        <td scope="col">
+          <!-- <input type="text" class="form-control mb-2 mr-sm-2" id="wagesConsolidated" [(ngModel)]="applicant.DailyRate" placeholder="Remarks Salary" /> -->
+        </td>
+        <td scope="col">
+          <input type="text" class="form-control mb-2 mr-sm-2" id="amountConsolidated" [(ngModel)]="applicant.DailyRate" placeholder="Amount Salary" />
+        </td>
+      </tr>
+      <!-- Added by Hakim on 27 Jan 2021 - Start -->
       <tr>
         <th scope="col">Consolidated Salary</th>
         <td scope="col">
-          <!-- <input type="text" class="form-control mb-2 mr-sm-2" id="wagesConsolidated" [(ngModel)]="applicant.Salary.wagesConsolidated" /> -->
+          <input type="text" class="form-control mb-2 mr-sm-2" id="wagesConsolidated" [(ngModel)]="applicant.SalaryRemarks" placeholder="Remarks Salary" />
         </td>
         <td scope="col">
-          <input type="text" class="form-control mb-2 mr-sm-2" id="amountConsolidated" [(ngModel)]="applicant.Salary" />
+          <input type="text" class="form-control mb-2 mr-sm-2" id="amountConsolidated" [(ngModel)]="applicant.Salary" placeholder="Amount Salary" />
         </td>
       </tr>
       <tr>
         <th scope="col">Allowance</th>
         <td scope="col">
-          <!-- <input type="text" class="form-control mb-2 mr-sm-2" id="wagesAllowance" [(ngModel)]="applicant.Salary.wagesAllowance" /> -->
+          <input type="text" class="form-control mb-2 mr-sm-2" id="wagesAllowance" [(ngModel)]="applicant.AllowanceRemarks" placeholder="Remarks Allowance" />
         </td>
         <td scope="col">
-          <input type="text" class="form-control mb-2 mr-sm-2" id="amountAllowance" [(ngModel)]="applicant.Allowance" />
+          <input type="text" class="form-control mb-2 mr-sm-2" id="amountAllowance" [(ngModel)]="applicant.Allowance" placeholder="Amount Allowance" />
         </td>
       </tr>
       <tr>

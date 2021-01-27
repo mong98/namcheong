@@ -192,12 +192,12 @@
                                 , "ON [VesselType].[VesselName] = [v_ApplicantApply].[NameofVessel] "
                                 , "WHERE [v_ApplicantApply].[Id] = @Id "],
     "updateApplicant" : ["UPDATE [ApplicantApply] SET OfferPosition = @ApplyPosition, DailyRate = @DailyRate, StandbyRate = @StandbyRate, StandbyAllowance = @StandbyAllowance, "
-                            , "Allowance = @Allowance, TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth, "
-                            , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
+                            , "Allowance = @Allowance, TypesofAllowance = @TypesofAllowance, AllowanceRemarks = @AllowanceRemarks, "
+                            , "ContractPeriodFromInMth = @ContractPeriodFromInMth, ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
                             , "NameofVessel = @NameofVessel, IMONo = @IMONo, PortofRegistry = @PortofRegistry, "
                             , "Status = @Status, "
                             , "Currency = @Currency, "
-                            , "Salary = @Salary, "
+                            , "Salary = @Salary, SalaryRemarks = @SalaryRemarks, "
                             , "OtherAllowance = @OtherAllowance "
                             , "WHERE Id=@Id "],
                             
@@ -216,10 +216,10 @@
                                 , "UPDATE [JobPortal].[dbo].[ApplicantApply] "
                                 , "SET OfferPosition = @OfferPosition, "
                                 , "DailyRate = @DailyRate, StandbyRate = @StandbyRate, StandbyAllowance = @StandbyAllowance, Allowance = @Allowance, "
-                                , "TypesofAllowance = @TypesofAllowance, ContractPeriodFromInMth = @ContractPeriodFromInMth, "
+                                , "TypesofAllowance = @TypesofAllowance, AllowanceRemarks = @AllowanceRemarks, ContractPeriodFromInMth = @ContractPeriodFromInMth, "
                                 , "ContractPeriodFrom = @ContractPeriodFrom, ContractPeriodTo = @ContractPeriodTo, "
                                 , "NameofVessel = @NameofVessel, IMONo = @IMONo, DtApplication = getdate(), PortofRegistry = @PortofRegistry, "
-                                , "Status = 'Offered', OtherAllowance = @OtherAllowance, Currency = @Currency, Salary = @Salary, ConfirmNo = @ConfirmNo, SerialNumber = @SerialNumber, "
+                                , "Status = 'Offered', OtherAllowance = @OtherAllowance, Currency = @Currency, Salary = @Salary, SalaryRemarks = @SalaryRemarks, ConfirmNo = @ConfirmNo, SerialNumber = @SerialNumber, "
                                 , "ConfirmFlag = '1', GenDoc = '0', ConfirmBy = '88', ConfirmByName = 'admin', ConfirmDt = GetDate() "
                                 , "WHERE Id=@Id "],
 

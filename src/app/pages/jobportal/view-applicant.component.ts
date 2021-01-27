@@ -621,14 +621,51 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
 
     this.applicant.ContractPeriodFrom = value
     if (this.applicant.ContractPeriodFromInMth != null && this.applicant.ContractPeriodFrom != null) {
-      let period = this.applicant.ContractPeriodFromInMth;
+      let period = parseInt(this.applicant.ContractPeriodFromInMth);
       let startDate = new Date(this.applicant.ContractPeriodFrom)
       let endDate = startDate.setMonth(startDate.getMonth()+period)
+      endDate = new Date(endDate).setDate(new Date(endDate).getDate()-1)
       this.applicant.ContractPeriodTo = endDate
     }
   }
   // Added by Hakim on 26 Jan 2021 - End
 
+  // Added by Hakim on 27 Jan 2021 - Start
+  contractPeriodToOnChange(value) {
+    this.applicant.ContractPeriodTo = value
+    if (this.applicant.ContractPeriodFrom != null) {
+      let startDate = new Date(this.applicant.ContractPeriodFrom)
+      let endDate = new Date(this.applicant.ContractPeriodTo)
+
+      let diffYears = endDate.getFullYear()-startDate.getFullYear();
+      let diffMonths = endDate.getMonth()-startDate.getMonth();
+      let diffDays = endDate.getDate()-startDate.getDate();
+
+      let months = (diffYears*12 + diffMonths);
+      let numOfmonth = months.toString();
+      if(diffDays>0) {
+          numOfmonth += '.'+diffDays;
+      } else if(diffDays<0) {
+          months--;
+          numOfmonth += '.'+(new Date(endDate.getFullYear(),endDate.getMonth(),0).getDate()+diffDays);
+      }
+
+      this.applicant.ContractPeriodFromInMth = numOfmonth
+    }
+  }
+
+  contractPeriodFromInMthOnChange(value) {
+
+    this.applicant.ContractPeriodFromInMth = value
+    if (this.applicant.ContractPeriodFrom != null && this.applicant.ContractPeriodTo != null) {
+      let period = parseInt(this.applicant.ContractPeriodFromInMth);
+      let startDate = new Date(this.applicant.ContractPeriodFrom)
+      let endDate = startDate.setMonth(startDate.getMonth()+period)
+      endDate = new Date(endDate).setDate(new Date(endDate).getDate()-1)
+      this.applicant.ContractPeriodTo = endDate
+    }
+  }
+  // Added by Hakim on 27 Jan 2021 - End
   currencyOnChange(value) {
     this.applicant.Currency = this.mapCurrencyToName(value)
   }

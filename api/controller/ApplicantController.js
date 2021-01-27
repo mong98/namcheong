@@ -396,6 +396,17 @@ class ApplicantController {
         //&& req.body.IMONo != null && req.body.PortofRegistry != null
         req.body.Status != null
       ) {
+
+        // // Calculate daily rate
+        // if (req.body.ContractPeriodFrom != null && req.body.ContractPeriodTo != null && req.body.Salary != null) {
+        //   let startDate = new Date(req.body.ContractPeriodFrom)
+        //   let endDate = new Date(req.body.ContractPeriodTo)
+        //   let epochPeriod = endDate.valueOf() - startDate.valueOf()
+        //   let numOfdays = epochPeriod / 86400000
+        //   let totalSalary = req.body.Salary * Number(req.body.ContractPeriodFromInMth)
+        //   req.body.DailyRate = (totalSalary / numOfdays).toFixed(2)
+        // }
+
         var queryStr = queries.updateApplicant.join(' ')
         //console.log('queryStr: ', queryStr, ' IMONo: ', req.body.IMONo)
         const pool = await poolPromise
@@ -407,6 +418,7 @@ class ApplicantController {
           .input('StandbyRate', sql.VarChar, req.body.StandbyRate)
           .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021
           .input('Allowance', sql.VarChar, req.body.Allowance)
+          .input('AllowanceRemarks', sql.VarChar, req.body.AllowanceRemarks) // Added by Hakim on 27 Jan 2021
           .input('TypesofAllowance', sql.VarChar, req.body.TypesofAllowance)
           .input(
             'ContractPeriodFromInMth',
@@ -421,6 +433,7 @@ class ApplicantController {
           .input('Status', sql.VarChar, req.body.Status)
           .input('Currency', sql.VarChar, req.body.Currency)
           .input('Salary', sql.VarChar, req.body.Salary)
+          .input('SalaryRemarks', sql.VarChar, req.body.SalaryRemarks) // Added by Hakim on 27 Jan 2021
           .input('OtherAllowance', sql.VarChar, req.body.OtherAllowance)
           .query(queryStr)
         //console.log('updateApplicant result: ', req.body.Id)
@@ -477,6 +490,7 @@ class ApplicantController {
           .input('StandbyRate', sql.VarChar, req.body.StandbyRate)
           .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021
           .input('Allowance', sql.VarChar, req.body.Allowance)
+          .input('AllowanceRemarks', sql.VarChar, req.body.AllowanceRemarks) // Added by Hakim on 27 Jan 2021
           .input('TypesofAllowance', sql.VarChar, req.body.TypesofAllowance)
           .input(
             'ContractPeriodFromInMth',
@@ -490,6 +504,7 @@ class ApplicantController {
           .input('PortofRegistry', sql.VarChar, req.body.PortofRegistry)
           .input('Currency', sql.VarChar, req.body.Currency)
           .input('Salary', sql.VarChar, req.body.Salary)
+          .input('SalaryRemarks', sql.VarChar, req.body.SalaryRemarks) // Added by Hakim on 27 Jan 2021
           .input('OtherAllowance', sql.VarChar, req.body.OtherAllowance)
           .query(queryStr)
 
