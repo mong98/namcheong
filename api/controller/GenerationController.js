@@ -13,6 +13,9 @@ const { createNotEmittedStatement } = require('typescript')
 
 var opts = { centered: false }
 
+//added watermark
+const Jimp = require('jimp')
+
 opts.getImage = function (tagValue, tagName) {
   return fs.readFileSync(tagValue, 'binary')
 }
@@ -113,7 +116,7 @@ class GenerationController {
             .input('UserID', sql.VarChar, req.body.LoginEmail)
             .query(queries.getApplicantExperience)
 
-            SEA = resltApplicantExperience.recordset
+          SEA = resltApplicantExperience.recordset
 
           //condition
           if (checkApplicant.recordset[0].Position != null) {
@@ -322,7 +325,7 @@ class GenerationController {
               if (SEA[i].Company == null || document[i].Company == '') {
                 SEACompany = '-'
               } else {
-                SEACompany = SEA[i].Company 
+                SEACompany = SEA[i].Company
               }
               if (SEA[i].VesselName == null || SEA[i].VesselName == '') {
                 SEAVessel = '-'
@@ -332,13 +335,11 @@ class GenerationController {
               if (SEA[i].ExpRank == null || SEA[i].ExpRank == '') {
                 SEARank = '-'
               } else {
-            
                 SEARank = SEA[i].ExpRank
               }
               if (SEA[i].ExpPeriod == null || SEA[i].ExpPeriod == '') {
                 SEAPeriod = '-'
               } else {
-             
                 SEAPeriod = SEA[i].ExpPeriod
               }
               SEAList.push({
@@ -634,6 +635,10 @@ class GenerationController {
           let SignatureName = '-'
           let SignatureIcPassport = '-'
           let SignatureDate = '-'
+
+          //watermark
+          let watermarkSignature = '-'
+          let watermarkSignatureAdmin = '-'
 
           //poolPromise
           const pool = await poolPromise
@@ -1412,6 +1417,46 @@ class GenerationController {
               SignatureExecutive = path.resolve(
                 '../src/assets/UserDoc/' + admin.Signature
               )
+
+              //watermark
+              const ORIGINAL_IMAGE = SignatureExecutive
+
+              const LOGO = '../src/assets/images/logoTesting.png'
+
+              const LOGO_MARGIN_PERCENTAGE = 5
+
+              const FILENAME =
+                '../src/assets/images/Signatures/' + admin.Signature
+
+              const main = async () => {
+                const [image, logo] = await Promise.all([
+                  Jimp.read(ORIGINAL_IMAGE),
+                  Jimp.read(LOGO),
+                ])
+
+                logo.resize(500, 300)
+
+                const xMargin =
+                  (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
+                const yMargin =
+                  (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
+
+                const X = image.bitmap.width - logo.bitmap.width - xMargin
+                const Y = image.bitmap.height - logo.bitmap.height - yMargin
+
+                return image.composite(logo, X, Y, [
+                  {
+                    mode: Jimp.BLEND_SOURCE_OVER,
+                    opacitySource: 0.5,
+                    opacityDest: 1,
+                  },
+                ])
+              }
+
+              main().then((image) => image.write(FILENAME))
+
+              watermarkSignature = FILENAME;
+              //end watermark
             } else {
               SignatureExecutive = '-'
             }
@@ -1419,6 +1464,46 @@ class GenerationController {
               SignatureManager = path.resolve(
                 '../src/assets/UserDoc/' + admin.SignatureAdmin
               )
+
+              //watermark
+              const ORIGINAL_IMAGE = SignatureManager
+
+              const LOGO = '../src/assets/images/logoTesting.png'
+
+              const LOGO_MARGIN_PERCENTAGE = 5
+
+              const FILENAME =
+                '../src/assets/images/Signatures/' + admin.SignatureAdmin
+
+              const main = async () => {
+                const [image, logo] = await Promise.all([
+                  Jimp.read(ORIGINAL_IMAGE),
+                  Jimp.read(LOGO),
+                ])
+
+                logo.resize(500, 300)
+
+                const xMargin =
+                  (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
+                const yMargin =
+                  (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
+
+                const X = image.bitmap.width - logo.bitmap.width - xMargin
+                const Y = image.bitmap.height - logo.bitmap.height - yMargin
+
+                return image.composite(logo, X, Y, [
+                  {
+                    mode: Jimp.BLEND_SOURCE_OVER,
+                    opacitySource: 0.5,
+                    opacityDest: 1,
+                  },
+                ])
+              }
+
+              main().then((image) => image.write(FILENAME))
+
+              watermarkSignatureAdmin = FILENAME;
+              //end watermark
             } else {
               SignatureManager = '-'
             }
@@ -1713,7 +1798,7 @@ class GenerationController {
               Q10Description: Q10Description,
               SignDtExecutive: SignDtExecutive,
               SignDtManager: SignDtManager,
-              SignatureExecutive: SignatureExecutive,
+              SignatureExecutive: watermarkSignature,
               SignatureExecutiveName: SignatureExecutiveName,
               SignatureManager: SignatureManager,
               SignatureManagerName: SignatureManagerName,
@@ -1958,6 +2043,10 @@ class GenerationController {
           //added 27/1/2021
           let SalaryRemark = '-'
           let AllowanceRemark = '-'
+
+          //watermark
+          let watermarkSignature = '-'
+          let watermarkSignatureAdmin = '-'
 
           //get data from dbo.applicant
           const pool = await poolPromise
@@ -2288,7 +2377,6 @@ class GenerationController {
             } else {
               Position = '-'
             }
-            
 
             if (SignDtManager == null || SignDtManager == '') {
               var today = new Date()
@@ -2409,6 +2497,46 @@ class GenerationController {
               SignatureExecutive = path.resolve(
                 '../src/assets/UserDoc/' + admin.Signature
               )
+
+              //watermark
+              const ORIGINAL_IMAGE = SignatureExecutive
+
+              const LOGO = '../src/assets/images/logoTesting.png'
+
+              const LOGO_MARGIN_PERCENTAGE = 5
+
+              const FILENAME =
+                '../src/assets/images/Signatures/' + admin.Signature
+
+              const main = async () => {
+                const [image, logo] = await Promise.all([
+                  Jimp.read(ORIGINAL_IMAGE),
+                  Jimp.read(LOGO),
+                ])
+
+                logo.resize(500, 300)
+
+                const xMargin =
+                  (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
+                const yMargin =
+                  (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
+
+                const X = image.bitmap.width - logo.bitmap.width - xMargin
+                const Y = image.bitmap.height - logo.bitmap.height - yMargin
+
+                return image.composite(logo, X, Y, [
+                  {
+                    mode: Jimp.BLEND_SOURCE_OVER,
+                    opacitySource: 0.5,
+                    opacityDest: 1,
+                  },
+                ])
+              }
+
+              main().then((image) => image.write(FILENAME))
+
+              watermarkSignature = FILENAME;
+              //end watermark
             } else {
               SignatureExecutive = '-'
             }
@@ -2416,6 +2544,45 @@ class GenerationController {
               SignatureManager = path.resolve(
                 '../src/assets/UserDoc/' + admin.SignatureAdmin
               )
+              //watermark
+              const ORIGINAL_IMAGE = SignatureManager
+
+              const LOGO = '../src/assets/images/logoTesting.png'
+
+              const LOGO_MARGIN_PERCENTAGE = 5
+
+              const FILENAME =
+                '../src/assets/images/Signatures/' + admin.SignatureAdmin
+
+              const main = async () => {
+                const [image, logo] = await Promise.all([
+                  Jimp.read(ORIGINAL_IMAGE),
+                  Jimp.read(LOGO),
+                ])
+
+                logo.resize(500, 300)
+
+                const xMargin =
+                  (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
+                const yMargin =
+                  (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100
+
+                const X = image.bitmap.width - logo.bitmap.width - xMargin
+                const Y = image.bitmap.height - logo.bitmap.height - yMargin
+
+                return image.composite(logo, X, Y, [
+                  {
+                    mode: Jimp.BLEND_SOURCE_OVER,
+                    opacitySource: 0.5,
+                    opacityDest: 1,
+                  },
+                ])
+              }
+
+              main().then((image) => image.write(FILENAME))
+
+              watermarkSignatureAdmin = FILENAME
+              //end watermark
             } else {
               SignatureManager = '-'
             }
@@ -2485,9 +2652,9 @@ class GenerationController {
               ConfirmDt: ConfirmDt,
               SignDtExecutive: SignDtExecutive,
               SignDtManager: SignDtManager,
-              SignatureExecutive: SignatureExecutive,
+              SignatureExecutive: watermarkSignature,
               SignatureExecutiveName: SignatureExecutiveName,
-              SignatureManager: SignatureManager,
+              SignatureManager: watermarkSignatureAdmin,
               SignatureManagerName: SignatureManagerName,
               Currency: Currency,
               OtherAllowance: OtherAllowance,
@@ -2515,8 +2682,8 @@ class GenerationController {
               PeriodTo: PeriodTo,
               StandbyRateSelection: StandbyRateSelection,
               //added 27/1/2021
-              SalaryRemark:SalaryRemark,
-              AllowanceRemark:AllowanceRemark,
+              SalaryRemark: SalaryRemark,
+              AllowanceRemark: AllowanceRemark,
             })
 
             doc.render() //apply them
