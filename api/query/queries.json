@@ -116,7 +116,7 @@
     "removeMatrix" : "DELETE FROM [JobPortal].[dbo].[Matrix] WHERE [Matrix] = @MatrixName",
     "getVesselName": "SELECT [VesselName], [VesselCode] FROM [JobPortal].[dbo].[IMONo]",
     "getMatrixTemplate" : "SELECT DISTINCT * FROM [JobPortal].[dbo].[MatrixDetail] M1 INNER JOIN (SELECT DISTINCT SeqNo FROM MatrixDetail )M2 on M1.SeqNo = M2.SeqNo ORDER BY M1.Matrix, M1.SeqNo",
-    "getMatrixData" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE ([ContractPeriodFrom] between @ContractDate and GETDATE()) AND [NameofVessel]=@VesselName",
+    "getMatrixData" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE [ContractPeriodFrom]=@ContractDate AND [NameofVessel]=@VesselName",
     "addMatrixTemplate" : "INSERT INTO [JobPortal].[dbo].[MatrixDetail] ([Matrix], [Item], [ItemDesc], [SeqNo]) VALUES (@MatrixName, @Item, @ItemDesc, @SeqNo)",
     "removeMatrixTemplate" : "DELETE FROM [JobPortal].[dbo].[MatrixDetail] WHERE [Matrix] = @MatrixName",
 

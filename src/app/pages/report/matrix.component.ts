@@ -131,10 +131,34 @@ export class MatrixComponent implements OnDestroy, OnInit {
           console.log(matrixData)
           console.log("selected matrix")
           console.log(selectedMatrix)
+        
+          // Added by Hakim on 28 Jan 2021 - Start
+          let selectedDateFormat1 = ''
+          let selectedDateFormat2 = ''
+          if (selectedMatrix.Item != null) {
+            selectedDateFormat1 = selectedMatrix.Item.find(data => data == 'DateFormat1')
+            selectedDateFormat2 = selectedMatrix.Item.find(data => data == 'DateFormat2')
+          }
+          // Added by Hakim on 28 Jan 2021 - End
 
           for (let key in matrixData) {
             var index = selectedMatrix.Item.indexOf(key)
             if (index >= 0) {
+              // Added by Hakim on 28 Jan 2021 - Start
+              // Change date format
+              if (matrixData[key] != null) {
+                let dataNumber = Number(matrixData[key])
+                let dataDate = new Date(matrixData[key])
+                if (dataDate.getDate() != null && !dataNumber && !isNaN(dataDate.getDate())) {
+                  if (selectedDateFormat2 != null) {
+                    matrixData[key] = dataDate.getDate() + '/' + dataDate.getMonth() + '/' + dataDate.getFullYear()
+                  } else {
+                    matrixData[key] = dataDate.getMonth() + '/' + dataDate.getDate() + '/' + dataDate.getFullYear()
+                  }
+                }
+              }
+              // Added by Hakim on 28 Jan 2021 - End
+
               this.newTableDetails.dict.push({
                 "key": selectedMatrix.ItemDesc[index],
                 "value": matrixData[key]
