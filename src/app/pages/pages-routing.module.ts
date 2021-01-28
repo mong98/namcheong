@@ -35,6 +35,7 @@ import { ContactUsComponent } from './applicant_jobportal/contact-us.component'
 import { ReportContactUs } from './report/contact-us.component'
 import { ApplicationStatusComponent } from './applicant_jobportal/application-status.component'
 import { ChangePasswordComponent } from './applicant_jobportal/change-password.component'
+import {AdminChangePasswordComponent} from './settings/change-password.component'
 import { UserLoginComponent } from './login_page/user-login.component'
 
 import { AuthGuard } from '../auth.guard'
@@ -207,6 +208,11 @@ const routes: Routes = [
         path: 'assets',
         redirectTo: 'report/afe_cv_sea',
         canActivate: [AdminAuthGuard],
+      },
+      {
+        path: 'settings/change-password',
+        component: AdminChangePasswordComponent,
+        canActivate: [AdminAuthGuard]
       },
       {
         path: '',

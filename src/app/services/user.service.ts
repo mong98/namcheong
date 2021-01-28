@@ -10,6 +10,7 @@ export class UserService {
   private _secondaryentity = 'admin'
   private _thirdentity = 'user'
   private _updateuserpassword = 'userpassword'
+  private _updateadminpassword = 'adminpassword'
 
   constructor(private service: BaseService) { }
 
@@ -34,7 +35,7 @@ export class UserService {
   }
 
   updateAdminPassword(data: any) {
-    return this.service.update(this._entity, data)
+    return this.service.updateSecondaryEntity(this._entity,this._updateadminpassword, data)
   }
 
   updateUserPassword(data: any) {

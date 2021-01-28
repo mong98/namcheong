@@ -200,7 +200,7 @@ export class BaseService {
       .pipe(catchError(this.errorHandler))
   }
 
-  update(entity: string, data: any) {
+  update(entity: string, data: any) { 
     this.constructHttpOptions()
     return this.httpClient
       .put(

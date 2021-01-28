@@ -80,25 +80,25 @@ class UserController {
     async updatePasswordAdmin(req, res) {
       try {
         console.log("updatePasswordAdmin: ", req.body);
-        if(req.body.password != null && req.body.email != null) {
+        if(req.body.password != null && req.body.username != null) {
             const pool = await poolPromise
             const result = await pool.request()
-              .input('Email',sql.VarChar , req.body.email)
-              .query(queries.getEmailAdmin)
+              .input('UserName',sql.VarChar , req.body.username)
+              .input('Password',sql.VarChar, req.body.password)
+              .query(queries.getAdmin)
 
               console.log(result.recordset)
-              const adminEmailExist = result.recordset.length;
             
-              if (!adminEmailExist) {
-                res.send('Failed to change password, email no exist!')
+              if (result.recordset.length == 0 ) {
+                res.status(400).send('Password Incorrect?!')
               } else {
                 //const salt = await bcrypt.genSalt(10);
                 //req.body.password = await bcrypt.hash(req.body.password, salt)
                 
                 const pool = await poolPromise
                 const result = await pool.request()
-                .input('Password', sql.VarChar , req.body.password)
-                .input('Email', sql.VarChar, req.body.email)
+                .input('Password', sql.VarChar , req.body.new_password)
+                .input('UserName', sql.VarChar, req.body.username)
                 .query(queries.updatePasswordAdmin)
 
                 var recordUser = result.rowsAffected[0];

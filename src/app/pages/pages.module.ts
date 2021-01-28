@@ -37,7 +37,8 @@ import { IssuingAuthorityModule } from './admin_module/issuingauthority.module'
 import { UserIdConfigureModule } from './admin_module/useridconfigure.module'
 
 import { PagesRoutingModule } from './pages-routing.module'
-import { DashboardApplicantModule } from './applicant_jobportal/dashboard-applicant.module'
+import { DashboardApplicantModule } from './applicant_jobportal/dashboard-applicant.module';
+import { AdminChangePasswordModule } from './settings/change-password.module';
 
 @NgModule({
   imports: [
@@ -73,6 +74,8 @@ import { DashboardApplicantModule } from './applicant_jobportal/dashboard-applic
     MatFormFieldModule,
     MatInputModule,
     //MatRippleModule,
+    AdminChangePasswordModule
+    
   ],
   declarations: [PagesComponent],
 })

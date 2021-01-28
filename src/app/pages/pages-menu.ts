@@ -147,6 +147,18 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Settings',
+    expanded: true,
+    children: [
+      {
+        title: 'Change Password',
+        link: '/pages/settings/change-password',
+      },
+ 
+
+    ],
+  },
 ]
 
 export const APPLICANT_MENU_ITEMS: NbMenuItem[] = [

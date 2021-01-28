@@ -48,6 +48,7 @@ import { AdminAuthGuard } from './admin-auth.guard';
 import { JwtModule } from '@auth0/angular-jwt';
 import { SignatureComponent } from './pages/jobportal/signature/signature.component';
 
+
 export function tokenGetter() {
   return localStorage.getItem('access_token');
 }
