@@ -93,6 +93,9 @@ export class UserLoginComponent implements OnInit, OnDestroy{
         console.log(this.register_error)
         if(err) {
           this.register_error = err.error
+          if (err.error != null && err.error.error != null) {
+            this.register_error = err.error.error;
+          }
         }
       }
     );
