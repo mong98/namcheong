@@ -1,5 +1,5 @@
-<nb-layout>
-  <nb-layout-column>
+<nb-layout style="padding: 0;">
+  <nb-layout-column style="padding: 0;">
     <head>
       <link
         rel="shortcut icon"
@@ -10,104 +10,64 @@
       <!--<link type="text/css" rel="Stylesheet" href="\JobPortal\job\css\job.css" />-->
     </head>
 
-    <body class="row text-center">
-      <div class="col-1">
-      </div>
-      <div class="col" style="background-color: rgba(255, 255, 255, 0.7);border-radius: 25px">
-        <div class="form-group pt-5">
-          <!-- <div class="col-75"> -->
-            <b><span style="color:#000000;font-size: 24px;">LOGIN TO YOUR ACCOUNT</span></b>
-          <!-- </div> -->
-        </div>
-        <div class="form-group">
-          <!-- <div class="col-75"> -->
-            <input name="txtUserID" type="text" maxlength="100" id="txtUserID" placeholder="EMAIL" [(ngModel)]="email"/>
-          <!-- </div> -->
-        </div>
-        <div class="form-group">
-          <!-- <div class="col-75"> -->
-            <input name="txtPassword" type="password" maxlength="20" id="txtPassword" placeholder="PASSWORD" [(ngModel)]="password"/>
-          <!-- </div> -->
-        </div>
-        <div class="form-group">
-          <!-- <div class="col-75"> -->
-            <input type="submit" (click)="loginUser($event)" name="btnLogin" value="Login" id="btnLogin" class="Btn" />
-            &nbsp;&nbsp;
-            <a href="forgot-password" style="color:#000000"><u><i>Forgot Password</i></u></a>
-          <!-- </div> -->
-        </div>
-        <div class="form-group">
-          <div *ngIf="login_error">
-            <span style="color:#ff0e0e;font-size: 14px;" [(ngModel)]="login_error" ngDefaultControl><i>{{login_error}}</i></span><br />
+    <body class="row">
+        <div class="col-sm-12 col-md-8 bg form-signin-parent">
+          <div class="container">
+            <div class="jumbotron text-white bg-dark">
+              <div class="container">
+                <h1 class="display-4 font-italic text-white">WELCOME TO SKOM e-CREW ONLINE JOB APPLICATION</h1>
+                <p class="font-weight-bolder text-white">SKOM is looking for dedicated, skilled and experienced talents with passion in the offshore marine. We offer competitive package, training and new fleet environment which allow you to excel in your career. Submit your application now and be part of the team to deliver possibilities.</p>
+                <hr class="my-4">
+                <form (ngSubmit)="registerUser()">
+                  <h1 class="h4 mb-3 font-weight-normal text-white">Register with us</h1>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="firstName">Full name</label>
+                      <input type="text" class="form-control" name="txtRgstFullname" id="txtRgstFullname" placeholder="" [(ngModel)]="register_username" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="lastName">Email</label>
+                      <input type="text" class="form-control" name="txtRgstEmail" id="txtRgstEmail" placeholder="" [(ngModel)]="register_email" required>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="firstName">Password</label>
+                      <input type="password" class="form-control" name="txtRgstPassword" id="txtRgstPassword" placeholder="" [(ngModel)]="register_password" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="lastName">Confirm password</label>
+                      <input type="password" class="form-control" name="txtRgstConfirmPassword" id="txtRgstConfirmPassword" placeholder="" [(ngModel)]="register_retyped_password" required>
+                    </div>
+                  </div>
+                  <div class="alert alert-danger" *ngIf="register_error">
+                    {{register_error}}
+                  </div>
+                  <button type="submit" class="btn btn-theme">REGISTER</button>
+                </form>
+              </div>
+            </div>
           </div>
+        </div>      
+
+        <div class="col-sm-12 col-md-4 text-center form-signin-parent" style="background-color: rgba(255, 255, 255, 1); padding-left: 0px;padding-right: 15px;">
+          <form class="pt-5 pb-5 form-signin" (ngSubmit)="loginUser()">
+            <img class="" src="/assets/images/SKOM-logo.png" width="200" />
+            <h1 class="h4 mb-3 font-weight-normal">Please sign in</h1>
+            <label for="txtUserID" class="sr-only">Email</label>
+            <input type="email" class="form-control" name="txtUserID" id="txtUserID" aria-describedby="emailHelp" placeholder="Email Address" [(ngModel)]="email" />
+            <label for="txtPassword" class="sr-only">Password</label>
+            <input type="password" class="form-control" name="txtPassword" id="txtPassword" placeholder="Password" [(ngModel)]="password" />
+            <div class="mb-3">
+              <a href="forgot-password" style="color:#000000"><u><i>Forgot Password</i></u></a>
+            </div>
+            <div class="alert alert-danger" *ngIf="login_error">
+              {{login_error}}
+            </div>
+            <button type="submit" class="btn btn-theme btn-lg btn-block">LOGIN</button>
+          </form>
         </div>
 
-        <div class="form-group">
-            <!-- <div class="col-75"> -->
-            <b><span style="color:#000000;font-size: 24px;"><br /><br />REGISTER NEW ACCOUNT</span></b>
-            <!-- </div> -->
-        </div>
-        <div class="form-group">
-            <!-- <div class="col-75"> -->
-              <input name="txtEmail2" type="text" maxlength="100" id="txtEmail2" placeholder="EMAIL" [(ngModel)]="register_email"/>
-            <!-- </div> -->
-        </div>
-        <div class="form-group">
-            <!-- <div class="col-75"> -->
-              <input name="txtName" type="text" maxlength="100" id="txtName" placeholder="NAME" [(ngModel)]="register_username"/>
-            <!-- </div> -->
-        </div>
-        <div class="form-group">
-          <!-- <div class="col-75"> -->
-            <input name="txtPassword1" type="password" maxlength="20" id="txtPassword1" placeholder="PASSWORD" [(ngModel)]="register_password"/>
-          <!-- </div> -->
-        </div>
-        <div class="form-group">
-          <!-- <div class="col-75"> -->
-            <input name="txtPassword2" type="password" maxlength="20" id="txtPassword2" placeholder="RE-TYPE PASSWORD" [(ngModel)]="register_retyped_password"/>
-          <!-- </div> -->
-        </div>
-
-        <div class="form-group">
-          <!-- <div class="col-75"> -->
-            <input type="submit" (click)="registerUser($event)" name="btnRegister" value="Register" id="btnRegister" class="Btn" />
-            &nbsp;&nbsp;
-            <a href="./contact-us" style="color:#000000"><u><i>Contact Us</i></u></a>
-          <!-- </div> -->
-        </div>
-        <div class="form-group">
-          <div *ngIf="register_error">
-            <span style="color:#ff0e0e;font-size: 14px;" [(ngModel)]="register_error" ngDefaultControl><i>{{register_error}}</i></span><br />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-75" style="display: none;">
-            <span style="color:#ff0e0e;font-size: 12px;">Password must:</span><br />
-              <span style="color:#ff0e0e;font-size: 10px;">• Be a minimum of eight (8) alphanumeric characters in length</span><br />
-              <span style="color:#ff0e0e;font-size: 10px;">• Contain at least 1 uppercase character </span><br />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div style="margin-left:75px;">
-          <!--<table width="100%" border="0">
-              <tr>
-                <td width="100%" ><input type="submit" (click)="registerUser($event)" name="btnRegister" value="Register" id="btnRegister" class="Btn" /></td>
-              </tr>
-              <tr>
-                <td width="90%"><br /><a href="./contact-us" style="color:#ffffff"><u><i>Contact Us</i></u></a></td>
-              </tr>
-          </table>-->
-          </div>
-          <div>
-            <img id="Image2" src="/assets/images/SKOM-logo.png" style="width:400px;border-width:0px;">
-          </div>
-        </div>
-      </div>
-      <div class="col-1">
-
-      </div>
     </body>
   </nb-layout-column>
 </nb-layout>

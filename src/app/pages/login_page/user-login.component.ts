@@ -50,7 +50,8 @@ export class UserLoginComponent implements OnInit, OnDestroy{
     }
   }
 
-  loginUser(event) {
+  loginUser() {
+
     //this.password = bcrypt.hashSync(this.password, this.salt)
       console.log("loginUser password: ", this.password)
       this.baseService.loginUser(this.email, this.username, this.password)
@@ -76,7 +77,7 @@ export class UserLoginComponent implements OnInit, OnDestroy{
     this.router.navigate(['applicant-login']);
   }
 
-  registerUser(event) {
+  registerUser() {
     //this.login_user.password = bcrypt.hashSync(this.login_user.password, this.salt)
     console.log("registerUser: ", this.register_password)
     this.baseService.registerUser(this.register_email, this.register_username, this.register_password, this.register_retyped_password)
@@ -91,7 +92,7 @@ export class UserLoginComponent implements OnInit, OnDestroy{
         this.register_error = 'Could not register user'
         console.log(this.register_error)
         if(err) {
-          this.register_error = err.error.error
+          this.register_error = err.error
         }
       }
     );

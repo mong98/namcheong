@@ -1,5 +1,5 @@
-<nb-layout>
-  <nb-layout-column>
+<nb-layout style="padding: 0;">
+  <nb-layout-column style="padding: 0;">
   <head>
     <link
       rel="shortcut icon"
@@ -10,92 +10,24 @@
     <!--<link type="text/css" rel="Stylesheet" href="\JobPortal\job\css\job.css" />-->
   </head>
 
-  <body>
-    <div>
-      <table style="width:100%;"   cellpadding="0" cellspacing="0" border="0" >
-        <tr >
-          <td  class="TopBorderLeft" ></td>
-          <td  class="TopBorderMiddle"></td>
-          <td  class="TopBorderRight" ></td>
-        </tr>
-      </table>
+  <body class="row bg text-center">
+    <div class="d-sm-none d-md-block col-md-4">
+    </div>      
+    <div class="col-sm-12 col-md-4 border border-dark rounded-lg" style="background-color: rgba(255, 255, 255, 1); padding-left: 0px;padding-right: 15px;">
+      <form class="pt-5 pb-5 form-signin" (ngSubmit)="loginAdmin()">
+        <img class="" src="/assets/images/SKOM-logo.png" width="200" />
+        <h1 class="h4 mb-3 font-weight-normal">Admin sign in</h1>
+        <label for="txtUserID" class="sr-only">Email</label>
+        <input type="email" class="form-control" name="txtUserID" id="txtUserID" aria-describedby="emailHelp" placeholder="Email Address" [(ngModel)]="username" />
+        <label for="txtPassword" class="sr-only">Password</label>
+        <input type="password" class="form-control" name="txtPassword" id="txtPassword" placeholder="Password" [(ngModel)]="password" />
+        <div class="alert alert-danger" *ngIf="login_error">
+          {{login_error}}
+        </div>
+        <button type="submit" class="btn btn-theme btn-lg btn-block">LOGIN</button>
+      </form>
     </div>
-    <div class="page">
-      <div class="form-group" align="center" >
-        <div class="col-50"  >
-          <div class="LoginTopHeader">
-            <img src="/assets/images/TopBanner.png" />
-          </div>
-        </div>
-        <div class="col-50">
-          <img src="/assets/images/NamCheongLogo.png" />
-        </div>
-        <img  src="/assets/images/Login_banner.jpg" />
-      </div>
-
-      <div class="loginmain">
-        <table class="LoginMain"  style="text-align:center; width:100%" >
-          <tr>
-            <td style="width:20%"></td>
-            <td style="width:20%"></td>
-            <td style="width:20%"></td>
-            <td style="width:40%"></td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td colspan ="2" style="padding-left: 30px">
-                <span id="ctl00_MainContent_lblError" class="ErrorLabel"></span>
-            </td>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td colspan ="2" class="LoginHeaderFont" align="left">
-                Please enter your login details</td>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td class="LoginTitleFont">User Name</td>
-            <td class="LoginTextboxFont">
-                <input [(ngModel)]="username" name="ctl00$MainContent$txtUserName" type="text" id="ctl00_MainContent_txtUserName" style="width:150px;" />
-            </td>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td colspan="4"></td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td class="LoginTitleFont">Password</td>
-            <td class="LoginTextboxFont">
-              <input [(ngModel)]="password" name="ctl00$MainContent$txtPassword" type="password" id="ctl00_MainContent_txtPassword" style="width:150px;" />
-            </td>          
-          </tr>
-          <tr>
-            <td colspan="2"></td>
-            <td align="left" >
-            <br />
-            <input type="submit" id="submit" class="submitButton" 
-            (click)="loginAdmin($event)"/>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2"></td>
-            <td align="left" >
-            <span style="color:#ff0e0e;font-size: 14px;" *ngIf="login_error" [(ngModel)]="login_error" ngDefaultControl>
-              <i>{{login_error}}</i>
-            </span>
-            <br />
-            <td colspan="4">
-              <br /><br /><br />
-            </td>
-          </tr>
-        </table>
-        <div class="CopyrightText">
-          <span id="ctl00_Label2">Copyright Nam Cheong Limited, Malaysia &copy; 2020</span>
-        </div>
-      </div>
+    <div class="d-sm-none d-md-block col-sm-2 col-md-4">
     </div>
   </body>
   </nb-layout-column>

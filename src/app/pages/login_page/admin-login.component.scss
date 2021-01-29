@@ -1,456 +1,67 @@
-* {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-  }
-
-  body
-{
-    background: #b6b7bc;
-    /*font-size: .80em;
-    font-family: "Helvetica Neue", "Lucida Grande", "Segoe UI", Arial, Helvetica, Verdana, sans-serif;*/
-    font-family: Tahoma;
-    font-size: 12px;
-    margin: 0px;
-    padding: 0px;
-    /*color: #696969;*/
-    color: #3a3a3b;
+html,
+body {
+  height: 100%;
 }
 
-h1, h2, h3, h4, h5, h6
-{
-    font-size: 1.5em;
-    color: #666666;
-
-    text-transform: none;
-    font-weight: 200;
-    margin-bottom: 0px;
+body {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+//   background-color: black;
 }
 
-h1
-{
-    font-size: 1.6em;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+  border-color: rgb(0, 156, 166);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgb(0, 156, 166);
+  outline: 0 none;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
-h2
-{
-      font-size: 1.8em;
-    font-weight: 600;
-    font-family: calibri;
-}
-
-h3
-{
-    font-size: 13px;
-}
-
-h4
-{
-    font-size: 1.1em;
-}
-
-h5, h6
-{
-    font-size: 1em;
-}
-
-
-.page
-{
-    width: 1024px;
-    background-color: White;
-    margin: 0px auto 0px auto;
-    border: 1px solid #496077;
-}
-
-.header
-{
-    position: relative;
-    margin: 0px;
-    padding: 0px;
-    /*background: #4b6c9e;*/
-    width: 100%;
-
-    left: 1px;
-}
-
-.header h1
-{
-    font-weight: 700;
-    margin: 0px;
-    padding: 0px 0px 0px 20px;
-    color:#33948F;
-    border: none;
-    line-height: 2em;
-    font-size: 2em;
-}
-
-.main
-{
-    padding: 0px 25px 0px 0px;
-     width:964px;
-    min-height: 400px;
-    padding-left:30px;
-}
-
-.loginmain
-{
-    padding: 0px 30px 0px 12px;
-    margin: 12px 8px 8px 8px;
-    min-height: 200px;
-}
-
-.leftCol
-{
-    padding: 6px 0px;
-    margin: 12px 8px 8px 8px;
-    width: 200px;
-    min-height: 200px;
-}
-
-.footer
-{
-    color: #4e5766;
-    padding: 8px 0px 0px 0px;
-    margin: 0px auto;
-    text-align: center;
-    line-height: normal;
-}
-
-
-
-/* this rule styles <h1> and <h2> tags that are the
-first child of the left and right table columns */
-.rightColumn > h1, .rightColumn > h2, .leftColumn > h1, .leftColumn > h2
-{
-    margin-top: 0px;
-}
-
-
-
-
-  .LoginMain
-{
-    background-position: bottom;
-
-    width: 400px;
-    background-image: url('/assets/images/Login_FooterBg.png');
-    background-repeat: repeat-x;
-
-}
-
-.loginmain
-{
-    padding: 0px 30px 0px 12px;
-    margin: 12px 8px 8px 8px;
-    min-height: 200px;
-}
-
-  .submitButton
-{
-    background: #c8f0ff;
-    border: solid 1px #61b7d8;
-    font-family: Tahoma;
-    font-size: 11px;
+.btn-theme {
+    color: rgb(242, 242, 242);
+    background-color: rgb(0, 156, 166);
+    border: rgb(127, 127, 127);
     font-weight: bold;
-    color: #252525;
-    height: 25px;
-    width: 80px;
 }
 
-.LoginTitleFont
-{
-    background-position: 30px center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-    background-image: url('/assets/images/Bullet.png');
+.bg {
+    /* The image used */
+    background-image: url('/assets/images/Main1.jpg');
+    
+    /* Full height */
+    height: 100%; 
+  
+    /* Center and scale the image nicely */
+    background-position: center;
     background-repeat: no-repeat;
+    // background-size: cover;
 }
-
-.LoginTextboxFont
-{
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-    text-align: left;
-}
-/*.submitButton[disabled]{background-color:Gray;}*/
-
-  .col-10 {
-    float: left;
-    width: 4%;
-    margin-top: 6px;
-  }
-
-  .col-50 {
-    float: left;
-    width: 46%;
-    margin-top: 6px;
-  }
-
-  .col-25 {
-    float: left;
-    width: 23%;
-    margin-top: 6px;
-  }
-
-  .col-75 {
-    float: left;
-    width: 70%;
-    margin-top: 6px;
-  }
-
-   /*
-For Login section
-*/
-
-TopBorderTable
-{
-    padding: 0px;
-    margin: 0px;
-    width: 100%;
-    empty-cells: hide;
-    caption-side: inherit;
-    border-spacing: 0px;
-    border-collapse: collapse;
-    table-layout: fixed;
-    text-indent: 0px;
-
-    word-spacing: 0em;
-    letter-spacing: 0em;
-}
-
-.TopBorderLeft
-{
-    background-color: #434343;
-    width:80%;
-    height:25px;
-}
-
-.TopBorderMiddle
-{
-    background-position: left top;
-    border-width: 0px;
-    padding: 0px;
-    margin: 0px;
-    width: 30px;
-    background-image: url('/assets/images/TopBanner_arrow.jpg');
-    background-repeat: no-repeat;
-    background-color: #00A2B1;
-}
-
-
-.TopBorderRight
-{
-    background-color: #00A2B1;
-    width: 17%;
-}
-
-
-.LoginTopHeader
-{
-    height: 70px;
-    padding-left: 680px;
-    padding-top:10px;
-    background-image: url('/assets/images/TopBanner.png');
-    background-repeat: no-repeat;
-
-}
-
-
-
-.LoginHeaderFont
-{
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    font-weight: bold;
-    padding-left: 30px;
-}
-
-.LoginTitleFont
-{
-    background-position: 30px center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-    background-image: url('/assets/images/Bullet.png');
-    background-repeat: no-repeat;
-}
-
-.LoginTextboxFont
-{
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-    text-align: left;
-}
-
-  .CopyrightText
-{
-    padding: 4px;
-    font-family: tahoma;
-    font-size: 10px;
-    font-weight: normal;
-    color: #585f69;
-    text-align: right;
-    vertical-align: bottom;
-    border-top-style: solid;
-    border-top-width: 1px;
-    border-top-color: #585f69;
-}
-
-
-.MenuBottomDiv
-{
-    background-color: #00A2B1;
-    width: 963px;
-    height: 9px;
-}
-
-.divTopHeadPanel
-{
-
-   padding-left: 30px;
-  padding-right:30px;
-
-}
-
-.divTopPanel
-{
-
-    background-image: url('/assets/images/TopBanner.png');
-   height:55px;
-   padding-top: 10px;
-
-    background-repeat: no-repeat;
-}
-
-/*style for Project Grid*/
-.projectGrid
-{
-    margin: 5px 0 10px 0;
-    font-family: Tahoma;
-    font-size: 12px;
-    color: #383838;
-
-}
-.projectGrid td
-{
-    padding: 2px;
-    color: #717171;
-    border-right-width: 10px;
-    padding-left: 10px;
-}
-.projectGrid th
-{
-
-}
-.projectGrid .alt
-{
-    background: top;
-}
-.projectGrid .pgr {  }
-.projectGrid .pgr table { margin: 5px 0; }
-.projectGrid .pgr td
-{
-    padding: 0 6px;
-    font-weight: bold;
-    color: #fff;
-    line-height: 12px;
-    border-right-style: solid;
-    border-right-color: #666;
-    border-top-width: 0;
-    border-right-width: 1px;
-    border-bottom-width: 0;
-}
-.projectGrid  a { color: #383838; text-decoration: none; }
-.projectGrid  a:hover { color: #383838; text-decoration: none; }
-
-.MenuListDiv
-{
-    vertical-align: top;
-    border-left-style: solid;
-    border-left-width: 1px;
-    padding-left: 30px;
-}
-
-.DefaultPageHeaderFont
-{
-    font-family: tahoma;
-    font-size: 24px;
-    color: #383838;
-}
-
-
-/* User Role List Style*/
-.roleListStyle {
-    background-color: #fff;
-    margin: 5px 0 10px 0;
-    border-collapse:collapse;
-    font-family:Tahoma;
-    font-size: 11px;
-}
-
-.roleListStyle td {
-    padding: 2px;
-    background: #e9f1f0;
-    color: #3a3a3b;
-}
-.roleListStyle th {
-    padding: 4px 2px;
-    color: #ffffff;
-    background: #188883;
-    font-size: 11px;
-}
-
-.roleList
-{
-    border:none;
-}
-
-.dividerLine
-{
-    border-top: 1px solid #e6e6e6;
-    height:10px;
-}
-
-.grayBackground
-{
-    background: #f4f4f4;
-}
-
-.titleDivider
-{
-    border-top: 1px solid #7F91A5;
-}
-
-.dividerGrid
-{
-    border-top: 2px solid #e6e6e6;
-    background: #F4FFF9;
-}
-
-[type=select]
-{
-    font-family: Tahoma;
-    font-size: 12px;
-}
-
-select, textarea
-{
-    font-family: Tahoma;
-    font-size: 12px;
-}
-
-.modifiedLabel
-{
-    font-size: 10px;
-}
-
-.LeftSpace
-{
-  padding-left:10px;
- }

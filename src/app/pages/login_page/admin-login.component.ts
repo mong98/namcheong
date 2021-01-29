@@ -52,7 +52,7 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  loginAdmin(event) {
+  loginAdmin() {
     //this.password = bcrypt.hashSync(this.password, this.salt)
       console.log("loginAdmin password: ", this.password)
       this.baseService.loginAdmin(this.email, this.username, this.password)
@@ -70,6 +70,7 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
           console.log(err)
           if(err) {
             this.login_error = err.error.error
+
           }
         }
       );
