@@ -21,6 +21,7 @@ export class MatrixComponent implements OnDestroy, OnInit {
   selectedFormat = 'Horizontal' // Default to Horizontal
   hasSearch = false // Used to denote whether first search has occurred
   formats = ['Horizontal', 'Vertical']
+  tableHeader = []
 
   private _matrixSubscription: Subscription
   private _matrixTemplateSubscription: Subscription
@@ -37,6 +38,8 @@ export class MatrixComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.newTableDetails = {}
     this.newTableDetails.dict = []
+    this.newTableDetails.horizontal = [] // Added by Hakim on 29 Jan 2021
+    this.newTableDetails.arr = [] // Added by Hakim on 29 Jan 2021
 
     this._matrixSubscription = this.matrixService.getMatrix().subscribe(
       (result: any) => {
@@ -93,10 +96,22 @@ export class MatrixComponent implements OnDestroy, OnInit {
   }
 
   exportToExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.newTableDetails.dict);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'matrix.xlsx');
+
+    if (this.selectedFormat == 'Horizontal') {
+      let dataToExport = []
+      dataToExport.push(this.tableHeader)
+      dataToExport = dataToExport.concat(this.newTableDetails.arr)
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport, {skipHeader: true});
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'matrix.xlsx');
+    } else {
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.newTableDetails.dict);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'matrix.xlsx');
+    }
   }
 
   alert() {
@@ -115,15 +130,18 @@ export class MatrixComponent implements OnDestroy, OnInit {
 
     this.newTableDetails = {}
     this.newTableDetails.dict = []
+    this.newTableDetails.horizontal = [] // Added by Hakim on 29 Jan 2021
+    this.newTableDetails.arr = [] // Added by Hakim on 29 Jan 2021
     this.hasSearch = true
 
     const subscription = this.matrixDataService.getMatrixData(this.selectedDate, this.vesselName).subscribe(
       (result: any) => {
         console.log("check matrix data")
         console.log(result)
-        if (result && result.length > 0) {
+        // if (result && result.length > 0) {
+        for (let i = 0; i < result.length; i++) {
           // Only take the first result
-          const matrixData = result[0]
+          const matrixData = result[i]
           matrixData.Position = matrixData.ApplyPosition
           const selectedMatrix = this.matrixTemplates.find(t => t.matrixName === this.selectedTemplate)
 
@@ -139,6 +157,9 @@ export class MatrixComponent implements OnDestroy, OnInit {
             selectedDateFormat1 = selectedMatrix.Item.find(data => data == 'DateFormat1')
             selectedDateFormat2 = selectedMatrix.Item.find(data => data == 'DateFormat2')
           }
+
+          let dictHorizontal = {}
+          let arrHorizontal = []
           // Added by Hakim on 28 Jan 2021 - End
 
           for (let key in matrixData) {
@@ -151,9 +172,9 @@ export class MatrixComponent implements OnDestroy, OnInit {
                 let dataDate = new Date(matrixData[key])
                 if (dataDate.getDate() != null && !dataNumber && !isNaN(dataDate.getDate())) {
                   if (selectedDateFormat2 != null) {
-                    matrixData[key] = dataDate.getDate() + '/' + dataDate.getMonth() + '/' + dataDate.getFullYear()
+                    matrixData[key] = (dataDate.getMonth()+1) + '/' + dataDate.getDate() + '/' + dataDate.getFullYear()
                   } else {
-                    matrixData[key] = dataDate.getMonth() + '/' + dataDate.getDate() + '/' + dataDate.getFullYear()
+                    matrixData[key] = dataDate.getDate() + '/' + (dataDate.getMonth()+1) + '/' + dataDate.getFullYear()
                   }
                 }
               }
@@ -163,8 +184,19 @@ export class MatrixComponent implements OnDestroy, OnInit {
                 "key": selectedMatrix.ItemDesc[index],
                 "value": matrixData[key]
               })
+
+              arrHorizontal.push(matrixData[key]) // Added by Hakim on 29 Jan 2021
+              dictHorizontal[key] = matrixData[key] // Added by Hakim on 29 Jan 2021
+
+              // Added by Hakim on 29 Jan 2021 - Start
+              if (i == 0) {
+                this.tableHeader.push(selectedMatrix.ItemDesc[index],)
+              }
+              // Added by Hakim on 29 Jan 2021 - End
             }
           }
+          this.newTableDetails.arr.push(arrHorizontal) // Added by Hakim on 29 Jan 2021
+          this.newTableDetails.horizontal.push(dictHorizontal) // Added by Hakim on 29 Jan 2021
         }
         subscription.unsubscribe()
       },

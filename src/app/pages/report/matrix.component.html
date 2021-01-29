@@ -115,16 +115,18 @@
 <div class="form-group" *ngIf="selectedFormat === 'Horizontal'">
   <table class="table bg-info table-bordered">
     <tbody>
+      <!-- Update by Hakim on 29 Jan 2021 - Start -->
       <tr>
-        <th *ngFor="let dict of newTableDetails.dict; let i = index">
-          {{ dict.key }}
+        <th *ngFor="let header of tableHeader; let i = index">
+          {{ header }}
         </th>
       </tr>
-      <tr>
-        <td *ngFor="let dict of newTableDetails.dict; let i = index">
-          {{ dict.value }}
+      <tr *ngFor="let data of newTableDetails.arr" >
+        <td *ngFor="let value of data; let i = index">
+          {{ value }}
         </td>
       </tr>
+      <!-- Update by Hakim on 29 Jan 2021 - End -->
     </tbody>
   </table>
 </div>
