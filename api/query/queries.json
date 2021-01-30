@@ -449,15 +449,15 @@
 
     "getSignature" : "SELECT * FROM [JobPortal].[dbo].[UserConfigure] WHERE [UserID] = @UserID",
 
-    "updateCV" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileCV] = @FileCV WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
-    "updateCVDate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileCVCreateDt] = @FileCVCreateDt WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+    "updateCV" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileCV] = @FileCV WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position AND [Id] = @ApplyID",
+    "updateCVDate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileCVCreateDt] = @FileCVCreateDt WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position AND [Id] = @ApplyID",
     
-    "updateAFE" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileAFE] = @FileAFE WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
-    "updateAFEDate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileAFECreateDt] = @FileAFECreateDt WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+    "updateAFE" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileAFE] = @FileAFE WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position AND [Id] = @ApplyID",
+    "updateAFEDate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileAFECreateDt] = @FileAFECreateDt WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position AND [Id] = @ApplyID",
 
-    "updateSEA" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileSEA] = @FileSEA  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
-    "updateSEADate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileSEACreateDt] = @FileSEACreateDt  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
-    "updategenDoc" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [GenDoc] = @GenDoc  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position",
+    "updateSEA" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileSEA] = @FileSEA  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position AND [Id] = @ApplyID",
+    "updateSEADate" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [FileSEACreateDt] = @FileSEACreateDt  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position AND [Id] = @ApplyID",
+    "updategenDoc" : "UPDATE [JobPortal].[dbo].[ApplicantApply] SET [GenDoc] = @GenDoc  WHERE [LoginEmail] = @LoginEmail AND [Position] = @Position AND [Id] = @ApplyID",
 
     "generalAnswer": "SELECT * FROM [JobPortal].[dbo].[ApplicantGeneralAnswer] WHERE [LoginEmail] = @LoginEmail AND [QuestionId] = @QuestionId AND [ApplyID] = @ApplyID",
     "getSignatureAdminFileName": "SELECT SignatureAdmin FROM [JobPortal].[dbo].[UserConfigure] WHERE Id = @Id",

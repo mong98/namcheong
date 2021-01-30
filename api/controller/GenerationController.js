@@ -425,6 +425,7 @@ class GenerationController {
                 today +
                 '.docx'
             )
+            .input('ApplyID',req.body.ApplyID)
             .query(queries.updateCV)
 
           const updateCvDate = await pool
@@ -436,6 +437,7 @@ class GenerationController {
               checkApplicant.recordset[0].Position
             )
             .input('FileCVCreateDt', sql.DateTime, Date())
+            .input('ApplyID',req.body.ApplyID)
             .query(queries.updateCVDate)
 
           // //console.log(
@@ -473,6 +475,7 @@ class GenerationController {
               checkApplicant.recordset[0].Position
             )
             .input('GenDoc', '1')
+            .input('ApplyID',req.body.ApplyID)
             .query(queries.updategenDoc)
 
           //res.send("Successfully generated CV for " + applicant.Name);
@@ -1858,6 +1861,7 @@ class GenerationController {
                   today +
                   '.docx'
               )
+              .input('ApplyID',req.body.ApplyID)
               .query(queries.updateAFE)
 
             const updateAFEDate = await pool
@@ -1869,6 +1873,7 @@ class GenerationController {
                 checkApplicant.recordset[0].Position
               )
               .input('FileAFECreateDt', sql.DateTime, Date())
+              .input('ApplyID',req.body.ApplyID)
               .query(queries.updateAFEDate)
 
             const updateGenDoc = await pool
@@ -1880,6 +1885,7 @@ class GenerationController {
                 checkApplicant.recordset[0].Position
               )
               .input('GenDoc', '1')
+              .input('ApplyID',req.body.ApplyID)
               .query(queries.updategenDoc)
             // //console.log(
             //   'updateAFE: ',
@@ -2721,6 +2727,7 @@ class GenerationController {
                   today +
                   '.docx'
               )
+              .input('ApplyID',req.body.ApplyID)
               .query(queries.updateSEA)
 
             const updateSEADate = await pool
@@ -2732,6 +2739,7 @@ class GenerationController {
                 checkApplicant.recordset[0].Position
               )
               .input('FileSEACreateDt', sql.DateTime, Date())
+              .input('ApplyID',req.body.ApplyID)
               .query(queries.updateSEADate)
 
             const updateGenDoc = await pool
@@ -2743,6 +2751,7 @@ class GenerationController {
                 checkApplicant.recordset[0].Position
               )
               .input('GenDoc', '2')
+              .input('ApplyID',req.body.ApplyID)
               .query(queries.updategenDoc)
 
             checkApplicant.recordset[0].Position = checkApplicant.recordset[0].Position.replace(
