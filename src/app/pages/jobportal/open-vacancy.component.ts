@@ -65,8 +65,8 @@ export class OpenVacancyComponent {
 
         this.vessels.forEach((vessel: any) => {
           this.vesselsList.push({
-            value: vessel.HullNo,
-            title: vessel.HullNo
+            value: vessel.VesselName,
+            title: vessel.VesselName
           })
         })
 

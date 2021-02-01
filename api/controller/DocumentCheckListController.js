@@ -7,7 +7,9 @@ class DocumentCheckListController {
   async getDocumentCheckList(req, res) {
     try {
       const pool = await poolPromise
-      const result = await pool.request().query(queries.getDocumentCheckList)
+      const result = await pool
+      .request()
+      .query(queries.getDocumentCheckList)
       console.log(result.recordset)
       res.json(result.recordset)
     } catch (error) {

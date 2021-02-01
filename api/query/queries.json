@@ -5,7 +5,7 @@
     "updateDocument" : "UPDATE [JobPortal].[dbo].[Document] SET [Document] = @Document, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
 
     "getIMONo" : "SELECT * FROM [JobPortal].[dbo].[IMONo] ORDER BY [dbo].[IMONo].[Id]",
-    "getVessel" : "SELECT [VesselID], [HullNo] FROM [JobPortal].[dbo].[v_VesselType]",
+    "getVessel" : "SELECT * FROM [dbo].[v_VesselType]",
     "addIMONo" :"INSERT INTO [JobPortal].[dbo].[IMONo] ([IMONo], [Vessel], [CreatedDate]) VALUES (@IMONo, @Vessel, GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
     "deleteIMONo" : "DELETE FROM [JobPortal].[dbo].[IMONo] WHERE [Id] = @Id",
     "updateIMONo" : "UPDATE [JobPortal].[dbo].[IMONo] SET [IMONo] = @IMONo, [Vessel] = @Vessel, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
@@ -140,7 +140,7 @@
                                 , "VALUES (@UserID, @ApplyID, @Position, @Document, @PositionID, "
                                 , "@DocumentID, @DocNo, @DtIssue, @DtExpiry, @Type, @FilePath, @FileName, @FileExtension, "
                                 , "@Charterer, @ChartererOthers, @DynamicPositionCertType, @DynamicPositionCertFileName, @Grade, @IssuingAuthority)"],
-    "getApplicantDocument" : ["SELECT dbo.[ApplicantDocument].[Id] as Id, dbo.[Document].[ID] as DocumentID, dbo.[PositionDocument].[Document] as Document, dbo.PositionDocument.Chk, dbo.PositionDocument.DocNo as DocNo, dbo.PositionDocument.DtExpiry as DtExpiry, dbo.PositionDocument.DtIssue as DtIssue, "
+    "getApplicantDocument" : ["SELECT dbo.[ApplicantDocument].[Id] as Id, dbo.[Document].[Id] as DocumentID, dbo.[PositionDocument].[Document] as Document, dbo.PositionDocument.Chk, dbo.PositionDocument.DocNo as DocNo, dbo.PositionDocument.DtExpiry as DtExpiry, dbo.PositionDocument.DtIssue as DtIssue, "
                                 , "dbo.PositionDocument.[Document] AS Document, dbo.PositionDocument.Position, dbo.PositionDocument.[DocType] AS DocType, dbo.PositionDocument.[DocFile] AS DocFile, dbo.PositionDocument.[GradeChk] AS GradeChk, dbo.PositionDocument.[IssuingAuthorityChk] AS IssuingAuthorityChk, dbo.PositionDocument.[TypeCompetencyChk] AS TypeCompetencyChk, " 
                                 , "ApplicantDocument.DocNo as [ApplicantDocNo], "
                                 , "ApplicantDocument.dtIssue as [ApplicantDocDtIssue], "
@@ -396,7 +396,7 @@
     "addApplication" : ["INSERT INTO [JobPortal].[dbo].[ApplicantApply] "
                                 , "(Position, PositionID, DtApplication, LoginEmail, Status, SubmitFlag, SubmitBy, SubmitDt) "
                                 , "VALUES (@Position, @PositionID, getdate(), @LoginEmail, @Status, @SubmitFlag, @SubmitBy, @SubmitDt); SELECT SCOPE_IDENTITY() AS [Id]"],
-    "updateApplication" : "UPDATE [JobPortal].[dbo].ApplicantApply SET Position=@Position, DtApplication=getdate(), Status='New', SubmitFlag='N' WHERE [LoginEmail]=@LoginEmail AND PositionID=@PositionID",
+    "updateApplication" : "UPDATE [JobPortal].[dbo].ApplicantApply SET Position=@Position, DtApplication=getdate(), Status='New', SubmitFlag='N' WHERE [LoginEmail]=@LoginEmail AND PositionID=@PositionID AND Id = @ApplyID",
     "registerApplicant" : "INSERT INTO [Applicant] (LoginEmail, Name, Password, Status, DtCreated) VALUES (@LoginEmail, @Name, @Password, 'Active', GetDate())",
     
     "getApplicantMedicalReportQuestion" : "SELECT * FROM [dbo].[ApplicantMedicalQuestion]",

@@ -19,7 +19,7 @@
       <button nbButton ngDefaultControl
       *ngIf="status.Status == 'New' || status.Status == 'Review'"
       type="button" status="primary" 
-      (click)="navigatePage(status.VacancyID,status.PositionID)" id="{{status.VacancyID}}">
+      (click)="navigatePage(status.VacancyID,status.PositionID,status.Id)" id="{{status.VacancyID}}">
         Update
       </button>
     </td>

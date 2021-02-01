@@ -85,6 +85,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   charterer_dropdown_shown: boolean = false
   charterer_dropdown_shown2: boolean = false
   defaultPositionID: string = '19'
+
+  defaultStatus: any = 1 //added 1/2/2021
+
   issuingAuthority: any = []
   signaturePath: string
   signature: File
@@ -151,7 +154,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
         this.medicalReportAnswer.push({ "Answer": 'N', "Description" : '', "FileNeeded": 'N', "Rating": '1', "YesNo": 'N', "AnsCheckupDt":new Date(), "AnsExpiryDt":new Date() })
       }
 
-
+      this.applicant.ApplyID = null
 
       // get user email
       this.applicant.LoginEmail = localStorage.getItem("user_email")
@@ -168,9 +171,13 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     this.applicant.medicalReportAnswer = []
     this.userEmail = localStorage.getItem("user_email")
     this.applicantLoginEmail = this.activatedRoute.snapshot.params.LoginEmail
+    this.defaultStatus = this.activatedRoute.snapshot.queryParamMap.get('status');
+    this.applicant.ApplyID = this.activatedRoute.snapshot.queryParamMap.get('ApplyID');
+    console.log(this.applicant.ApplyID)
     if (this.activatedRoute.snapshot.queryParamMap.get('psid')) {
       this.defaultPositionID = this.activatedRoute.snapshot.queryParamMap.get('psid');
-      console.log(this.activatedRoute.snapshot.params.LoginEmail);
+   
+ 
     }
     this.getAllowances()
     this.getGender()
@@ -279,7 +286,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
 
     if (inputIC.length > 12) {
       this.applicant.IC = inputIC.slice(0, -1)
-      alert('Invalid identification card number format. Please insert ic in the folowing format 000000-00-0000')
+      alert('Invalid identification card number format. Please insert ic in the folowing format 000000000000')
     }
   }
 
@@ -1320,6 +1327,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     console.log(this.applicantapply)
     console.log(this.applicantapply.Position, this.applicantapply.PositionID)
     console.log("applicant_documents: ", this.applicant.Id, " email: ", this.applicant.LoginEmail, " ApplyPositionID: ", this.applicant.ApplyPositionID)
+    console.log(this.applicant);
   }
 
   _refreshPositionData() {
@@ -1611,6 +1619,8 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       console.log(`Dialog result: ${result}`);
       if(result == true) {
         this.openPasswordDialog(event, isSubmit)
+      }else{
+        alert("Please check any missing feilds! There is an error!")
       }
     });
   }
@@ -1652,6 +1662,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       //this.onSaveSanitize()
       if(this.addNew) {
         console.log("go in add application")
+       
         // temp. add login email
         this.applicant.AddNew = this.addNew
         this.applicant.LoginEmail = localStorage.getItem("user_email")
@@ -1660,7 +1671,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
         const subscription = this.applicationService.addApplicationSubmit(
           JSON.stringify(this.applicant))
           .subscribe((res: any) => {
-            if (res.LoginEmail == null) {
+            if (res.LoginEmail == null || res == undefined ) {
               alert('Failed to submit new application ')
             } else {
               alert('Submit New Record Successful')
@@ -1671,17 +1682,43 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
             subscription.unsubscribe()
           })
       }
+      else if(this.defaultStatus == 2){
+        console.log("Update Status")
+        console.log('ApplyID')
+        this.applicant.ApplyID = this.activatedRoute.snapshot.queryParamMap.get('ApplyID');
+        console.log(this.applicant.ApplyID)
+        //if(this.applicantapply != null && this.applicantapply.LoginEmail != null) {
+        // find a way to save/update data
+        // submit existing application
+																	  
+        const subscription = this.applicationService.updateApplicationSubmit(
+          JSON.stringify(this.applicant))
+          .subscribe((res: any) => {
+            console.log('res');
+            console.log(res);
+            if (res.LoginEmail == null || res == undefined || res == null) {
+              alert('Failed to submit application')
+            } else {
+              alert('Submit Record Successful')
+              // upload file & update filepath
+              this.onSaveFile()
+              this.router.navigateByUrl('/pages/applicant_jobportal/dashboard-applicant') 
+            }
+            subscription.unsubscribe()
+          })
+      }
       else {
         console.log("go in update")
         //if(this.applicantapply != null && this.applicantapply.LoginEmail != null) {
         // find a way to save/update data
         // submit existing application
-											
-									  
+																	  
         const subscription = this.applicationService.updateApplicationSubmit(
           JSON.stringify(this.applicant))
           .subscribe((res: any) => {
-            if (res.LoginEmail == null) {
+            console.log('res');
+            console.log(res);
+            if (res.LoginEmail == null || res == undefined || res == null) {
               alert('Failed to submit application')
             } else {
               alert('Submit Record Successful')

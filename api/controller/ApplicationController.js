@@ -6,6 +6,8 @@ var queries = JSON.parse(rawdata)
 class ApplicationController {
   // update the applicant tbl
   async updateApplicant(req) {
+    console.log('req for update')
+    console.log(req);
     var queryStr2 = queries.saveAsDraftApplication.join(' ')
     //console.log("queryStr2: ", queryStr2, " LoginEmail2: ", req.body.LoginEmail)
     const pool = await poolPromise
@@ -368,6 +370,7 @@ class ApplicationController {
     .input('Position', sql.VarChar, req.body.Position)
     .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
     .input('PositionID', sql.VarChar, req.body.PositionID)
+    .input('ApplyID', sql.VarChar, req.body.ApplyID)
     .query(queries.updateApplication)
     return result2
   }
@@ -700,6 +703,8 @@ class ApplicationController {
     .input('SignatureDate', sql.VarChar, req.body.SignatureDate) // Added by Hakim on 19 Jan 2021
     .query(queryStr2)
 
+    const result3 = await module.exports.updateApplication(req)
+
     //////console.log('addApplicationSaveAsDraft result2: ', result2)
     //console.log("done for updateApplicantSubmit")
     return result2
@@ -712,22 +717,25 @@ class ApplicationController {
       if (req.body.LoginEmail != null || req.body.Position != null) {
         var isSubmit = true
         const pool = await poolPromise
-        const result = await module.exports.addApplication(req, isSubmit) 
+
+        console.log('submitApplication');
+        console.log(req.body);
+        //const result = await module.exports.addApplication(req, isSubmit) 
         //console.log('addApplicationSubmit result: ', result)
 
         //console.log("check return id")
         //console.log(result.recordset[0].Id)
-        var ApplyID = result.recordset[0].Id
+        var ApplyID = req.body.ApplyID
 
-        if(result != null) {
+        //if(result != null) {
           // update the applicant tbl 
           //console.log("come in update submit")
           const result2 = await module.exports.updateApplicantSubmit(req)
-          //console.log('addApplicationSubmit result: ', result2)
+          console.log('updateApplicantSubmit result: ', result2)
 
           // get applicant by login email & apply pos. from ApplicantApply tbl
           const result3 = await module.exports.getApplicantByLoginEmailApplyId(req, ApplyID)
-          //console.log('selectApplicantApply result3: ', result3)
+          console.log('selectApplicantApply result3: ', result3)
           //console.log("check before")
           
 
@@ -746,6 +754,8 @@ class ApplicationController {
             const result7 = await module.exports.updateApplicantMedicalReportAnswerById(req, ApplyID)
             //console.log('updateApplicantMedicalReportAnswerById result7: ', result7)
 
+            const result8 = await module.exports.updateApplication(req)
+
             // Updated by Hakim on 19 Jan 2021 - start
             // To solve issue of sending response two times
             if (result6 && result7) {
@@ -753,7 +763,7 @@ class ApplicationController {
             }
             // Updated by Hakim on 19 Jan 2021 - End
           }
-        }
+        //}
         // res.json({ LoginEmail: req.body.LoginEmail })
       } else {
         res.send('All fields are required!')

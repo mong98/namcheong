@@ -17,10 +17,10 @@ export class ApplicationService {
   }
 
   updateApplicationSubmit(data: any) {
-    console.log("check service")
-    console.log(data)
-    console.log(this._secondaryEntity)
-    return this.service.updateSecondaryEntity(this._entity, this._secondaryEntity, data)
+    // console.log("check service")
+    // console.log(data)
+   
+    return this.service.updateSecondaryEntity(this._entity,this._secondaryEntity, data)
   }
 
   authenticateUserApplication(data: any) {

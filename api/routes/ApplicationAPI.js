@@ -9,6 +9,7 @@ router.put('/update_application/',controller.saveAsDraftApplication);
 router.put('/update_submitapplication/',controller.submitApplication);
 router.post('/add_saveapplication/',controller.addApplicationSaveAsDraft);
 router.post('/add_submitapplication/',controller.addApplicationSubmit);
+router.post('/update_existApplication/',controller.updateApplicantSubmit);
 
 router.delete('/delete_applicantnextofkin/:Id',controller.deleteApplicantNextOfKin);
 router.post('/add_applicantnextofkin/', controller.addApplicantNextOfKin);

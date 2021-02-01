@@ -45,12 +45,9 @@ export class ApplicationStatusComponent implements OnInit {
       // Added by Hakim on 19 Jan 2021 - End
     }
   
-    navigatePage(id,psid) {
+    navigatePage(id,psid,ApplyID) {
       //this.router.navigateByUrl('/pages/applicant_jobportal/crew_job_portal')
-      console.log("check id")
-      console.log(id)
-      console.log(psid)
-      this.router.navigate(['/pages/applicant_jobportal/crew_job_portal/'], { queryParams: { openvacancy: id, psid: psid }})
+      this.router.navigate(['/pages/applicant_jobportal/crew_job_portal/'], { queryParams: { openvacancy: id, psid: psid, status: 2,LoginEmail:this.userEmail,ApplyID:ApplyID}})
     }
 
     private _getStatus() {
@@ -75,10 +72,10 @@ export class ApplicationStatusComponent implements OnInit {
     private _refreshVacancyData(result: any[]) {
       this.allStatus = result.map((status: ApplicationStatus) => {
 
-        let dtUpdate = new Date(status.DtApplication).toLocaleString()
-        let dtSubmit = new Date(status.SubmitDt).toLocaleString()
+        let dtUpdate = new Date(status.DtApplication).toLocaleString("en-US")
+        let dtSubmit = new Date(status.SubmitDt).toLocaleString("en-US")
         let vacancy = this.allVacancies.filter(v => v.PSId == status.PositionID)
-        console.log(vacancy)
+      
         return {
           Id: status.Id,
           PositionID: status.PositionID,
@@ -89,5 +86,7 @@ export class ApplicationStatusComponent implements OnInit {
           Status: status.Status
         }
       })
+      console.log('All Status!')
+      console.log(this.allStatus);
     }
   }
