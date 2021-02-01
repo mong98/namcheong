@@ -147,7 +147,8 @@ export class BaseService {
   }
 
   getWithParams(entity: string, params: any) {
-    const paramQuery = Object.values(params).join('&')
+    // const paramQuery = Object.values(params).join('&')
+    const paramQuery = Object.values(params).join('/') // Update by Hakim on 1 Feb 2021
 
     return this.httpClient
       .get(`${this.apiServer}/${entity}/get_${entity}/${paramQuery}`)
