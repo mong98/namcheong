@@ -50,7 +50,7 @@ class FileUploadController {
           result = await pool
           .request()
           .input('LoginEmail', sql.VarChar, req.body.UserID)
-          .input('EducationFileName', sql.VarChar, filename_generated)
+          .input('FileName', sql.VarChar, filename_generated) // Updated by Hakim on 2 Feb 2021
           .query(queries.updateApplicantEducation)
         }
         else if(req.body.ColumnType == "cv"){

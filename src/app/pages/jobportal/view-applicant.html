@@ -234,7 +234,15 @@
       <!-- Added by Hakim on 2 Feb 2021 - Start -->
       <tr>
         <th scope="row" style="width: 35%;">Highest Education Level</th>
-        <th scope="col">{{applicant.Education}}</th>
+        <th scope="col">
+          {{applicant.Education}}
+          <br><br>
+          <button nbButton status="basic" ngDefaultControl
+          *ngIf="applicant.EducationFileName
+          && applicant.EducationFileName.length > 0"
+          [ngModel]="applicant.EducationFileName"
+          (click)="viewFile(applicant.EducationFileName)">View</button>
+        </th>
       </tr>
       <!-- Added by Hakim on 2 Feb 2021 - End -->
     </tbody>
