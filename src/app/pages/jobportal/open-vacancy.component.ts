@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs'
 import { OpenVacancy } from '../../interfaces/openvacancy'
 import { OpenVacancyService } from '../../services/openvacancy.service'
 import { ImoNoService } from '../../services/imono.service'
+import { formatDate } from '@angular/common'
 
 import {
   SmartTableDatepickerComponent,
@@ -33,7 +34,7 @@ export class OpenVacancyComponent {
     private service: OpenVacancyService,
     private imoNoService: ImoNoService,
     private positionService: PositionService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getData()
@@ -65,8 +66,8 @@ export class OpenVacancyComponent {
 
         this.vessels.forEach((vessel: any) => {
           this.vesselsList.push({
-            value: vessel.VesselName,
-            title: vessel.VesselName
+            value: vessel.HullNo,
+            title: vessel.HullNo,
           })
         })
 
@@ -86,11 +87,11 @@ export class OpenVacancyComponent {
               title: 'No',
               filter: false,
               editable: false,
-              addable: false
+              addable: false,
             },
             Id: {
               title: 'ID',
-              hide: true
+              hide: true,
             },
             Position: {
               title: 'Position',
@@ -136,7 +137,7 @@ export class OpenVacancyComponent {
           },
           actions: {
             add: true,
-            position: 'right'
+            position: 'right',
           },
         }
         this.settings = Object.assign(newSettings)
@@ -144,90 +145,92 @@ export class OpenVacancyComponent {
       (err) => alert('Failed to load vessels')
     )
 
-    this._positionSubscription = this.positionService.getAllPositions().subscribe(
-      (result: any) => {
-        this.positions = result
+    this._positionSubscription = this.positionService
+      .getAllPositions()
+      .subscribe(
+        (result: any) => {
+          this.positions = result
 
-        this.positions.forEach((position: Position) => {
-          this.positionsList.push({
-            value: position.Id,
-            title: position.Position
+          this.positions.forEach((position: Position) => {
+            this.positionsList.push({
+              value: position.Id,
+              title: position.Position,
+            })
           })
-        })
 
-        const newSettings = {
-          delete: {
-            confirmDelete: true,
-          },
-          add: {
-            addButtonContent: 'Add',
-            confirmCreate: true,
-          },
-          edit: {
-            confirmSave: true,
-          },
-          columns: {
-            No: {
-              title: 'No',
-              filter: false,
-              editable: false,
-              addable: false
+          const newSettings = {
+            delete: {
+              confirmDelete: true,
             },
-            Id: {
-              title: 'ID',
-              hide: true
+            add: {
+              addButtonContent: 'Add',
+              confirmCreate: true,
             },
-            Position: {
-              title: 'Position',
-              filter: false,
-              type: 'html',
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.positionsList,
+            edit: {
+              confirmSave: true,
+            },
+            columns: {
+              No: {
+                title: 'No',
+                filter: false,
+                editable: false,
+                addable: false,
+              },
+              Id: {
+                title: 'ID',
+                hide: true,
+              },
+              Position: {
+                title: 'Position',
+                filter: false,
+                type: 'html',
+                editor: {
+                  type: 'list',
+                  config: {
+                    selectText: 'Select...',
+                    list: this.positionsList,
+                  },
                 },
               },
-            },
-            DateEnd: {
-              title: 'End Date',
-              type: 'custom',
-              renderComponent: SmartTableDatepickerRenderComponent,
-              filter: false,
-              editor: {
+              DateEnd: {
+                title: 'End Date',
                 type: 'custom',
-                component: SmartTableDatepickerComponent,
-                pickerType: 'calendar',
-                timePicker: false,
-                format: 'dd/MM/yyyy',
-              },
-            },
-            HullNo: {
-              title: 'Vessel Type',
-              filter: false,
-              type: 'html',
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.vesselsList,
+                renderComponent: SmartTableDatepickerRenderComponent,
+                filter: false,
+                editor: {
+                  type: 'custom',
+                  component: SmartTableDatepickerComponent,
+                  pickerType: 'calendar',
+                  timePicker: false,
+                  format: 'dd/MM/yyyy',
                 },
               },
+              HullNo: {
+                title: 'Vessel Type',
+                filter: false,
+                type: 'html',
+                editor: {
+                  type: 'list',
+                  config: {
+                    selectText: 'Select...',
+                    list: this.vesselsList,
+                  },
+                },
+              },
+              Qualification: {
+                title: 'Qualification',
+                filter: false,
+              },
             },
-            Qualification: {
-              title: 'Qualification',
-              filter: false,
+            actions: {
+              add: true,
+              position: 'right',
             },
-          },
-          actions: {
-            add: true,
-            position: 'right'
-          },
-        }
-        this.settings = Object.assign(newSettings)
-      },
-      (err) => alert('Failed to load positions')
-    )
+          }
+          this.settings = Object.assign(newSettings)
+        },
+        (err) => alert('Failed to load positions')
+      )
   }
 
   settings = {
@@ -246,11 +249,11 @@ export class OpenVacancyComponent {
         title: 'No',
         filter: false,
         editable: false,
-        addable: false
+        addable: false,
       },
       Id: {
         title: 'ID',
-        hide: true
+        hide: true,
       },
       Position: {
         title: 'Position',
@@ -258,7 +261,6 @@ export class OpenVacancyComponent {
       },
       DateEnd: {
         title: 'End Date',
-        type: 'custom',
         renderComponent: SmartTableDatepickerRenderComponent,
         filter: false,
         editor: {
@@ -288,22 +290,28 @@ export class OpenVacancyComponent {
     },
     actions: {
       add: true,
-      position: 'right'
+      position: 'right',
     },
   }
 
   onDeleteConfirm(event) {
-    if (window.confirm(`Are you sure you want to delete ${event.data.Position}?`)) {
-      const subscription = this.service.deleteOpenVacancy(event.data.Id).subscribe((res: any) => {
-        if (res.Id == null) {
-          alert(`Failed to delete ${event.data.Position}`)
-        } else {
-          this.openVacancies = this.openVacancies.filter(a => a.Id !== event.data.Id)
-          this._refreshData()
-          event.confirm.resolve(event.newData)
-        }
-        subscription.unsubscribe()
-      })
+    if (
+      window.confirm(`Are you sure you want to delete ${event.data.Position}?`)
+    ) {
+      const subscription = this.service
+        .deleteOpenVacancy(event.data.Id)
+        .subscribe((res: any) => {
+          if (res.Id == null) {
+            alert(`Failed to delete ${event.data.Position}`)
+          } else {
+            this.openVacancies = this.openVacancies.filter(
+              (a) => a.Id !== event.data.Id
+            )
+            this._refreshData()
+            event.confirm.resolve(event.newData)
+          }
+          subscription.unsubscribe()
+        })
     } else {
       event.confirm.reject()
     }
@@ -315,16 +323,16 @@ export class OpenVacancyComponent {
     if (window.confirm('Are you sure you want to save?')) {
       event.confirm.resolve(event.newData)
 
-      const subscription = this.service.updateOpenVacancy(
-        JSON.stringify(event.newData)
-      ).subscribe((res: any) => {
-        if (res.Id == null) {
-          alert('Failed to update open vacancy')
-        } else {
-          event.confirm.resolve(event.newData)
-        }
-        subscription.unsubscribe()
-      })
+      const subscription = this.service
+        .updateOpenVacancy(JSON.stringify(event.newData))
+        .subscribe((res: any) => {
+          if (res.Id == null) {
+            alert('Failed to update open vacancy')
+          } else {
+            event.confirm.resolve(event.newData)
+          }
+          subscription.unsubscribe()
+        })
     } else {
       event.confirm.reject()
     }
@@ -333,25 +341,30 @@ export class OpenVacancyComponent {
   onCreateConfirm(event) {
     if (!this.isValid(event)) return
 
-    if (window.confirm(`Are you sure you want to add ${event.newData.Position}?`)) {
-      const subscription = this.service.addOpenVacancy(
-        JSON.stringify({
-          Position: event.newData.Position,
-          DateEnd: event.newData.DateEnd,
-          HullNo: event.newData.HullNo,
-          Qualification: event.newData.Qualification
+    if (
+      window.confirm(`Are you sure you want to add ${event.newData.Position}?`)
+    ) {
+      const subscription = this.service
+        .addOpenVacancy(
+          JSON.stringify({
+            Position: event.newData.Position,
+            DateEnd: event.newData.DateEnd,
+            HullNo: event.newData.HullNo,
+            Qualification: event.newData.Qualification,
+          })
+        )
+        .subscribe((res: any) => {
+          if (res.Id == null) {
+            alert(`Failed to create ${event.newData.Position}`)
+          } else {
+            event.newData.No = this.openVacancies.length + 1
+            event.newData.Id = res.Id
+            this.openVacancies.push(event.newData)
+            event.confirm.resolve(event.newData)
+            location.reload();
+          }
+          subscription.unsubscribe()
         })
-      ).subscribe((res: any) => {
-        if (res.Id == null) {
-          alert(`Failed to create ${event.newData.Position}`)
-        } else {
-          event.newData.No = this.openVacancies.length + 1
-          event.newData.Id = res.Id
-          this.openVacancies.push(event.newData)
-          event.confirm.resolve(event.newData)
-        }
-        subscription.unsubscribe()
-      })
     } else {
       event.confirm.reject()
     }
@@ -378,15 +391,19 @@ export class OpenVacancyComponent {
   }
 
   _refreshData() {
+
     this.source.load(
       this.openVacancies.map((item: OpenVacancy, index: number) => {
+
+        let date_ob = new Date(item.DateEnd)
+
         return {
           No: index + 1,
           Id: item.Id,
           Position: item.Position,
-          DateEnd: new Date(item.DateEnd).toLocaleDateString('dd/MM/yyyy') ,
+          DateEnd: formatDate(date_ob, 'dd/MM/yyyy', 'en-MY'),
           HullNo: item.HullNo || '',
-          Qualification: item.Qualification || ''
+          Qualification: item.Qualification || '',
         }
       })
     )
