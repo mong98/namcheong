@@ -20,6 +20,10 @@ import {
   ApplicantNextOfKin,
   ApplicantDropdownId,
   Currency,
+  ApplicantGeneralQuestion, // Added by Hakim on 2 Feb 2021
+  ApplicantGeneralAnswer, // Added by Hakim on 2 Feb 2021
+  ApplicantMedicalQuestion, // Added by Hakim 2 Feb 2021
+  ApplicantMedicalAnswer // Added by Hakim 2 Feb 2021
 } from '../../interfaces/applicant'
 import { Position } from '../../interfaces/position'
 import { ImoNo, VesselType } from '../../interfaces/imono'
@@ -51,6 +55,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   currencies: any = []
   allowances: any = []
   genderlist: any = []
+  educationlist: any = []
   relationshiplist: any = []
   positionid: string
   daily_rate: string
@@ -62,6 +67,10 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   signature: string
   signatureAdmin: string
   adminDetails: any = []
+  generalQuestion: any = [] // Added by Hakim on 2 Feb 2021
+  generalAnswer: any = [] // Added by Hakim on 2 Feb 2021
+  medicalReportQuestion: any = [] // Added by Hakim on 2 Feb 2021
+  medicalReportAnswer: any = [] // Added by Hakim on 2 Feb 2021
 
   _subscription: Subscription
 
@@ -88,6 +97,8 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.medicalReportQuestion = []
+    this.medicalReportAnswer = []
     this.applicant.next_of_kin = []
     this.applicant.applicant_dropdown = []
     this.applicant.applicant_documents = []
@@ -95,6 +106,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     this.getAllowances()
     this.getCurrency()
     this.getGender()
+    this.getEducation() // Added by Hakim on 2 Feb 2021
     this.getRelationships()
     //this.getApplicantById(135)
     //this.getApplicantById(1274)
@@ -106,6 +118,8 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     this.getPortsOfRegistry()
     this.getIssuingAuthorities()
     this.getAdminId()
+    this.getApplicantGeneralQuestion() // Added by Hakim on 2 Feb 2021
+    this.getApplicantMedicalReportQuestion() // Added by Hakim on 2 Feb 2021
   }
 
   ngOnDestroy(): void {
@@ -310,6 +324,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   //     (err) => alert('Failed to load Vessel Type')
   //   )
   // }
+
   getVesselType() {
     this.vesselService.getAllVessels().subscribe(
       (result: any) => {
@@ -384,6 +399,114 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     })
   }
 
+  // Added by Hakim on 2 Feb 2021 - Start
+  getApplicantGeneralQuestion() {
+    this.service.getApplicantGeneralQuestion().subscribe(
+    (result: any) => {
+      this.generalQuestion = result
+      this._refreshApplicantGeneralQuestionData()
+    },
+      (err) => alert('Failed to load Applicant Status')
+    )
+  }
+
+  _refreshApplicantGeneralQuestionData() {
+    this.generalQuestion.map((item: ApplicantGeneralQuestion) => {
+      return {
+        Id: item.Id,
+        Type: item.Type,
+        Question: item.Question,
+        YesNo: item.YesNo,
+        Rating: item.Rating,
+        TxtBox: item.TxtBox,
+        FileNeeded: item.FileNeeded,
+        PositionRelated: item.PositionRelated
+      }
+    })
+  }
+
+  getApplicantGeneralAnswer(ApplyID: string) {
+    this.service.getApplicantGeneralAnswerById(ApplyID).subscribe(
+    (result: any) => {
+      if(result != null && result.length > 0)
+        this.generalAnswer = result
+      this._refreshApplicantGeneralAnswerData()
+    },
+      (err) => alert('Failed to load question')
+    )
+  }
+
+  _refreshApplicantGeneralAnswerData() {
+    this.generalAnswer = this.generalAnswer.map((item: ApplicantGeneralAnswer) => {
+      return {
+        Id: item.Id,
+        Type: item.Type,
+        ApplyID: item.ApplyID,
+        LoginEmail: item.LoginEmail,
+        QuestionId: item.QuestionId,
+        Answer: item.Answer == 'Y' ? 'Yes' : 'No',
+        Description: item.Description,
+        FilePath: item.FilePath
+      }
+    })
+  }
+
+  getApplicantMedicalReportQuestion() {
+    this.service.getApplicantMedicalReportQuestion().subscribe(
+    (result: any) => {
+      this.medicalReportQuestion = result
+      this._refreshApplicantMedicalReportQuestionData()
+    },
+      (err) => alert('Failed to load Applicant Status')
+    )
+  }
+
+  _refreshApplicantMedicalReportQuestionData() {
+    this.medicalReportQuestion.map((item: ApplicantMedicalQuestion) => {
+      return {
+        Id: item.Id,
+        Type: item.Type,
+        Question: item.Question,
+        YesNo: item.YesNo,
+        Rating: item.Rating,
+        TxtBox: item.TxtBox,
+        FileNeeded: item.FileNeeded,
+        PositionRelated: item.PositionRelated,
+        CheckupDt: item.CheckupDt,
+        ExpiryDt: item.ExpiryDt
+      }
+    })
+  }
+
+  getApplicantMedicalReportAnswer(ApplyID: string) {
+    this.service.getApplicantMedicalReportAnswerById(ApplyID).subscribe(
+    (result: any) => {
+      if(result != null && result.length > 0)
+        this.medicalReportAnswer = result
+      this._refreshApplicantMedicalReportAnswerData()
+    },
+      (err) => alert('Failed to load question')
+    )
+  }
+
+  _refreshApplicantMedicalReportAnswerData() {
+    this.medicalReportAnswer = this.medicalReportAnswer.map((item: ApplicantMedicalAnswer) => {
+      return {
+        Id: item.Id,
+        Type: item.Type,
+        ApplyID: item.ApplyID,
+        LoginEmail: item.LoginEmail,
+        QuestionId: item.QuestionId,
+        Answer: item.Answer == 'Y' ? 'Yes' : 'No',
+        Description: item.Description,
+        FilePath: item.FilePath,
+        AnsCheckupDt: item.AnsCheckupDt != null ? new Date(item.AnsCheckupDt).getDate() + '/' + (new Date(item.AnsCheckupDt).getMonth()+1) + '/' + new Date(item.AnsCheckupDt).getFullYear() : '',
+        AnsExpiryDt: item.AnsExpiryDt != null ? new Date(item.AnsExpiryDt).getDate() + '/' + (new Date(item.AnsExpiryDt).getMonth()+1) + '/' + new Date(item.AnsExpiryDt).getFullYear() : ''
+      }
+    })
+  }
+  // Added by Hakim on 2 Feb 2021 - End
+
   mapStandByRateToId(id) {
     for (var i =0; i < this.standbyRates.length; i++) {
       var item = this.standbyRates[i]
@@ -403,6 +526,18 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
       (err) => alert('Failed to load Gender')
     )
   }
+
+  // Added by Hakim on 2 Feb 2021 - Start
+  getEducation() {
+    this._subscription = this.service.getEducation().subscribe(
+      (result: any) => {
+        this.educationlist = result
+        //this._refreshCountryData()
+      },
+      (err) => alert('Failed to load Education')
+    )
+  }
+  // Added by Hakim on 2 Feb 2021 - End
 
   getRelationships() {
     this._subscription = this.relationshipService.getAllRelationships().subscribe(
@@ -433,6 +568,17 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Added by Hakim on 2 Feb 2021 - Start
+  mapEducationToName(id) {
+    for (var i =0; i < this.educationlist.length; i++) {
+      var item = this.educationlist[i]
+      if (item.Id == id) {
+        return item.Education
+      }
+    }
+  }
+  // Added by Hakim on 2 Feb 2021 - Start
+
   mapCurrencyToId(name) {
     for (var i =0; i < this.currencies.length; i++) {
       var item = this.currencies[i]
@@ -456,6 +602,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
   _refreshData() {
     this.applicant.CurrencyID = this.mapCurrencyToId(this.applicant.Currency) 
     this.applicant.GenderName = this.mapGenderToName(this.applicant.Gender)
+    this.applicant.Education = this.mapEducationToName(this.applicant.Education) // Added by Hakim on 2 Feb 2021
     console.log(this.applicant)
     //this.applicant.EmergencyContactRelationship = this.mapRelationshipToName(this.applicant.EmergencyContactRelationship)
     //this.standbyRates = this.standby_rate
@@ -584,6 +731,8 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
       this.applicant.ApplyPositionID
     )
     this.getApplicantDropdown(this.applicant.Id)
+    this.getApplicantGeneralAnswer(this.applicant.Id)
+    this.getApplicantMedicalReportAnswer(this.applicant.Id)
     //}
   }
 
@@ -615,6 +764,13 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
       }
     })
   }
+
+  // Added by Hakim on 1 Feb 2021 - Start
+  vesselIdOnChange(value) {
+    let selectedVesselData = this.imonos.find(data => data.Id == this.applicant.applicant_dropdown.VesselId)
+    this.applicant.applicant_dropdown.ImonoId = selectedVesselData.Id
+  }
+  // Added by Hakim on 1 Feb 2021 - End
 
   // Added by Hakim on 26 Jan 2021 - Start
   contractPeriodFromOnChange(value) {
@@ -656,7 +812,8 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
 
   contractPeriodFromInMthOnChange(value) {
 
-    this.applicant.ContractPeriodFromInMth = value
+    this.applicant.ContractPeriodFromInMth = Math.round(value) // Update by Hakim on 1 Feb 2021
+    console.log(parseInt(value))
     if (this.applicant.ContractPeriodFrom != null && this.applicant.ContractPeriodTo != null) {
       let period = parseInt(this.applicant.ContractPeriodFromInMth);
       let startDate = new Date(this.applicant.ContractPeriodFrom)
@@ -666,6 +823,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     }
   }
   // Added by Hakim on 27 Jan 2021 - End
+
   currencyOnChange(value) {
     this.applicant.Currency = this.mapCurrencyToName(value)
   }

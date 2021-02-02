@@ -52,7 +52,7 @@
   <label><b>Document</b></label>
 </div>
 <div class="form-group">
-  <table class="table table-bordered" style="background-color: white;">
+  <table class="table table-bordered table-responsive" style="background-color: white;">
     <tbody>
       <tr>
         <th scope="col">No</th>
@@ -193,7 +193,7 @@
       </tr>
       <tr>
         <th scope="row" style="width: 35%;">Permanent Address</th>
-        <th scope="col">{{applicant.PermanentAddress}}</th>
+        <th scope="col">{{applicant.PermanentAddress}}, {{applicant.PermanentAddress2}}, {{applicant.PermanentAddress3}}</th>
       </tr>
       <tr>
         <th scope="row" style="width: 35%;">Permanent PostCode</th>
@@ -209,7 +209,7 @@
       </tr>
       <tr>
         <th scope="row" style="width: 35%;">Residential Address</th>
-        <th scope="col">{{applicant.Residentialaddress}}</th>
+        <th scope="col">{{applicant.Residentialaddress}}, {{applicant.Residentialaddress2}}, {{applicant.Residentialaddress3}}</th>
       </tr>
       <tr>
         <th scope="row" style="width: 35%;">Residential PostCode</th>
@@ -231,6 +231,12 @@
         <th scope="row" style="width: 35%;">Repatriation Home Port</th>
         <th scope="col">{{applicant.RepatriationHomePort}}</th>
       </tr> -->
+      <!-- Added by Hakim on 2 Feb 2021 - Start -->
+      <tr>
+        <th scope="row" style="width: 35%;">Highest Education Level</th>
+        <th scope="col">{{applicant.Education}}</th>
+      </tr>
+      <!-- Added by Hakim on 2 Feb 2021 - End -->
     </tbody>
   </table>
 </div>
@@ -297,7 +303,7 @@
       </tr>
       <tr>
         <th scope="row" style="width: 35%;">Address</th>
-        <td scope="col">{{applicant.EmergencyContact_Address}},{{applicant.EmergencyContact_Address2}},{{applicant.EmergencyContact_Address3}}</td>
+        <td scope="col">{{applicant.EmergencyContact_Address}}, {{applicant.EmergencyContact_Address2}}, {{applicant.EmergencyContact_Address3}}</td>
       </tr>
       <tr>
         <th scope="row" style="width: 35%;">City</th>
@@ -343,7 +349,6 @@
   </table>
 </div>
 
-
 <div class="form-group" style="margin-top: 5%">
   <label><b>References</b></label>
 </div>
@@ -371,6 +376,81 @@
     </tbody>
   </table>
 </div>
+
+<!-- Added by Hakim on 2 Feb 2021 - Start -->
+<div class="form-group" style="margin-top: 5%">
+  <label><b>Medical Checkup Report</b></label>
+</div>
+<div class="form-group">
+  <table  class="table table-bordered" style="background-color: white;">
+    <thead>
+      <tr>
+        <th>Questions</th>
+        <th>Answers</th>
+        <th>Date of checkup</th>
+        <th>Date of expiry</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr *ngFor="let question of medicalReportQuestion; let i = index">
+        <td>{{question.Question}}</td>
+        <td *ngIf="medicalReportAnswer.length > 0">{{medicalReportAnswer[question.Id-1].Answer}}</td>
+        <td *ngIf="medicalReportAnswer.length > 0">{{medicalReportAnswer[question.Id-1].AnsCheckupDt}}</td>
+        <td *ngIf="medicalReportAnswer.length > 0">{{medicalReportAnswer[question.Id-1].AnsExpiryDt}}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="form-group" style="margin-top: 5%">
+  <label><b>Medical History</b></label>
+</div>
+<div class="form-group">
+  <table  class="table table-bordered" style="background-color: white;">
+    <thead>
+      <tr>
+        <th>Questions</th>
+        <th>Answers</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr *ngFor="let question of generalQuestion; let i = index">
+        <ng-container *ngIf="question.Type == 2">
+          <td>{{question.Question}}</td>
+          <td *ngIf="generalAnswer.length > 0">{{generalAnswer[question.Id-1].Answer}}</td>
+          <td *ngIf="generalAnswer.length > 0">{{generalAnswer[question.Id-1].Description}}</td>
+        </ng-container>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="form-group" style="margin-top: 5%">
+  <label><b>General</b></label>
+</div>
+<div class="form-group">
+  <table  class="table table-bordered" style="background-color: white;">
+    <thead>
+      <tr>
+        <th>Questions</th>
+        <th>Answers</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr *ngFor="let question of generalQuestion; let i = index">
+        <ng-container *ngIf="question.Type == 1">
+          <td>{{question.Question}}</td>
+          <td *ngIf="generalAnswer.length > 0">{{generalAnswer[question.Id-1].Answer}}</td>
+          <td *ngIf="generalAnswer.length > 0">{{generalAnswer[question.Id-1].Description}}</td>
+        </ng-container>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<!-- Added by Hakim on 2 Feb 2021 - End-->
 
 <div class="form-group" style="margin-top: 5%">
   <label><b>Agreement Data</b></label>
@@ -484,7 +564,7 @@
       <tr>
         <th scope="col">Name of Vessel</th>
         <td scope="col">
-          <select #vessel_name class="custom-select mb-2 mr-sm-2" id="vessel_name" [(ngModel)]="applicant.applicant_dropdown.VesselId">
+          <select #vessel_name class="custom-select mb-2 mr-sm-2" id="vessel_name" [(ngModel)]="applicant.applicant_dropdown.VesselId" (change)="vesselIdOnChange($event)">
             <option selected value="19">Choose...</option>
             <option
               *ngFor="let vessel of vessels; let i = index"
@@ -567,15 +647,14 @@
         </td>
       </tr>
       <!-- Added by Hakim on 27 Jan 2021 - Start -->
-      <tr>
+      <!-- <tr>
         <th scope="col">Daily Rate</th>
         <td scope="col">
-          <!-- <input type="text" class="form-control mb-2 mr-sm-2" id="wagesConsolidated" [(ngModel)]="applicant.DailyRate" placeholder="Remarks Salary" /> -->
         </td>
         <td scope="col">
           <input type="text" class="form-control mb-2 mr-sm-2" id="amountConsolidated" [(ngModel)]="applicant.DailyRate"/>
         </td>
-      </tr>
+      </tr> -->
       <!-- Added by Hakim on 27 Jan 2021 - Start -->
       <tr>
         <th scope="col">Consolidated Salary</th>
