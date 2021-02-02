@@ -114,7 +114,7 @@ export class OpenVacancyComponent {
                 component: SmartTableDatepickerComponent,
                 pickerType: 'calendar',
                 timePicker: false,
-                format: 'dd-MM-yyyy',
+                format: 'dd/MM/yyyy',
               },
             },
             HullNo: {
@@ -199,7 +199,7 @@ export class OpenVacancyComponent {
                 component: SmartTableDatepickerComponent,
                 pickerType: 'calendar',
                 timePicker: false,
-                format: 'dd-MM-yyyy',
+                format: 'dd/MM/yyyy',
               },
             },
             HullNo: {
@@ -266,7 +266,7 @@ export class OpenVacancyComponent {
           component: SmartTableDatepickerComponent,
           pickerType: 'calendar',
           timePicker: false,
-          format: 'dd-MM-yyyy',
+          format: 'dd/MM/yyyy',
         },
       },
       HullNo: {
@@ -384,7 +384,7 @@ export class OpenVacancyComponent {
           No: index + 1,
           Id: item.Id,
           Position: item.Position,
-          DateEnd: item.DateEnd,
+          DateEnd: new Date(item.DateEnd).toLocaleDateString('dd/MM/yyyy') ,
           HullNo: item.HullNo || '',
           Qualification: item.Qualification || ''
         }
