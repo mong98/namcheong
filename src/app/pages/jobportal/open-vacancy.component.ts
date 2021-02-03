@@ -401,7 +401,7 @@ export class OpenVacancyComponent {
           No: index + 1,
           Id: item.Id,
           Position: item.Position,
-          DateEnd: formatDate(date_ob, 'dd/MM/yyyy', 'en-MY'),
+          DateEnd: item.DateEnd,
           HullNo: item.HullNo || '',
           Qualification: item.Qualification || '',
         }
