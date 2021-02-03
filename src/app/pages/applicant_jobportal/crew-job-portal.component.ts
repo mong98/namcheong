@@ -241,7 +241,10 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   private _refreshVacancyData(result: any[]) {
+    console.log("refreshVacancy");
+    
     this.allVacancies = result.map((openvacancy: OpenVacancy) => {
+      console.log(openvacancy)
       return {
         Id: openvacancy.Id,
         PSId: openvacancy.PSId,
