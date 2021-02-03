@@ -223,6 +223,19 @@ export class BaseService {
       .pipe(catchError(this.errorHandler))
   }
 
+  // Added by Hakim on 3 Feb 2021 - Start
+  updatePasswordWithId(entity: string, updateId: string, data: any) {
+    this.constructHttpOptions()
+    return this.httpClient
+      .put(
+        `${this.apiServer}/${entity}/update_${entity}password/${updateId}`,
+        data,
+        this.httpOptions
+      )
+      .pipe(catchError(this.errorHandler))
+  }
+  // Added by Hakim on 3 Feb 2021 - End
+
   updateSecondaryEntity(entity: string, secondaryEntity: string, data: any) {
     this.constructHttpOptions()
     return this.httpClient

@@ -43,6 +43,7 @@
     "deleteUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [Deleted] = 1 WHERE [Id] = @Id",
     "updateUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [LoginEmail] = @LoginEmail, [Name] = @Name, [Email] = @Email, [Password] = @Password WHERE [Id] = @Id",
     "getLoginAdmin" : "SELECT [UserID], [UserName], [Password], [Email],[FirstName],[LastName] FROM [Namcheong].[dbo].[tblUser] WHERE [UserName] = @UserName",
+    "getLoginAdmin2" : "SELECT [UserID], [UserName], [Password], [LoginEmail], [Name], [LastName] FROM [JobPortal].[dbo].[UserConfigure] WHERE [UserName] = @UserName",
     "getEmailAdmin" : "SELECT [UserID] FROM [Namcheong].[dbo].[tblUser] WHERE [Email] = @Email",
     "getAdmin" : "SELECT [UserID] FROM [Namcheong].[dbo].[tblUser] WHERE [UserName] = @UserName AND [Password] = @Password",
     "addAdmin" :"INSERT INTO [Namcheong].[dbo].[tblUser] ([UserName], [Password], [Email], [StatusID], [DepartmentID], [FirstName], [LastName], [CreatedOn], [ModifiedOn]) VALUES (@UserName, @Password, @Email, @StatusID, @DepartmentID, @FirstName, @LastName, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY() AS [UserID]",
@@ -101,8 +102,8 @@
 	"getUserModule": "SELECT * FROM [JobPortal].[dbo].[AccessModule]",
 	"getAdminDetails": "SELECT * FROM [JobPortal].[dbo].[UserConfigure] WHERE [UserName] = @Id",
 	"getUserIdConfigure": "SELECT [Id] AS [UserConfigureID], [UserID], [UserName],[Signature],[SignatureAdmin],[ManagerId],[ManagerName] FROM [JobPortal].[dbo].[UserConfigure]",
-	"getUserIdConfigureById": "SELECT [AMU].[Id], [AMU].[ModuleID], [AMU].[UserConfigureID], [AMU].[Chk], [AM].[Module], [AM].[SubModule], [UC].[UserID], [UC].[UserName],[UC].[SignatureAdmin], [UC].[Signature], [UC].[ManagerId], [UC].[ManagerName] FROM [JobPortal].[dbo].[AccessModuleUser] AS [AMU] INNER JOIN [JobPortal].[dbo].[AccessModule] AS [AM] ON [AMU].[ModuleID] = [AM].[Id] INNER JOIN [JobPortal].[dbo].[UserConfigure] AS [UC] ON [AMU].[UserConfigureID] = CAST([UC].[Id] as varchar(100)) WHERE [UC].[Id] = @UserConfigureID",
-	"addUserIdConfigure": "INSERT INTO [JobPortal].[dbo].[UserConfigure] ([UserID], [UserName], [Name], [CreatedBy], [CreatedDate], [UpdatedBy], [UpdatedDate], [ManagerId], [ManagerName]) VALUES (@UserID, @UserName, @Name, @CreatedBy, GETDATE(), @UpdatedBy, GETDATE(), @ManagerId, @ManagerName); SELECT SCOPE_IDENTITY() AS [UserConfigureID]",
+	"getUserIdConfigureById": "SELECT [AMU].[Id], [AMU].[ModuleID], [AMU].[UserConfigureID], [AMU].[Chk], [AM].[Module], [AM].[SubModule], [UC].[UserID], [UC].[UserName], [UC].[Password], [UC].[SignatureAdmin], [UC].[Signature], [UC].[ManagerId], [UC].[ManagerName] FROM [JobPortal].[dbo].[AccessModuleUser] AS [AMU] INNER JOIN [JobPortal].[dbo].[AccessModule] AS [AM] ON [AMU].[ModuleID] = [AM].[Id] INNER JOIN [JobPortal].[dbo].[UserConfigure] AS [UC] ON [AMU].[UserConfigureID] = CAST([UC].[Id] as varchar(100)) WHERE [UC].[Id] = @UserConfigureID",
+	"addUserIdConfigure": "INSERT INTO [JobPortal].[dbo].[UserConfigure] ([UserID], [UserName], [Password], [Name], [CreatedBy], [CreatedDate], [UpdatedBy], [UpdatedDate], [ManagerId], [ManagerName]) VALUES (@UserID, @UserName, @Password, @Name, @CreatedBy, GETDATE(), @UpdatedBy, GETDATE(), @ManagerId, @ManagerName); SELECT SCOPE_IDENTITY() AS [UserConfigureID]",
 	"deleteUserIdConfigure": "DELETE FROM [JobPortal].[dbo].[UserConfigure] WHERE [Id] = @UserConfigureID; DELETE FROM [JobPortal].[dbo].[AccessModuleUser] WHERE [UserConfigureId] = @UserConfigureID;",
 	"updateUserIdConfigure": "UPDATE [JobPortal].[dbo].[UserConfigure] SET [UserID] = @UserID, [UserName] = @UserName, [ManagerId] = @ManagerId, [ManagerName] = @ManagerName WHERE [Id] = @Id; UPDATE [JobPortal].[dbo].[AccessModuleUser] SET [Chk] = @Chk WHERE [UserConfigureID] = @UserConfigureID;",
 
@@ -273,8 +274,8 @@
                                 , ", RCountry = @RCountry"
                                 , ", Contact_MobileCtryCode = @Contact_MobileCtryCode"
                                 , ", Contact_Mobile = @Contact_Mobile"
-								, ", Contact_HouseCtryCode = @Contact_HouseCtryCode" 
-                                , ", Contact_House = @Contact_House"																				
+								, ", Contact_HouseCtryCode = @Contact_HouseCtryCode"
+                                , ", Contact_House = @Contact_House"																					
                                 , ", RepatriationHomePort = @RepatriationHomePort"
                                 , ", EmergencyContactName = @EmergencyContactName"
                                 , ", EmergencyContactMiddleName = @EmergencyContactMiddleName"
@@ -354,8 +355,6 @@
                                 , ", RCountry = @RCountry"
                                 , ", Contact_MobileCtryCode = @Contact_MobileCtryCode"
                                 , ", Contact_Mobile = @Contact_Mobile"
-                                , ", Contact_HouseCtryCode = @Contact_HouseCtryCode" 
-                                , ", Contact_House = @Contact_House"
                                 , ", RepatriationHomePort = @RepatriationHomePort"
                                 , ", EmergencyContactName = @EmergencyContactName"
                                 , ", EmergencyContactMiddleName = @EmergencyContactMiddleName"

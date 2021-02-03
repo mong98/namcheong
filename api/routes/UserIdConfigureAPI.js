@@ -24,6 +24,12 @@ router.put(
   '/update_useridconfigure/:UserConfigureID',
   controller.updateUserIdConfigure
 )
+// Added by Hakim on 3 Feb 2021 - Start
+router.put(
+  '/update_useridconfigurepassword/:UserConfigureID',
+  controller.updateUserIdConfigurePassword
+)
+// Added by Hakim on 3 Feb 2021 - End
 router.delete(
   '/delete_useridconfigure/:UserConfigureID',
   controller.deleteUserIdConfigure

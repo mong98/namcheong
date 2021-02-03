@@ -223,55 +223,63 @@ class UserController {
       console.log("get login: ", req.body);
       try {
         const pool = await poolPromise
-        const result = await pool.request()
+        let result = await pool.request()
+          .input('UserName',sql.VarChar , req.body.username)
+          .input('Password',sql.VarChar , req.body.password)
+          .query(queries.getLoginAdmin2) // Find user in new db
+          console.log(result.recordset);
+        
+        // Added by Hakim on 3 Feb 2021 - Start
+        // Find user in old db
+        if (result.recordset[0] == null) {
+          result = await pool.request()
           .input('UserName',sql.VarChar , req.body.username)
           .input('Password',sql.VarChar , req.body.password)
           .query(queries.getLoginAdmin)
           console.log(result.recordset);
+        }
+        // Added by Hakim on 3 Feb 2021 - End
 
-          const salt = await bcrypt.genSalt(10);
-          const hashPassword = await bcrypt.hash(req.body.password, salt)
-          console.log("loginAdmin bcrypt.genSalt(10) password: ", hashPassword)
-          var userData = result.recordset[0];
-          if (userData) {
-            const validPassword = await bcrypt.compare(hashPassword, userData.Password);
-            
-            if (!validPassword) {
-              console.log("loginAdmin compare plaintext")
-              // maybe only not hash but the password is correct
-              if (req.body.password === userData.Password) {
-                const token = jwt.sign({
-                  name: userData.UserName,
-                  id: userData.UserID,
-                }, "anystring", {expiresIn: 3600})
-                // res.status(200).json({token})
-                //res.json({"token" : token})
-                res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.LoginEmail});
-              } else {
-                //res.json({"token" : null, "error": 'Password not correct'});
-                console.log("Password not correct")
-                return res.status(401).json({ error: "Password not correct" });
-              }
-            } else {
+        var userData = result.recordset[0];
+        if (userData) {
+          const validPassword = await bcrypt.compare(req.body.password, userData.Password);
+          
+          if (!validPassword) {
+            console.log("loginAdmin compare plaintext")
+            // maybe only not hash but the password is correct
+            if (req.body.password === userData.Password) {
               const token = jwt.sign({
                 name: userData.UserName,
                 id: userData.UserID,
               }, "anystring", {expiresIn: 3600})
               // res.status(200).json({token})
-              console.log("token: ", token)
               //res.json({"token" : token})
-              res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.LoginEmail});
-              // res.header("auth-token", token).json({
-              //   error: null,
-              //   data: {
-              //     token,
-              //   },
-              // });
+              res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.LoginEmail}); // Comment by Hakim on 3 Feb 2021
+            } else {
+              //res.json({"token" : null, "error": 'Password not correct'});
+              console.log("Password not correct")
+              return res.status(401).json({ error: "Password not correct" });
             }
           } else {
-            res.status(400).json({"token" : null, "error": 'Email not correct!'});
-            //res.send('Email not correct!')
+            const token = jwt.sign({
+              name: userData.UserName,
+              id: userData.UserID,
+            }, "anystring", {expiresIn: 3600})
+            // res.status(200).json({token})
+            console.log("token: ", token)
+            //res.json({"token" : token})
+            res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.LoginEmail});
+            // res.header("auth-token", token).json({
+            //   error: null,
+            //   data: {
+            //     token,
+            //   },
+            // });
           }
+        } else {
+          // res.status(400).json({"token" : null, "error": 'Email not correct!'});
+          res.send('Email not correct!')
+        }
       } catch (error) {
         res.status(500)
         res.send(error.message)

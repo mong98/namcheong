@@ -34,6 +34,12 @@ export class UserIdConfigService {
     return this.service.updateWithId(this._entity, id, data)
   }
 
+  // Added by Hakim on 3 Feb 2021 - Start
+  updateUserIdConfigPassword(id: string, data: any) {
+    return this.service.updatePasswordWithId(this._entity, id, data)
+  }
+  // Added by Hakim on 3 Feb 2021 - End
+
   deleteUserIdConfig(id: string) {
     return this.service.delete(this._entity, id)
   }
