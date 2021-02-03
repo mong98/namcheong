@@ -226,17 +226,19 @@ class UserController {
         let result = await pool.request()
           .input('UserName',sql.VarChar , req.body.username)
           .input('Password',sql.VarChar , req.body.password)
-          .query(queries.getLoginAdmin2) // Find user in new db
+          .query(queries.getLoginAdmin) // Find user in old db
           console.log(result.recordset);
         
         // Added by Hakim on 3 Feb 2021 - Start
-        // Find user in old db
-        if (result.recordset[0] == null) {
-          result = await pool.request()
+        // Find user in new db
+        let resultNewDB = await pool.request()
           .input('UserName',sql.VarChar , req.body.username)
           .input('Password',sql.VarChar , req.body.password)
-          .query(queries.getLoginAdmin)
-          console.log(result.recordset);
+          .query(queries.getLoginAdmin2)
+          console.log(resultNewDB.recordset);
+
+        if (resultNewDB.recordset[0] != null && resultNewDB.recordset[0].Password != null) {
+          result = resultNewDB
         }
         // Added by Hakim on 3 Feb 2021 - End
 
