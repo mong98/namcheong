@@ -24,28 +24,30 @@ export class SmartTableDatepickerComponent
 
   ngOnInit() {
     // additional time hh:mm fields, uncomment if needs min/max date
-    /*if(!this.min) {
-      this.min = new Date();
-      this.min.setMinutes(Math.floor(this.min.getMinutes() / 15) * 15 );
-    }
+    // if(!this.min) {
+    //   this.min = new Date();
+    //   this.min.setMinutes(Math.floor(this.min.getMinutes() / 15) * 15 );
+    // }
 
-    if(!this.max) {
-      this.max = new Date(this.min);
-      this.max.setFullYear(this.min.getFullYear() + 1);
-    }
+    // if(!this.max) {
+    //   this.max = new Date(this.min);
+    //   this.max.setFullYear(this.min.getFullYear() + 1);
+    // }
 
+    // uncomment this to get the date value in open vacancy
     if(this.cell.newValue) {
       let cellValue = new Date(this.cell.newValue);
-      if(cellValue.getTime() >= this.min.getTime() && cellValue.getTime() <= this.max.getTime()) {
+      // commented as no need to check for min and max of date
+      //if(cellValue.getTime() >= this.min.getTime() && cellValue.getTime() <= this.max.getTime()) {
         this.inputModel = cellValue;
         this.cell.newValue = this.inputModel.toISOString();
-      }
+      //}
     }
 
-    if(!this.inputModel) {
-      this.inputModel = this.min;
-      this.cell.newValue = this.inputModel.toISOString();
-    }*/
+    // if(!this.inputModel) {
+    //   this.inputModel = this.min;
+    //   this.cell.newValue = this.inputModel.toISOString();
+    // }
   }
 
   onChange() {
@@ -56,7 +58,7 @@ export class SmartTableDatepickerComponent
 }
 
 @Component({
-  template: `{{ value | date: 'dd-MM-yyyy' }} `,
+  template: `{{ value | date: 'dd/MM/yyyy' }} `,
 })
 export class SmartTableDatepickerRenderComponent implements ViewCell, OnInit {
   @Input() value: string
