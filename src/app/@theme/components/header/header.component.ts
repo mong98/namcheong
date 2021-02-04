@@ -87,7 +87,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.user_name = localStorage.getItem('user_name');
     }
     else if(localStorage.getItem('admin_access_token') != null) {
-      this.isUser = true
+      this.isUser = false
       this.user_name = localStorage.getItem('admin_user_name');
     }
 

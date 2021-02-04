@@ -21,11 +21,13 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
   name: string
   userId: string
   userName: string
+  password: string // Added by Hakim on 3 Feb 2021
   selectedManager: string
   signaturePath: string
   signatureAdminPath: string
   signature: File
   signatureAdmin: File
+  adminDetails: any = [] // Added by Hakim on 3 Feb 2021
 
   isCreate: boolean = true
   public source = new LocalDataSource()
@@ -48,6 +50,7 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getAdminId()
     this._getData()
   }
 
@@ -63,6 +66,21 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Added by Hakim on 3 Feb 2021 - Start
+  getAdminId() {
+    this.service
+      .getAdminDetails(localStorage.getItem('adminUsername'))
+      .subscribe(
+        (result: any) => {
+          if(result.length != 0){
+            this.adminDetails = result[0]
+          }
+        },
+        (err) => alert('Failed to load admin details')
+      )
+  }
+  // Added by Hakim on 3 Feb 2021 - End
+
   private _getData() {
     if (!this.isCreate) {
       this._subscription = this.service.getUserIdConfigById(this.Id).subscribe(
@@ -74,6 +92,7 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
             this.name = cfg.Name || ''
             this.userId = cfg.UserID || ''
             this.userName = cfg.UserName || ''
+            this.password = cfg.Password || '' // Added by Hakim on 3 Feb 2021
             this.signaturePath = cfg.Signature
             this.signatureAdminPath = cfg.SignatureAdmin
             this.selectedManager = cfg.ManagerId || ''
@@ -215,7 +234,9 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
                 Module: item.Module,
                 SubModule: item.SubModule,
                 ManagerId: manager ? manager.ManagerId : null,
-                ManagerName: manager ? manager.ManagerName : null
+                ManagerName: manager ? manager.ManagerName : null,
+                Password: this.password, // Added by Hakim on 3 Feb 2021
+                UpdatedBy: this.adminDetails.Id // Added by Hakim on 3 Feb 2021
               }
             })
         )
@@ -273,6 +294,30 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Added by Hakim on 3 Feb 2021 - Start
+  async onSavePasswordConfirm(event) {
+    if (window.confirm('Are you sure you want to save password?')) {
+      const manager = this.allManagers.find(m => m.ManagerId === Number(this.selectedManager))
+      console.log(manager , this.Id)
+      const subscription = this.service.updateUserIdConfigPassword(this.Id,
+        JSON.stringify({ Password: this.password })
+      )
+        .subscribe((res: any) => {
+          if (res == null) {
+            alert('Failed to update user password')
+          } else {
+            alert('Successfully updated user password!')
+          }
+          subscription.unsubscribe()
+        },
+          (err) => alert('Failed to update user password')
+        )
+    } else {
+      event.confirm.reject()
+    }
+  }
+  // Added by Hakim on 3 Feb 2021 - End
+
   async onCreateConfirm(event) {
     if (window.confirm('Are you sure you want to create user config?')) {
       const manager = this.allManagers.find(m => m.ManagerId === Number(this.selectedManager))
@@ -289,7 +334,9 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
                 Module: item.Module,
                 SubModule: item.SubModule,
                 ManagerId: manager ? manager.ManagerId : null,
-                ManagerName: manager ? manager.ManagerName : null
+                ManagerName: manager ? manager.ManagerName : null,
+                Password: this.password, // Added by Hakim on 3 Feb 2021
+                CreatedBy: this.adminDetails.Id // Added by hakim on 3 Feb 2021
               }
             })
         )
@@ -340,6 +387,8 @@ export class UserIdConfigureCrudComponent implements OnInit, OnDestroy {
             alert('Failed to create user config')
           }
           subscription.unsubscribe()
+        }, (err) => { 
+          alert('Failed to create user config')
         })
     } else {
       event.confirm.reject()

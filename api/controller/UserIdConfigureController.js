@@ -1,6 +1,7 @@
 const { sql, poolPromise } = require('../database/db')
 const fs = require('fs')
 var rawdata = fs.readFileSync('./query/queries.json')
+const bcrypt = require('bcryptjs')
 var queries = JSON.parse(rawdata)
 
 class UserIdConfigureController {
@@ -107,13 +108,19 @@ class UserIdConfigureController {
         }
         var UserConfigureID = 0
         if (success_val) {
+          // Added by Hakim on 3 Feb 2021 - Start
+          const salt = await bcrypt.genSalt(10);
+          const hashPassword = await bcrypt.hash(values[0].Password, salt)
+          // Added by Hakim on 3 Feb 2021 - End
+
           const result = await pool
             .request()
             .input('UserID', sql.VarChar, values[0].UserID)
             .input('Name', sql.VarChar, values[0].Name)
             .input('UserName', sql.VarChar, values[0].UserName)
-            .input('CreatedBy', sql.VarChar, '88')
-            .input('UpdatedBy', sql.VarChar, '88')
+            .input('Password', sql.VarChar, hashPassword) // Added by Hakim on 3 Feb 2021
+            .input('CreatedBy', sql.VarChar, values[0].CreatedBy) // Updated by Hakim on 3 Feb 2021
+            .input('UpdatedBy', sql.VarChar, values[0].CreatedBy) // Updated by Hakim on 3 Feb 2021
             .input('ManagerId', sql.Int, values[0].ManagerId)
             .input('ManagerName', sql.VarChar, values[0].ManagerName)
             .query(queries.addUserIdConfigure)
@@ -157,7 +164,7 @@ class UserIdConfigureController {
             .query(queries_insertAccessModuleUser)
           res.json({ Id: UserConfigureID })
         } else {
-          res.send('All fields are required!')
+          // res.send('All fields are required!')
         }
       }
     } catch (error) {
@@ -228,14 +235,17 @@ class UserIdConfigureController {
         if (values[0].UserID == null || values[0].UserName == null) {
           success_val = false
         }
+
         updateUserIdConfigureUser += "[UserID] = '" + values[0].UserID + "', "
-        //updateUserIdConfigureUser += "[Name] = '" + values[0].Name + "', "
+        // updateUserIdConfigureUser += "[Name] = '" + values[0].Name + "', "
         updateUserIdConfigureUser +=
           "[UserName] = '" + values[0].UserName + "', "
         updateUserIdConfigureUser +=
           "[ManagerId] = '" + values[0].ManagerId + "', "
         updateUserIdConfigureUser +=
-          "[ManagerName] = '" + values[0].ManagerName + "' "
+          "[ManagerName] = '" + values[0].ManagerName + "', "
+        updateUserIdConfigureUser +=
+          "[UpdatedBy] = '" + values[0].UpdatedBy + "' " // Added by Hakim on 3 Feb 2021
         updateUserIdConfigureUser += 'WHERE [Id] = ' + values[0].UserConfigureID
         queries_updateAccessModuleUser += updateUserIdConfigureUser
         queries_updateAccessModuleUser += ';'
@@ -257,6 +267,54 @@ class UserIdConfigureController {
       res.send(error.message)
     }
   }
+
+  // Added by Hakim on 3 Feb 2021 - Start
+  async updateUserIdConfigurePassword(req, res) {
+    try {
+      console.log('updateUserIdConfigurePassword: ', req.body)
+      console.log(
+        'updateUserIdConfigurePassword - req.params.UserConfigureID: ',
+        req.params.UserConfigureID
+      )
+      if (
+        req.params.UserConfigureID == null
+      ) {
+        console.log('Object missing')
+        res.status(500)
+        res.send(error.message)
+      } else {
+        console.log('Object detected')
+        const pool = await poolPromise
+        var success_val = true
+
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(req.body.Password, salt)
+
+        var updateUserIdConfigureUser =
+          'UPDATE [JobPortal].[dbo].[UserConfigure] SET '
+        updateUserIdConfigureUser +=
+          "[Password] = '" + hashPassword + "' "
+        updateUserIdConfigureUser += 'WHERE [Id] = ' + req.params.UserConfigureID + ';'
+
+        if (success_val) {
+          console.log(
+            'queries_updateUserIdConfigurePasswordUser: ',
+            updateUserIdConfigureUser
+          )
+          const result = await pool
+            .request()
+            .query(updateUserIdConfigureUser)
+          res.json({ UserConfigureID: req.params.UserConfigureID })
+        } else {
+          res.send('All fields are required!')
+        }
+      }
+    } catch (error) {
+      res.status(500)
+      res.send(error.message)
+    }
+  }
+  // Added by Hakim on 3 Feb 2021 - End
 
   async deleteUserIdConfigure(req, res) {
     try {

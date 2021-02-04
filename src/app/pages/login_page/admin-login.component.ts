@@ -69,8 +69,11 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
           console.log(this.login_error)
           console.log(err)
           if(err) {
-            this.login_error = err.error.error
-
+            if(err.error.text) {
+              this.login_error = err.error.text
+            } else {
+              this.login_error = err.error.error
+            }
           }
         }
       );

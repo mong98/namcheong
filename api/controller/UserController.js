@@ -220,22 +220,33 @@ class UserController {
     }
 
     async loginAdmin(req , res){
-      console.log("come in login")
+      console.log("come in login admin")
       console.log("get login: ", req.body);
       try {
-        const pool = await poolPromise
-        const result = await pool.request()
-          .input('UserName',sql.VarChar , req.body.username)
-          .input('Password',sql.VarChar , req.body.password)
-          .query(queries.getLoginAdmin)
-          console.log(result.recordset);
+        if (req.body.password && req.body.username) {
+          const pool = await poolPromise
+          let result = await pool.request()
+            .input('UserName',sql.VarChar , req.body.username)
+            .input('Password',sql.VarChar , req.body.password)
+            .query(queries.getLoginAdmin) // Find user in old db
+            console.log(result.recordset);
+          
+          // Added by Hakim on 3 Feb 2021 - Start
+          // Find user in new db
+          let resultNewDB = await pool.request()
+            .input('UserName',sql.VarChar , req.body.username)
+            .input('Password',sql.VarChar , req.body.password)
+            .query(queries.getLoginAdmin2)
+            console.log(resultNewDB.recordset);
 
-          const salt = await bcrypt.genSalt(10);
-          const hashPassword = await bcrypt.hash(req.body.password, salt)
-          console.log("loginAdmin bcrypt.genSalt(10) password: ", hashPassword)
+          if (resultNewDB.recordset[0] != null && resultNewDB.recordset[0].Password != null) {
+            result = resultNewDB
+          }
+          // Added by Hakim on 3 Feb 2021 - End
+
           var userData = result.recordset[0];
           if (userData) {
-            const validPassword = await bcrypt.compare(hashPassword, userData.Password);
+            const validPassword = await bcrypt.compare(req.body.password, userData.Password);
             
             if (!validPassword) {
               console.log("loginAdmin compare plaintext")
@@ -247,7 +258,7 @@ class UserController {
                 }, "anystring", {expiresIn: 3600})
                 // res.status(200).json({token})
                 //res.json({"token" : token})
-                res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.LoginEmail});
+                res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email}); // Comment by Hakim on 3 Feb 2021
               } else {
                 //res.json({"token" : null, "error": 'Password not correct'});
                 console.log("Password not correct")
@@ -270,9 +281,12 @@ class UserController {
               // });
             }
           } else {
-            res.status(400).json({"token" : null, "error": 'Email not correct!'});
-            //res.send('Email not correct!')
+            // res.status(400).json({"token" : null, "error": 'Email not correct!'});
+            res.send('Username not correct!')
           }
+        } else {
+          res.status(400).json({"error": 'All fields are required!'});
+        }
       } catch (error) {
         res.status(500)
         res.send(error.message)

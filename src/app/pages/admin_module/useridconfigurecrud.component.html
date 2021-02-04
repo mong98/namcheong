@@ -26,20 +26,29 @@
   </div>
   <div class="col"></div>
 </div>
-<!-- <div class="row">
+<!-- Added by Hakim on 3 Feb 2021 - Start -->
+<div class="row">
   <div class="col">
-    <label for="fullname">Full Name</label>
+    <label for="fullname">Password</label>
   </div>
   <div class="col">
     <input
-      type="text"
+      type="password"
       class="form-control mb-2 mr-sm-2"
-      placeholder="Full Name"
-      [(ngModel)]="name"
+      placeholder="Password"
+      [(ngModel)]="password"
     />
   </div>
-  <div class="col"></div>
-</div> -->
+  <div class="col">
+    <button nbButton
+      status="primary" ngDefaultControl
+      *ngIf="userName != null"
+      (click)="onSavePasswordConfirm()">
+      Update Password
+    </button>
+  </div>
+</div>
+<!-- Added by Hakim on 3 Feb 2021 - End -->
 <div class="row mb-3">
   <div class="col-4">
     <label for="signature_file">Upload Signature</label>
