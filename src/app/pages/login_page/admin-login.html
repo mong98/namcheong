@@ -18,7 +18,7 @@
         <img class="" src="/assets/images/SKOM-logo.png" width="200" />
         <h1 class="h4 mb-3 font-weight-normal">Admin sign in</h1>
         <label for="txtUserID" class="sr-only">Email</label>
-        <input type="email" class="form-control" name="txtUserID" id="txtUserID" aria-describedby="emailHelp" placeholder="Email Address" [(ngModel)]="username" />
+        <input type="email" class="form-control" name="txtUserID" id="txtUserID" aria-describedby="emailHelp" placeholder="Username" [(ngModel)]="username" />
         <label for="txtPassword" class="sr-only">Password</label>
         <input type="password" class="form-control" name="txtPassword" id="txtPassword" placeholder="Password" [(ngModel)]="password" />
         <div class="alert alert-danger" *ngIf="login_error">
