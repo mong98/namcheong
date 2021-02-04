@@ -11,6 +11,7 @@ export class UserService {
   private _thirdentity = 'user'
   private _updateuserpassword = 'userpassword'
   private _updateadminpassword = 'adminpassword'
+  private _forgotpassword = 'forgotpassword' 
 
   constructor(private service: BaseService) { }
 
@@ -40,6 +41,10 @@ export class UserService {
 
   updateUserPassword(data: any) {
     return this.service.updateSecondaryEntity(this._entity,this._updateuserpassword, data)
+  }
+
+  forgotPassword(data: any) {
+    return this.service.customPutSecondaryEntity(this._entity,this._forgotpassword, data)
   }
 
   deleteAdmin(id: string) {

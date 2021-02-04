@@ -4,19 +4,21 @@ var rawdata = fs.readFileSync('./query/queries.json');
 var queries = JSON.parse(rawdata);
 const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken");
+var generator = require('generate-password');
+const sgMail = require('@sendgrid/mail')
 
 class UserController {
 
     async getUser(req , res){
-      console.log("come in user")
-      console.log("getUser: ", req.body);
+      //console.log("come in user")
+      //console.log("getUser: ", req.body);
       try {
         const pool = await poolPromise
         const result = await pool.request()
           .input('UserName',sql.VarChar , req.body.username)
           .input('Password',sql.VarChar , req.body.password)
           .query(queries.getUser)
-          console.log(result.recordset)
+          //console.log(result.recordset)
           //res.json(result.recordset)
           res.send(result.recordset)
       } catch (error) {
@@ -26,29 +28,29 @@ class UserController {
     }
 
     async authenticateUserApp(req , res){
-      console.log("come in authenticateUserApp")
-      console.log("getUser: ", req.body);
+      //console.log("come in authenticateUserApp")
+      //console.log("getUser: ", req.body);
       try {
         const pool = await poolPromise
         const result = await pool.request()
           .input('LoginEmail',sql.VarChar , req.body.LoginEmail)
           .query(queries.authenticateUserApp)
-          console.log(result.recordset)
+          //console.log(result.recordset)
           if(result != null && result.recordset != null) {
             if(result.recordset[0].Password == req.body.Password) {
-              console.log("User authenticated!")
+              //console.log("User authenticated!")
               res.send(result.recordset)
               return
             }
             else {
-              console.log("check if hashed password")
+              //console.log("check if hashed password")
               // check if password is hashed
               const salt = await bcrypt.genSalt(10);
               const hashPassword = await bcrypt.hash(req.body.Password, salt)
-              console.log("loginAdmin bcrypt.genSalt(10) password: ", hashPassword)
+              //console.log("loginAdmin bcrypt.genSalt(10) password: ", hashPassword)
               const validPassword = await bcrypt.compare(hashPassword, result.recordset[0].Password);
               if(validPassword) {
-                console.log("User authenticated! Hashed Password")
+                //console.log("User authenticated! Hashed Password")
                 res.send(result.recordset)
                 return
               }
@@ -65,8 +67,8 @@ class UserController {
     }
 
     async authenticateAdmin(req, res) {
-      console.log("come in authenticate")
-      console.log("get authenticate: ", req.body);
+      //console.log("come in authenticate")
+      //console.log("get authenticate: ", req.body);
       const token = req.body.token;
       if (!token) return res.status(401).json({ error: "Access denied" });
       try {
@@ -77,9 +79,91 @@ class UserController {
       }
     }
 
+    async forgotPassword(req, res) {
+      try {
+        if (req.body.email) {
+          const pool = await poolPromise
+          const result = await pool.request()
+            .input('LoginEmail',sql.VarChar , req.body.email)
+            .query(queries.getLoginUser)
+
+            const userEmailExist = result.recordset.length;
+
+            var password = generator.generate({
+              length: 10,
+              numbers: true
+            });
+
+            var sendEmail = false;
+          
+            if (userEmailExist) {
+              //send email
+              sgMail.setApiKey(
+                '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'
+              )
+              let htmlText =
+                'Dear ' +
+                result.recordset[0].Name +
+                '<br /><br />' +
+                'Temporary password is created. Please use the temporary password to login to account' +
+                '<br /><br />' +
+                '<strong>Temporary password: <strong>' + password + '<br />' 
+
+              const msg = {
+                //to: 'desmond@wiserobot.com',
+                to: result.recordset[0].LoginEmail, // Change to your recipient
+                from: 'desomond17@gmail.com', // Change to your verified sender
+                subject: '[TEST]: SKOM eCrew Job Portal Password Reset',
+                text: 'SKOM eCrew Job Portal Password Reset',
+                html: htmlText,
+              }
+              sgMail
+                .send(msg)
+                .then(() => {
+                  sendEmail = true
+                  //console.log('Forgot Password Email sent to ' + result.recordset[0].LoginEmail)
+                })
+                .then(() => {
+                  if (sendEmail) {
+                    //const pool = await poolPromise
+                    const result1 = pool.request()
+                    .input('Password', sql.VarChar , password)
+                    .input('LoginEmail', sql.VarChar, req.body.email)
+                    .query(queries.forgotPasswordUser)
+
+                    result1.then(function(data) {
+                      var recordUser = data.rowsAffected[0];
+
+                      if (recordUser) {
+                        res.status(200).send({message: 'Reset Password successfully. Please check your email!'});
+                      } else {
+                        res.status(400).send('Failed to reset password!')
+                      }
+                    })
+                    
+                  } else {
+                    res.status(400).send('Failed to send email!')
+                  }
+                })
+                .catch((error) => {
+                  console.error(error)
+                  res.status(500)
+                  res.send(error.message)
+                })
+              
+            } else {
+              res.status(400).send('Email not exist!')
+            }
+        }
+      } catch (error) {
+        res.status(500)
+        res.send(error.message)
+      }
+    }
+
     async updatePasswordAdmin(req, res) {
       try {
-        console.log("updatePasswordAdmin: ", req.body);
+        //console.log("updatePasswordAdmin: ", req.body);
         if(req.body.password != null && req.body.username != null) {
             const pool = await poolPromise
             const result = await pool.request()
@@ -87,7 +171,7 @@ class UserController {
               .input('Password',sql.VarChar, req.body.password)
               .query(queries.getAdmin)
 
-              console.log(result.recordset)
+              //console.log(result.recordset)
             
               if (result.recordset.length == 0 ) {
                 res.status(400).send('Password Incorrect?!')
@@ -125,7 +209,7 @@ class UserController {
 
     async updatePasswordUser(req, res) {
       try {
-        console.log("updatePasswordUser: ", req.body);
+        //console.log("updatePasswordUser: ", req.body);
         if(req.body.password != null && req.body.new_password != null 
           && req.body.email != null) {
             const pool = await poolPromise
@@ -133,7 +217,7 @@ class UserController {
               .input('LoginEmail',sql.VarChar , req.body.email)
               .query(queries.getEmailUser)
 
-              console.log(result.recordset)
+              //console.log(result.recordset)
               const userEmailExist = result.recordset.length;
               var getRecordUser = result.recordset[0];
 
@@ -174,21 +258,21 @@ class UserController {
     }
 
     async authenticateUser(req, res, next) {
-      console.log("come in authenticate")
-      console.log("get authenticate: ", req.body);
+      //console.log("come in authenticate")
+      //console.log("get authenticate: ", req.body);
       const header = req.headers['authorization'];
 
       if(typeof header !== 'undefined') {
-        console.log("header !== undefined")
+        //console.log("header !== undefined")
         const bearer = header.split(' ');
         const token = bearer[1];
 
         req.token = token;
-        console.log("token: ", token)
+        //console.log("token: ", token)
         //next();
       } else {
         //If header is undefined return Forbidden (403)
-        console.log("Forbidden (403)")
+        //console.log("Forbidden (403)")
         return res.sendStatus(403)
       }
 
@@ -197,31 +281,31 @@ class UserController {
       try {
         const verified = jwt.verify(token, "anystring", (err, verifiedJwt) => {
           if(err){
-            console.log("error: ", err)
+            //console.log("error: ", err)
             if (err.name === 'TokenExpiredError') {
               //create a new token and send the same way you created initially
               return res.status(401).json({ error: "TokenExpiredError" });
             }
             return res.status(400).json({ error: "Token is not valid" });
           }else{
-            console.log("Successfully verified: ", verifiedJwt)
+            //console.log("Successfully verified: ", verifiedJwt)
             //res.status(200).json({ ok: "Token valid" });
             //next()
           }
         })
-        console.log("verified: next")
+        //console.log("verified: next")
         next()
         //return res.status(200).json({ ok: "Token valid" });
         //return res.status(400).json({ error: "Token is not valid" });
       } catch (err) {
-        console.log("catch error: ", err)
+        //console.log("catch error: ", err)
         res.status(400).json({ error: "Token is not valid" });
       }
     }
 
     async loginAdmin(req , res){
-      console.log("come in login admin")
-      console.log("get login: ", req.body);
+      //console.log("come in login admin")
+      //console.log("get login: ", req.body);
       try {
         if (req.body.password && req.body.username) {
           const pool = await poolPromise
@@ -229,7 +313,7 @@ class UserController {
             .input('UserName',sql.VarChar , req.body.username)
             .input('Password',sql.VarChar , req.body.password)
             .query(queries.getLoginAdmin) // Find user in old db
-            console.log(result.recordset);
+            //console.log(result.recordset);
           
           // Added by Hakim on 3 Feb 2021 - Start
           // Find user in new db
@@ -237,7 +321,7 @@ class UserController {
             .input('UserName',sql.VarChar , req.body.username)
             .input('Password',sql.VarChar , req.body.password)
             .query(queries.getLoginAdmin2)
-            console.log(resultNewDB.recordset);
+            //console.log(resultNewDB.recordset);
 
           if (resultNewDB.recordset[0] != null && resultNewDB.recordset[0].Password != null) {
             result = resultNewDB
@@ -249,7 +333,7 @@ class UserController {
             const validPassword = await bcrypt.compare(req.body.password, userData.Password);
             
             if (!validPassword) {
-              console.log("loginAdmin compare plaintext")
+              //console.log("loginAdmin compare plaintext")
               // maybe only not hash but the password is correct
               if (req.body.password === userData.Password) {
                 const token = jwt.sign({
@@ -261,7 +345,7 @@ class UserController {
                 res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email}); // Comment by Hakim on 3 Feb 2021
               } else {
                 //res.json({"token" : null, "error": 'Password not correct'});
-                console.log("Password not correct")
+                //console.log("Password not correct")
                 return res.status(401).json({ error: "Password not correct" });
               }
             } else {
@@ -270,7 +354,7 @@ class UserController {
                 id: userData.UserID,
               }, "anystring", {expiresIn: 3600})
               // res.status(200).json({token})
-              console.log("token: ", token)
+              //console.log("token: ", token)
               //res.json({"token" : token})
               res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.LoginEmail});
               // res.header("auth-token", token).json({
@@ -294,16 +378,16 @@ class UserController {
     }
 
     async loginUser(req , res){
-      console.log("come in login")
-      console.log("get login: ", req.body);
+      //console.log("come in login")
+      //console.log("get login: ", req.body);
       try {
         const pool = await poolPromise
         const result = await pool.request()
           .input('LoginEmail',sql.VarChar , req.body.email)
           .input('Password',sql.VarChar , req.body.password)
           .query(queries.getLoginUser)
-          console.log(result.recordset);
-          //console.log(result.recordset[0].Id);
+          //console.log(result.recordset);
+          ////console.log(result.recordset[0].Id);
           //res.json(result.recordset)
           //res.send(result.recordset)
           var userData = result.recordset[0];
@@ -311,7 +395,7 @@ class UserController {
             const validPassword = await bcrypt.compare(req.body.password, userData.Password);
             
             if (!validPassword) {
-              console.log("check plaintext password")
+              //console.log("check plaintext password")
               // maybe only not hash but the password is correct
               if (req.body.password === userData.Password) {
                 const token = jwt.sign({
@@ -326,13 +410,13 @@ class UserController {
                 return res.status(401).json({ error: "Password not correct" });
               }
             } else {
-              console.log("check hashed password")
+              //console.log("check hashed password")
               const token = jwt.sign({
                 name: userData.Name,
                 id: userData.Id,
               }, "anystring", {expiresIn: 3600})
               // res.status(200).json({token})
-              console.log("token: ", token)
+              //console.log("token: ", token)
               res.status(200).send({"token" : token, "name": userData.Name, "email": userData.LoginEmail});
               // res.header("auth-token", token).json({
               //   error: null,
@@ -353,7 +437,7 @@ class UserController {
 
     async createAdmin(req , res){
       try {
-        console.log("createAdmin: ", req.body);
+        //console.log("createAdmin: ", req.body);
         // LoginEmail, Password, Name, RetypePassword
         if(req.body.username != null && req.body.password != null && req.body.email != null && req.body.retyped_password != null) {
             const pool = await poolPromise
@@ -364,7 +448,7 @@ class UserController {
               const adminEmailExist = result.recordset.length;
             
               if (!adminEmailExist) {
-                console.log("email no exist")
+                //console.log("email no exist")
                 const salt = await bcrypt.genSalt(10);
                 req.body.password = await bcrypt.hash(req.body.password, salt)
                 
@@ -378,7 +462,7 @@ class UserController {
                 .input('FirstName', sql.VarChar, "Kevin")
                 .input('LastName', sql.VarChar, "Ng")
                 .query(queries.addAdmin)
-                console.log("addAdmin result: ", result.recordset[0].UserID);
+                //console.log("addAdmin result: ", result.recordset[0].UserID);
                 
                 //res.json(result.recordset[0].UserID)
                 var newUser = result.recordset[0];
@@ -401,7 +485,7 @@ class UserController {
           res.status(400).send('Please fill all the details!')
         }
       } catch (error) {
-        console.log("in error")
+        //console.log("in error")
         res.status(500)
         res.send(error.message)
       }
@@ -409,7 +493,7 @@ class UserController {
 
     async createUser(req , res){
       try {
-        console.log("createUser: ", req.body);
+        //console.log("createUser: ", req.body);
         // LoginEmail, Password, Name, RetypePassword
         if(req.body.username != null && req.body.password != null 
           && req.body.email != null && req.body.retyped_password != null) {
@@ -421,7 +505,7 @@ class UserController {
               const userEmailExist = result.recordset.length;
             
               if (!userEmailExist) {
-                console.log("email no exist")
+                //console.log("email no exist")
                 //const salt = await bcrypt.genSalt(10);
                 //req.body.password = await bcrypt.hash(req.body.password, salt)
                 
@@ -432,7 +516,7 @@ class UserController {
                 .input('LoginEmail', sql.VarChar, req.body.email)
                 .input('Email', sql.VarChar, req.body.email)
                 .query(queries.addUser)
-                console.log("addUser result: ", result.recordset[0].Id);
+                //console.log("addUser result: ", result.recordset[0].Id);
                 
                 //res.json(result.recordset[0].UserID)
                 var newUser = result.recordset[0];
@@ -456,7 +540,7 @@ class UserController {
           res.status(400).send('Please fill all the details!')
         }
       } catch (error) {
-        console.log("in error")
+        //console.log("in error")
         res.status(500)
         res.send(error.message)
       }
@@ -464,7 +548,7 @@ class UserController {
 
     async updateUser(req, res){
       try {
-        console.log("updateUser: ", req.body);
+        //console.log("updateUser: ", req.body);
         if(req.body.Id != null && req.body.Name != null) {
         const pool = await poolPromise
           const result = await pool.request()
@@ -474,7 +558,7 @@ class UserController {
           .input('Email',sql.VarChar , req.body.Email)
           .input('Password',sql.VarChar , req.body.Password)
           .query(queries.updateUser)
-          console.log("updateUser result: ", req.body.Id);
+          //console.log("updateUser result: ", req.body.Id);
           res.status(200).json({Id: req.body.Id})
         } else {
           res.status(400).send('All fields are required!')
@@ -487,13 +571,13 @@ class UserController {
 
     async deleteUser(req , res){
       try {
-          console.log(req);
+          //console.log(req);
         if(req.params.Id != null) {
           const pool = await poolPromise
             const result = await pool.request()
             .input('Id',sql.SmallInt , req.params.Id)
             .query(queries.deleteUser)
-            console.log("deleteUser result: ", req.params.Id);
+            //console.log("deleteUser result: ", req.params.Id);
             res.status(200).json({Id: req.params.Id})
           } else {
             res.status(400).send('Please fill all the details!')

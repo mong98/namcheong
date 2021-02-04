@@ -21,4 +21,6 @@ router.post('/add_user' , controller.createUser);
 router.post('/login_user' , controller.loginUser);
 router.put('/update_userpassword' , controller.updatePasswordUser);
 
+router.put('/forgotpassword' , controller.forgotPassword);
+
 module.exports = router;

@@ -15,7 +15,7 @@
     "deleteVessel" : "DELETE FROM [JobPortal].[dbo].[Vessel] WHERE [Id] = @Id",
     "updateVessel" : "UPDATE [JobPortal].[dbo].[Vessel] SET [VesselName] = @VesselName, [VesselType] = @VesselType, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
 
-    "getContactLists" : "SELECT * FROM [JobPortal].[dbo].[ContactUs] ORDER BY ID",
+    "getContactLists" : "SELECT * FROM [JobPortal].[dbo].[ContactUs] ORDER BY ID DESC",
     "addContactLists" : "INSERT INTO [JobPortal].[dbo].[ContactUs] ( [Name], [Email], [ContactNo], [Message], [Status], [SubmitDate], [UpdatedDate], [UpdatedBy], [Remark]) VALUES (@Name, @Email, @ContactNo, @Message, 'New', GETDATE(), GETDATE(), @Name, NULL)",
 
     "getPosition" : "SELECT [Id], [Position] FROM [JobPortal].[dbo].[Position]",
@@ -52,6 +52,7 @@
     "getEmailUser" : "SELECT [Id] FROM [JobPortal].[dbo].[Applicant] WHERE [LoginEmail] = @LoginEmail",
     "addUser" :"INSERT INTO [JobPortal].[dbo].[Applicant] ([Name], [Password], [Email], [LoginEmail], [DtCreated], [DtUpdated]) VALUES (@Name, @Password, @LoginEmail, @LoginEmail, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
     "updatePasswordUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [Password] = @newPassword WHERE [LoginEmail] = @LoginEmail AND [Password] = @Password",
+    "forgotPasswordUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [Password] = @Password WHERE [LoginEmail] = @LoginEmail",
 
     "getState" : "SELECT [Id], [TableField] AS [State] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='State'",
     "addState" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('State', @State); SELECT SCOPE_IDENTITY() AS [Id]",
