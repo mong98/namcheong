@@ -102,6 +102,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     this.applicant.next_of_kin = []
     this.applicant.applicant_dropdown = []
     this.applicant.applicant_documents = []
+    this.applicant.SEAExp = []
     const applicantId = this.activatedRoute.snapshot.params.Id
     this.getAllowances()
     this.getCurrency()
@@ -725,6 +726,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
     //if(this.applicant.length >= 1) {
     // this.applicant = this.applicant[0]
     this.getApplicantNextOfKin(this.applicant.LoginEmail)
+    this.getApplicantSeaExperience(this.applicant.LoginEmail)
     this.getApplicantDocument(
       this.applicant.Id,
       this.applicant.LoginEmail,
@@ -744,6 +746,18 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
       }
     })
   }
+
+  // Added by Hakim on 4 Feb 2021 - Start
+  getApplicantSeaExperience(LoginEmail) {
+    this.applicant.SEAExp = []
+    this.service.getApplicantSeaExperience(LoginEmail).subscribe(
+      (result: any) => {
+        this.applicant.SEAExp = result
+      },
+        (err) => alert('Failed to load certification')
+    )
+  }
+  // Added by Hakim on 4 Feb 2021 - End
 
   getAllowances() {
     this._subscription = this.allowanceService.getAllAllowances().subscribe(

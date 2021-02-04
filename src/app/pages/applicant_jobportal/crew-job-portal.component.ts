@@ -48,8 +48,6 @@ import { environment } from '../../../environments/environment'
 })
 export class CrewJobPortalComponent implements OnInit, OnDestroy {
   userEmail: string
-  data: any = []
-  data2: any = [] // Added by Hakim on 12 Jan 2021
   applicant: any = []
   applicantapply: any = []
   applicantStatus: any = []
@@ -107,7 +105,10 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   url;
   urlPassport;
   msg = "";
-  
+
+  smarttbl_NOK = {} // Added by Hakim on 4 Feb 2021
+  smarttbl_SEAExp = {} // Added by Hakim on 4 Feb 2021
+
   private addNew: boolean = false
 
   _subscription: Subscription
@@ -161,7 +162,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       console.log("applicant.LoginEmail: ", this.applicant.LoginEmail)
     }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.applicant.SEAExp = []
     this.applicant.next_of_kin = []
     this.applicant.beneficiary = [] // Added by Hakim on 12 Jan 2021 - Update for changes no. 6 in Application For Employment (0106 NC Comment_11012021.docx) 
@@ -180,13 +181,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
  
     }
     this.getAllowances()
-    this.getGender()
-    this.getNOKListData()
-    this.getSeaExperienceListData() // Added by Hakim on 26 Jan 2021 
+    await this.getGender()
     //this.getApplicantById(135)
     //this.getApplicantById(1274)
-    this.getApplicantByLoginEmail(this.applicant.LoginEmail)
-    this.getApplicantApplyByLoginEmail(this.applicant.LoginEmail)
     this.getVacancies()
     this.getPositions()
     this.getImoNo()
@@ -195,18 +192,22 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     this.getPortsOfRegistry()
     this.getRaces()
     this.getReligions()
-    this.getRelationships()
+    await this.getRelationships()
     this.getStates()
     this.getCountries()
     // get the general question to display
-    this.getApplicantGeneralQuestion()
-    this.getApplicantMedicalReportQuestion() // Added by Hakim on 12 Jan 2021
     this.getIssuingAuthorities()
     this.getCharterer()
     this.getCompetency()
     this.getWorking()
     this.getEducation()
     this.getDynamicPos()
+    this.getApplicantByLoginEmail(this.applicant.LoginEmail)
+    this.getApplicantApplyByLoginEmail(this.applicant.LoginEmail)
+    this.getNOKListData()
+    this.getSeaExperienceListData() // Added by Hakim on 26 Jan 2021
+    this.getApplicantGeneralQuestion()
+    this.getApplicantMedicalReportQuestion() // Added by Hakim on 12 Jan 2021
   }
 
   getIssuingAuthorities() {
@@ -367,19 +368,25 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   getGender() {
-    this._subscription = this.service.getGender().subscribe(
-      (result: any) => {
-        this.genderlist = result
-        if (result != null && result.length > 1) {
-          this.genderlist2 = [{ value:result[0].Id, title:result[0].Gender }, { value:result[1].Id, title:result[1].Gender }];
+    return new Promise((resolve, reject) => {
+      this._subscription = this.service.getGender().subscribe(
+        (result: any) => {
+          this.genderlist = result
+          if (result != null && result.length > 1) {
+            this.genderlist2 = [{ value:result[0].Id, title:result[0].Gender }, { value:result[1].Id, title:result[1].Gender }];
+          }
+  
+          console.log("check gender")
+          console.log(this.genderlist)
+          //this._refreshCountryData()
+          return resolve(true)
+        },
+        (err) => {
+          alert('Failed to load Gender')
+          return reject(true)
         }
-
-        console.log("check gender")
-        console.log(this.genderlist)
-        //this._refreshCountryData()
-      },
-      (err) => alert('Failed to load Gender')
-    )
+      )
+    })
   }
 
   getEducation() {
@@ -413,11 +420,21 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   _refreshCountryData() {
-    this.countries.map((item: Country) => {
-      return {
-        Id: item.Id,
-        Country: item.Country
-      }
+    // this.countries.map((item: Country) => {
+    //   return {
+    //     Id: item.Id,
+    //     Country: item.Country
+    //   }
+    // })
+
+    this.countries.sort(function(a, b){
+      if(a.Country == b.Country) { return 0; }
+      if(a.Country == 'Malaysia') { return -1; }
+      if(b.Country == 'Malaysia') { return 1; }
+
+      if(a.Country < b.Country) { return -1; }
+      if(a.Country > b.Country) { return 1; }
+      return 0;
     })
   }
 
@@ -432,34 +449,63 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   _refreshStateData() {
-    this.states.map((item: State) => {
-      return {
-        Id: item.Id,
-        State: item.State
-      }
+    // this.states.map((item: State) => {
+    //   return {
+    //     Id: item.Id,
+    //     State: item.State
+    //   }
+    // })
+
+    this.states.sort(function(a, b){
+      if(a.State == b.State) { return 0; }
+      if(a.State == 'Others') { return 1; }
+      if(b.State == 'Others') { return -1; }
+
+      if(a.State < b.State) { return -1; }
+      if(a.State > b.State) { return 1; }
+      return 0;
     })
+
+    console.log('Sorted')
   }
 
   getRelationships() {
-    this._subscription = this.relationshipService.getAllRelationships().subscribe(
-      (result: any) => {
-        this.relationships = result
-        // Added by Hakim on 19 Jan 2021 - Start
-        this.applicant.EmergencyContactRelationship = parseInt(this.applicant.EmergencyContactRelationship)
-        // Added by Hakim on 19 Jan 2021 - End
-        this._refreshRelationshipData()
-      },
-      (err) => alert('Failed to load relationships')
-    )
+    return new Promise((resolve, reject) => {
+      this._subscription = this.relationshipService.getAllRelationships().subscribe(
+        (result: any) => {
+          this.relationships = result
+          this._refreshRelationshipData()
+          return resolve(true)
+        },
+        (err) => {
+          alert('Failed to load relationships')
+          return reject(false)
+        }
+      )
+    })
   }
 
   _refreshRelationshipData() {
+
     this.relationships.map((item: Relationship) => {
       return {
         Id: item.Id,
         Relationship: item.Relationship
       }
     })
+
+    // Added by Hakim on 4 Feb 2021 - Start
+    this.relationships.forEach((relationship: any) => {
+      this.relationshiplist.push({
+        value: relationship.Id,
+        title: relationship.Relationship
+      })
+    })
+    // Added by Hakim on 4 Feb 2021 - End
+
+    // Added by Hakim on 19 Jan 2021 - Start
+    this.applicant.EmergencyContactRelationship = parseInt(this.applicant.EmergencyContactRelationship)
+    // Added by Hakim on 19 Jan 2021 - End
 
     // Set emergency contact relations to display
     // let relationship = this.relationships.find(relationship => relationship.Id == this.applicant.EmergencyContactRelationship)
@@ -513,322 +559,188 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  settings = {
-    delete: {
-      confirmDelete: true
-    },
-    add: {
-      addButtonContent: 'Add',
-      confirmCreate: true
-    },
-    edit: {
-      confirmSave: true
-    },
-    columns: {
-      Id: {
-        title: 'Id',
-        hide: true,
-        filter: false
-      },
-      UserID: {
-        title: 'UserID',
-        hide: true,
-        filter: false
-      },
-      // Added by Hakim on 12 Jan 2021 - Start
-      // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
-      NOKName: {
-        title: 'Firstname',
-        filter: false
-      },
-      NOKMiddleName: {
-        title: 'Middlename',
-        filter: false
-      },
-      NOKLastName: {
-        title: 'Lastname',
-        filter: false
-      },
-      // Added by Hakim on 12 Jan 2021 - End
-      NOKRelationship: {
-        title: 'Relationship',
-        filter: false,
-        type: 'html',
-        editor: {
-          type: 'list',
-          config: {
-            selectText: 'Select...',
-            list: this.relationshiplist,
-          },
-        },
-      },
-      NOKAge: {
-        title: 'Age',
-        filter: false
-      },
-      NOKGender: {
-        title: 'Gender',
-        filter: false,
-        type: 'html',
-        editor: {
-          type: 'list',
-          config: {
-            selectText: 'Select...',
-            list: this.genderlist2,
-          },
-        },
-      },
-
-      // Added by Hakim on 12 Jan 2021 - Start
-      // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
-      NOKEmployment: {
-        title: 'Working/studying',
-        filter: false,
-        type: 'html',
-        editor: {
-          type: 'list',
-          config: {
-            selectText: 'Select...',
-            list: this.occupationList,
-          },
-        },
-      },
-      NOKHandicap: {
-        title: 'Handicap',
-        filter: false,
-        type: 'html',
-        editor: {
-          type: 'list',
-          config: {
-            selectText: 'Select...',
-            list: this.yesno,
-          },
-        },
-      },
-      // Added by Hakim on 12 Jan 2021 - End
-    },
-    actions: {
-      add: true,
-      position: 'right', // left|right
-    }
-  }
-
-  // Added by Hakim on 26 Jan 2021 - Start
-  // Update for changes no. 17 in Application For Employment (SKOM 210122 comment.docx)
-  settings2 = {
-    delete: {
-      confirmDelete: true
-    },
-    add: {
-      addButtonContent: 'Add',
-      confirmCreate: true
-    },
-    edit: {
-      confirmSave: true
-    },
-    columns: {
-      Id: {
-        title: 'Id',
-        hide: true,
-        filter: false
-      },
-      SeaExpCompany: {
-        title: 'Company',
-        filter: false
-      },
-      SeaExpVesselName: {
-        title: 'Vessel Name',
-        filter: false,
-      },
-      SeaExpRank: {
-        title: 'Rank',
-        filter: false
-      },
-      SeaExpPeriod: {
-        title: 'Period',
-        filter: false,
-      },
-    },
-    actions: {
-      add: true,
-      position: 'right', // left|right
-    }
-  }
-
-  // Added by Hakim on 26 Jan 2021 - End
-
   getNOKListData() {
-    this._subscription = this.relationshipService.getAllRelationships().subscribe(
-      (result: any) => {
-        this.relationships = result
-        this.relationships.forEach((relationship: any) => {
-          this.relationshiplist.push({
-            value: relationship.Id,
-            title: relationship.Relationship
-          })
-        })
-
-        const newSettings = {
-          delete: {
-            confirmDelete: true
-          },
-          add: {
-            addButtonContent: 'Add',
-            confirmCreate: true
-          },
-          edit: {
-            confirmSave: true
-          },
-          columns: {
-            Id: {
-              title: 'Id',
-              hide: true,
-              filter: false
-            },
-            UserID: {
-              title: 'UserID',
-              hide: true,
-              filter: false
-            },
-            // Added by Hakim on 12 Jan 2021 - Start
-            // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
-            NOKName: {
-              title: 'Firstname',
-              filter: false
-            },
-            NOKMiddleName: {
-              title: 'Middlename',
-              filter: false
-            },
-            NOKLastName: {
-              title: 'Lastname',
-              filter: false
-            },
-            // Added by Hakim on 12 Jan 2021 - End
-
-            NOKRelationship: {
-              title: 'Relationship',
-              filter: false,
-              type: 'html',
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.relationshiplist,
-                },
-              },
-            },
-            NOKAge: {
-              title: 'Age',
-              filter: false
-            },
-            NOKGender: {
-              title: 'Gender',
-              filter: false,
-              type: 'html',
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.genderlist2,
-                },
-              },
-            },
-
-            // Added by Hakim on 12 Jan 2021 - Start
-            // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
-            NOKEmployment: {
-              title: 'Working/studying',
-              filter: false,
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.occupationList,
-                },
-              },
-            },
-            NOKHandicap: {
-              title: 'Handicap',
-              filter: false,
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.yesno,
-                },
-              },
-            },
-            // Added by Hakim on 12 Jan 2021 - End
-          },
-          actions: {
-            add: true,
-            position: 'right', // left|right
-          }
-        }
-        this.settings = Object.assign(newSettings)
-
+    const newSettings = {
+      delete: {
+        confirmDelete: true
       },
-      (err) => alert('Failed to load relationships')
-    )
+      add: {
+        addButtonContent: 'Add',
+        confirmCreate: true
+      },
+      edit: {
+        confirmSave: true
+      },
+      columns: {
+        Id: {
+          title: 'Id',
+          hide: true,
+          filter: false
+        },
+        UserID: {
+          title: 'UserID',
+          hide: true,
+          filter: false
+        },
+        // Added by Hakim on 12 Jan 2021 - Start
+        // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
+        NOKName: {
+          title: 'Firstname',
+          filter: false
+        },
+        NOKMiddleName: {
+          title: 'Middlename',
+          filter: false
+        },
+        NOKLastName: {
+          title: 'Lastname',
+          filter: false
+        },
+        // Added by Hakim on 12 Jan 2021 - End
+
+        NOKRelationship: {
+          title: 'Relationship',
+          filter: false,
+          type: 'html',
+          editor: {
+            type: 'list',
+            config: {
+              selectText: 'Select...',
+              list: this.relationshiplist,
+            },
+          },
+          valuePrepareFunction: (cell:string) => {
+            return this.findRelationshipById(cell);
+          }
+        },
+        NOKAge: {
+          title: 'Age',
+          filter: false
+        },
+        NOKGender: {
+          title: 'Gender',
+          filter: false,
+          type: 'html',
+          editor: {
+            type: 'list',
+            config: {
+              selectText: 'Select...',
+              list: this.genderlist2,
+            },
+          },
+          valuePrepareFunction: (cell:string) => {
+            return this.findGenderById(cell);
+          }
+        },
+
+        // Added by Hakim on 12 Jan 2021 - Start
+        // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
+        NOKEmployment: {
+          title: 'Working/studying',
+          filter: false,
+          editor: {
+            type: 'list',
+            config: {
+              selectText: 'Select...',
+              list: this.occupationList,
+            },
+          },
+        },
+        NOKHandicap: {
+          title: 'Handicap',
+          filter: false,
+          editor: {
+            type: 'list',
+            config: {
+              selectText: 'Select...',
+              list: this.yesno,
+            },
+          },
+          valuePrepareFunction: (cell:string) => {
+            return this.findYesNoById(cell);
+          }
+        },
+        // Added by Hakim on 12 Jan 2021 - End
+      },
+      actions: {
+        add: true,
+        position: 'right', // left|right
+      }
+    }
+    this.smarttbl_NOK = Object.assign(newSettings)
   }
+
+  // Added by Hakim on 4 Feb 2021 - Start
+  findGenderById(value:string) {
+    if (value == '') {
+      return ''
+    }
+
+    let selected = this.genderlist2.find(data => data.value == value)
+    return selected.title
+  }
+
+  findRelationshipById(value:string) {
+    if (value == '') {
+      return ''
+    }
+
+    let selected = this.relationshiplist.find(data => data.value == value)
+    return selected.title
+  }
+
+  findYesNoById(value:string) {
+    if (value == '') {
+      return ''
+    }
+    
+    let selected = this.yesno.find(data => data.value == value)
+    return selected.title
+  }
+  // Added by Hakim on 4 Feb 2021 - End
 
   // Added by Hakim on 25 Jan 2021 - Start
   getSeaExperienceListData() {
-    this._subscription = this.relationshipService.getAllRelationships().subscribe(
-      (result: any) => {
-        this.relationships = result
-        this.relationships.forEach((relationship: any) => {
-          this.relationshiplist.push({
-            value: relationship.Id,
-            title: relationship.Relationship
-          })
-        })
-
-        const newSettings = {
-          delete: {
-            confirmDelete: true
-          },
-          add: {
-            addButtonContent: 'Add',
-            confirmCreate: true
-          },
-          edit: {
-            confirmSave: true
-          },
-          columns: {
-            Id: {
-              title: 'Id',
-              hide: true,
-              filter: false
-            },
-            SeaExpCompany: {
-              title: 'Company',
-              filter: false
-            },
-            SeaExpVesselName: {
-              title: 'Vessel Name',
-              filter: false,
-            },
-            SeaExpRank: {
-              title: 'Rank',
-              filter: false
-            },
-            SeaExpPeriod: {
-              title: 'Period',
-              filter: false,
-            },
-          },
-          actions: {
-            add: true,
-            position: 'right', // left|right
-          }
-        }
-        this.settings2 = Object.assign(newSettings)
-
+    const newSettings = {
+      delete: {
+        confirmDelete: true
       },
-      (err) => alert('Failed to load sea experience')
-    )
+      add: {
+        addButtonContent: 'Add',
+        confirmCreate: true
+      },
+      edit: {
+        confirmSave: true
+      },
+      columns: {
+        Id: {
+          title: 'Id',
+          hide: true,
+          filter: false
+        },
+        SeaExpCompany: {
+          title: 'Company',
+          filter: false
+        },
+        SeaExpVesselName: {
+          title: 'Vessel Name',
+          filter: false,
+        },
+        SeaExpRank: {
+          title: 'Rank',
+          filter: false
+        },
+        SeaExpPeriod: {
+          title: 'Period',
+          filter: false,
+        },
+      },
+      actions: {
+        add: true,
+        position: 'right', // left|right
+      }
+    }
+    this.smarttbl_SEAExp = Object.assign(newSettings)
   }
   // Added by Hakim on 25 Jan 2021 - End
 
@@ -1200,7 +1112,6 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     this.service.getApplicantNextOfKin(LoginEmail).subscribe(
       (result: any) => {
         this.applicant.next_of_kin = result
-        this.data = result
         this._refreshNextOfKinData()
       },
         (err) => alert('Failed to load Next Of Kin')
@@ -1209,7 +1120,6 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
 
   _refreshNextOfKinData() {
     this.applicant.next_of_kin = this.applicant.next_of_kin.map((item: ApplicantNextOfKin) => {
-      let relationshipObj = this.relationshiplist.find(i => i.value == item.NOKRelationship)
       return {
         Id: item.Id,
         ApplyID: item.ApplyID,
@@ -1217,38 +1127,12 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
         // Added by Hakim on 12 Jan 2021 - Start
         // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
         NOKName: item.NOKName,
-        NOKMiddlename: item.NOKMiddleName,
-        NOKLastname: item.NOKLastName,
-        // Added by Hakim on 12 Jan 2021 - End
-        NOKRelationship: relationshipObj != null ? relationshipObj.title : "", // Update by Hakim on 14 Jan 2021
-        NOKOccupaction: item.NOKOccupaction,
-        NOKGender: item.NOKGender == "83" ? "Male" : "Female", // Update by Hakim on 14 Jan 2021
-        NOKAge: item.NOKAge,
-        NOKContactNumber: item.NOKContactNumber,
-        NOKDOB: item.NOKDOB,
-        // Updated by Hakim on 12 Jan 2021 - Start
-        // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
-        NOKHandicap: item.NOKHandicap,
-        NOKEmployment: item.NOKEmployment,
-        // Added by Hakim on 12 Jan 2021 - End  
-        No: item.SeqNo
-      }
-    })
-
-    this.data = this.data.map((item: ApplicantNextOfKin) => {
-      let relationshipObj = this.relationshiplist.find(i => i.value == item.NOKRelationship)
-      return {
-        Id: item.Id,
-        UserID: item.UserID,
-        // Added by Hakim on 12 Jan 2021 - Start
-        // Update for changes no. 4 in Application For Employment (0106 NC Comment_11012021.docx)
-        NOKName: item.NOKName,
         NOKMiddleName: item.NOKMiddleName,
         NOKLastName: item.NOKLastName,
-        // Added by Hakim on 12 Jan 2021 - End        
-        NOKRelationship: relationshipObj != null ? relationshipObj.title : "", // Update by Hakim on 14 Jan 2021
+        // Added by Hakim on 12 Jan 2021 - End
+        NOKRelationship: item.NOKRelationship, // Update by Hakim on 4 Feb 2021
         NOKOccupaction: item.NOKOccupaction,
-        NOKGender: item.NOKGender == "83" ? "Male" : "Female", // Update by Hakim on 14 Jan 2021
+        NOKGender: item.NOKGender, // Update by Hakim on 4 Feb 2021
         NOKAge: item.NOKAge,
         NOKContactNumber: item.NOKContactNumber,
         NOKDOB: item.NOKDOB,
@@ -1269,10 +1153,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     this.service.getApplicantSeaExperience(LoginEmail).subscribe(
       (result: any) => {
         this.applicant.SEAExp = result
-        this.data2 = result
         this._refreshSeaExperienceData()
       },
-        (err) => alert('Failed to load certification')
+        (err) => alert('Failed to load experiences')
     )
   }
 
@@ -1288,20 +1171,6 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
         SeaExpPeriod: item.ExpPeriod,
       }
     })
-
-    this.data2 = this.data2.map((item: ApplicantSEAExperience) => {
-      return {
-        Id: item.Id,
-        ApplyID: item.ApplyID,
-        UserID: item.UserID,
-        SeaExpCompany: item.Company,
-        SeaExpVesselName: item.VesselName,
-        SeaExpRank: item.ExpRank,
-        SeaExpPeriod: item.ExpPeriod,
-      }
-    })
-
-    console.log("Number of experience: ", this.data2.length)
   }
   // Added by Hakim on 26 Jan 2021 - End
 
@@ -1623,7 +1492,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       if(result == true) {
         this.openPasswordDialog(event, isSubmit)
       }else{
-        alert("Please check any missing feilds! There is an error!")
+        // alert("Please check any missing fields! There is an error!")
       }
     });
   }
@@ -1754,10 +1623,10 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   // TODO: placeholder for next-to-kin smart table
-  onDeleteConfirm(event) {
+  onDeleteConfirmNOK(event) {
     if (window.confirm(`Are you sure you want to delete next-of-kin?`)) {
       // event.data.UserID = this.applicant.LoginEmail
-      event.newData.UserID = localStorage.getItem("user_email") // Added by Hakim on 14 Jan 2021
+      event.data.UserID = localStorage.getItem("user_email") // Added by Hakim on 14 Jan 2021
       const subscription = this.applicationService.deleteApplicantNextOfKin(event.data.Id).subscribe((res: any) => {
         if (res.Id == null) {
           alert(`Failed to delete next-of-kin`)
@@ -1773,7 +1642,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSaveConfirm(event) {
+  onSaveConfirmNOK(event) {
     if (window.confirm('Are you sure you want to save next-of-kin?')) {
       event.confirm.resolve(event.newData)
       // event.newData.UserID = this.applicant.LoginEmail
@@ -1793,7 +1662,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCreateConfirm(event) {
+  onCreateConfirmNOK(event) {
     if (window.confirm(`Are you sure you want to add next-of-kin?`)) {
       //event.newData.Id = this.applicant.Id
       //event.newData.UserID = this.applicant.LoginEmail
@@ -1806,7 +1675,6 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
         } else {
           event.newData.No = this.applicant.next_of_kin.length + 1
           event.newData.Id = res.Id
-          this.applicant.next_of_kin.push(event.newData)
           event.confirm.resolve(event.newData)
         }
         subscription.unsubscribe()
@@ -1837,7 +1705,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   onSaveConfirmSEAExp(event) {
-    if (window.confirm('Are you sure you want to save SEA sxperience?')) {
+    if (window.confirm('Are you sure you want to save SEA experience?')) {
       event.confirm.resolve(event.newData)
       event.newData.UserID = localStorage.getItem("user_email")
       const subscription = this.applicationService.updateApplicantSEAExp(
@@ -1856,18 +1724,17 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   onCreateConfirmSEAExp(event) {
-    if (window.confirm(`Are you sure you want to add SEA sxperience?`)) {
+    if (window.confirm(`Are you sure you want to add SEA experience?`)) {
       //event.newData.Id = this.applicant.Id
       event.newData.UserID = localStorage.getItem("user_email")
       const subscription = this.applicationService.addApplicantSEAExp(
         JSON.stringify(event.newData)
       ).subscribe((res: any) => {
         if (res.Id == null) {
-          alert(`Failed to create SEA experience`)
+          alert(`Failed to add SEA experience`)
         } else {
           event.newData.No = this.applicant.SEAExp.length + 1
           event.newData.Id = res.Id
-          this.applicant.SEAExp.push(event.newData)
           event.confirm.resolve(event.newData)
         }
         subscription.unsubscribe()

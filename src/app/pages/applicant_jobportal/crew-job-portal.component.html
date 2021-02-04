@@ -17,8 +17,11 @@
     </option>
   </select>
 </div>
-<div class="form-group">
+<!-- <div class="form-group">
   <h3>Personal Data</h3>
+</div> -->
+<div style="margin-top: 3%">
+  <label class="h5">Personal Data</label>
 </div>
 <div class="form-group">
   <label for="photo_label">Photo</label>
@@ -556,102 +559,48 @@
 </div> -->
 <!-- Comment by Hakim on 26 Jan 2021 - End -->
 <div class="form-group">
-  <label for="repatriation port">Highest Education Level</label>
+  <label for="education">Highest Education Level</label>
   <select class="custom-select my-1 mr-sm-2" id="education" [(ngModel)]="applicant.Education">
     <option *ngFor="let education of educations; let i = index" value="{{ education.Id }}">
       {{ education.Education }}
     </option>
   </select>
-  <input type="file" class="form-control-file" id="upload_education_level"
-  (change)="fileChange($event, 0, 'education')"
-  placeholder="Upload file"
-  class="form-control-file"
-  accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"/>
   <div class="form-group" *ngIf="applicant.EducationFileName">
     <button nbButton ngDefaultControl *ngIf="applicant.EducationFileName
     && applicant.EducationFileName.length > 0"
     [ngModel]="applicant.EducationFileName"
+    type="button"
+    status="info"
     (click)="viewFile(applicant.EducationFileName)">View</button>
+    {{applicant.EducationFileName}}
   </div>
+  <input type="file" class="form-control-file" id="education_file"
+  (change)="fileChange($event, 0, 'education')"
+  placeholder="Upload file"
+  class="form-control-file"
+  accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"/>
+</div>
+
+<div style="margin-top: 3%">
+  <label class="h5">Next of Kin</label>
 </div>
 <div class="form-group">
-  <label><b>Next of Kin</b></label>
-  <ng2-smart-table [settings]="settings" [source]="data"
-  (deleteConfirm)="onDeleteConfirm($event)"
-  (editConfirm)="onSaveConfirm($event)"
-  (createConfirm)="onCreateConfirm($event)"></ng2-smart-table>
+  <ng2-smart-table [settings]="smarttbl_NOK" [source]="applicant.next_of_kin"
+  (deleteConfirm)="onDeleteConfirmNOK($event)"
+  (editConfirm)="onSaveConfirmNOK($event)"
+  (createConfirm)="onCreateConfirmNOK($event)"></ng2-smart-table>
 </div>
-
-<!-- <div class="form-group">
-  <label><b>Emergency Contact</b></label>
-</div>
-<div class="row">
-  <div class="col">
-    <label for="">Name in Full</label>
-    <input
-      type="text"
-      class="form-control mb-2 mr-sm-2"
-      id="emergency_contact_name"
-      [(ngModel)]="applicant.EmergencyContactName"
-    />
-  </div>
-  <div class="col">
-    <label for="">Relationship</label>
-    <select
-      class="custom-select mb-2 mr-sm-2"
-      id="relationships"
-      [(ngModel)]="applicant.EmergencyContactRelationship"
-    >
-      <option
-        *ngFor="
-          let relationship of relationships;
-          let i = index
-        "
-        value="{{ relationship.Relationship }}"
-      >
-        {{ relationship.Relationship }}
-      </option>
-    </select>
-  </div>
-</div>
-<div class="row">
-  <div class="col">
-    <label for="contact">Contact (Mobile/ House)</label>
-
-    <div class="row">
-      <div class="col">
-        <div class="col-lg-8">
-          <input
-            type="text"
-            class="form-control"
-            id="emergency_contact_country_code"
-            [(ngModel)]="applicant.EmergencyContact_MobileCtryCode"
-          />
-        </div>
-      </div>
-      <div class="col">
-        <input
-          type="text"
-          class="form-control mb-2 mr-sm-2"
-          id="emergency_contact_mobile"
-          placeholder="phone number"
-          [(ngModel)]="applicant.EmergencyContact_Mobile"
-        />
-      </div>
-    </div>
-  </div>
-  <div class="col"></div>
-  <div class="col"></div>
-</div> -->
 
 <!-- Added by Hakim on 12 Jan 2021 - Start -->
 <!-- Update for changes no. 6 in Application For Employment (0106 NC Comment_11012021.docx) -->
-<div class="form-group">
-  <label><b>Beneficiary</b></label>
-  <br>Must be a member from family particular table for emergency/to receive the benefit due to mishap of fatality
+<div style="margin-top: 3%">
+  <label class="h5">Beneficiary</label>
+  <br/>
+  Must be a member from family particular table for emergency/to receive the benefit due to mishap of fatality<br/>
+  <br/>
 </div>
-
-<div class="row">
+<div class="form-group" >
+  <div class="row">
   <div class="col">
     <label for="name">First Name</label>
     <input
@@ -807,11 +756,14 @@
     </div>
   </div>
   <div class="col"></div>
+  </div>
 </div>
 <!-- Added by Hakim on 12 Jan 2021 - End -->
 
+<div style="margin-top: 3%">
+  <label class="h5"><b>Income Tax No.</b></label>
+</div>
 <div class="form-group">
-  <label><b>Income Tax No.</b></label>
   <input
     type="text"
     class="form-control mb-2 mr-sm-2"
@@ -820,30 +772,34 @@
     [(ngModel)]="applicant.IncomeTaxNo"
   />
 </div>
+
+<div style="margin-top: 3%">
+  <label class="h5"><b>CV</b></label>
+</div>
+<div class="form-group" *ngIf="applicant.FileNameCV">
+  <button nbButton ngDefaultControl *ngIf="applicant.FileNameCV && applicant.FileNameCV.length > 0"
+  [ngModel]="applicant.FileNameCV"
+  type="button"
+  status="info"
+  (click)="viewFile(applicant.FileNameCV)">View</button>
+  {{applicant.FileNameCV}}
+  <br/>
+</div>
 <div class="form-group">
-  <label for="exampleFormControlFile1">CV</label>
-  <div class="form-group" *ngIf="applicant.FileNameCV">
-    <button nbButton ngDefaultControl *ngIf="applicant.FileNameCV && applicant.FileNameCV.length > 0"
-    [ngModel]="applicant.FileNameCV"
-    type="button"
-    status="info"
-    (click)="viewFile(applicant.FileNameCV)">View</button>
-    <br/>
-  </div>
-  <div class="form-group">
-    <input type="file" class="form-control-file" id="cv_file"
-      (change)="fileChange($event, 0, 'cv')"
-      placeholder="Upload file"
-      class="form-control-file"
-      accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"/>
-  </div>
+  <input type="file" class="form-control-file" id="cv_file"
+    (change)="fileChange($event, 0, 'cv')"
+    placeholder="Upload file"
+    class="form-control-file"
+    accept=".png,.gif,.jpg,.jpeg,.tif,.pdf,.doc,.docx,.xls,.xlsx,.rtf"/>
 </div>
 
 <!-- Added by Hakim on 26 Jan 2021 -->
 <!-- Update for changes no. 17 in Application For Employment (SKOM 210122.docx) -->
+<div style="margin-top: 3%">
+  <label class="h5"><b>SEA Experience</b></label>
+</div>
 <div class="form-group">
-  <label><b>SEA Experience</b></label>
-  <ng2-smart-table [settings]="settings2" [source]="data2"
+  <ng2-smart-table [settings]="smarttbl_SEAExp" [source]="applicant.SEAExp"
   (deleteConfirm)="onDeleteConfirmSEAExp($event)"
   (editConfirm)="onSaveConfirmSEAExp($event)"
   (createConfirm)="onCreateConfirmSEAExp($event)"></ng2-smart-table>
@@ -851,7 +807,7 @@
 <!-- Added by Hakim on 26 Jan 2021 -->
 
 	
-<div class="form-group">
+<div class="form-group" style="margin-top: 3%">
   <table class="table table-striped table-bordered table-responsive">
     <tbody>
       <tr>
@@ -1018,15 +974,10 @@
   </table>
 </div> 
 
-<br /><br />
-
-<div class="row">
-
-  <!-- Updated by Hakim on 14 Jan 2021 - Start -->
-  <!-- Update for changes no. 9 in Application For Employment (0106 NC Comment_11012021.docx) -->
-  <div class="col-25">
-    <label for="References"><b>MEDICAL CHECKUP REPORT</b></label>
-  </div>
+<div style="margin-top: 3%">
+  <label class="h5"><b>Medical Checkup Report</b></label>
+</div>
+<div class="form-group">
   <table
     id="Table1"
     class="table"
@@ -1078,15 +1029,17 @@
       </tr>
     </tfoot>
   </table>
-  <!-- Updated by Hakim on 14 Jan 2021 - End -->
+</div>
 
-  <div class="col-25">
-    <label for="References"><b>MEDICAL HISTORY</b></label>
-    <br/>
-    **MEDICAL HISTORY: It is of utmost importance that all illness other than minor afflictions should be stated.<br />
-    The Company is entitled to refuse any claim for treatment, cost or any other insured benefits if a complete statement 
-    of all previous illness has not been given. <br />If yes, please provide following details.<br/>
-  </div>
+<div style="margin-top: 3%">
+  <label class="h5"><b>Medical History</b></label>
+  <br/>
+  **MEDICAL HISTORY: It is of utmost importance that all illness other than minor afflictions should be stated.<br />
+  The company is entitled to refuse any claim for treatment, cost or any other insured benefits if a complete statement 
+  of all previous illness has not been given. <br />If yes, please provide following details.<br/>
+  <br/>
+</div>
+<div class="form-group">
   <table
     id="Table1"
     class="table"
@@ -1119,11 +1072,10 @@
   </table>
 </div>
 
-<br/><br/>
-<div class="row">
-  <div class="col-25">
-    <label for="References"><b>GENERAL</b></label>
-  </div>
+<div style="margin-top: 3%">
+  <label class="h5"><b>General</b></label>
+</div>
+<div>
   <table
     id="Table1"
     class="table"
@@ -1163,11 +1115,10 @@
   </table>
 </div>
 
-<br /><br />
-<div class="row">
-  <div class="col-25">
-    <label for="References"><b>References</b></label>
-  </div>
+<div style="margin-top: 3%">
+  <label class="h5"><b>References</b></label>
+</div>
+<div>
   <table
     id="Table1"
     class="table"
@@ -1229,9 +1180,7 @@
   </table>
 </div>
 
-<br /><br />
-
-<div class="form-group">
+<div style="margin-top: 3%">
   <label><b>I hereby declare that the above is true,</b></label>
 </div>
 <div class="row">
