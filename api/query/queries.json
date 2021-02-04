@@ -50,7 +50,7 @@
     "getLoginUser" : "SELECT [Id], [Name], [Password], [Email], [LoginEmail] FROM [JobPortal].[dbo].[Applicant] WHERE [LoginEmail] = @LoginEmail",
     "getEmailUser" : "SELECT [Id] FROM [JobPortal].[dbo].[Applicant] WHERE [LoginEmail] = @LoginEmail",
     "addUser" :"INSERT INTO [JobPortal].[dbo].[Applicant] ([Name], [Password], [Email], [LoginEmail], [DtCreated], [DtUpdated]) VALUES (@Name, @Password, @LoginEmail, @LoginEmail, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
-    "updatePasswordUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [Password] = @Password WHERE [LoginEmail] = @LoginEmail",
+    "updatePasswordUser" : "UPDATE [JobPortal].[dbo].[Applicant] SET [Password] = @newPassword WHERE [LoginEmail] = @LoginEmail AND [Password] = @Password",
 
     "getState" : "SELECT [Id], [TableField] AS [State] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='State'",
     "addState" :"INSERT INTO [JobPortal].[dbo].[SystemTable] ([TableName], [TableField]) VALUES ('State', @State); SELECT SCOPE_IDENTITY() AS [Id]",

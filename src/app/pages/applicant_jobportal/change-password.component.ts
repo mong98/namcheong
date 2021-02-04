@@ -63,9 +63,16 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
           }
         } else {
           console.log("changePassword - result: ", result)
-          this.router.navigate(['/pages/dashboard/', this.email])
+          alert('Password Changed!');
+        
+          this.password = '';
+          this.new_password = '';
+          this.retyped_password = '';
         }
         this._subscription.unsubscribe()
+      },
+      (error) => {
+        alert('Password Incorrect!');
       })
   }
 }

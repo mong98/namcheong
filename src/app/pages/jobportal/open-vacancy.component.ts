@@ -60,15 +60,14 @@ export class OpenVacancyComponent {
       },
       (err) => alert('Failed to load open vacancies')
     )
-
     this._vesselSubscription = this.imoNoService.getAllVessels().subscribe(
       (result: any) => {
         this.vessels = result
 
         this.vessels.forEach((vessel: any) => {
           this.vesselsList.push({
-            value: vessel.VesselName,
-            title: vessel.VesselName,
+            value: vessel.HullNo,
+            title: vessel.HullNo,
           })
         })
 
@@ -120,7 +119,7 @@ export class OpenVacancyComponent {
               },
             },
             HullNo: {
-              title: 'Vessel Name',
+              title: 'Vessel Type',
               filter: false,
               type: 'html',
               editor: {
@@ -146,90 +145,92 @@ export class OpenVacancyComponent {
       (err) => alert('Failed to load vessels')
     )
 
-    this._positionSubscription = this.positionService.getAllPositions().subscribe(
-      (result: any) => {
-        this.positions = result
+    this._positionSubscription = this.positionService
+      .getAllPositions()
+      .subscribe(
+        (result: any) => {
+          this.positions = result
 
-        this.positions.forEach((position: Position) => {
-          this.positionsList.push({
-            value: position.Position,
-            title: position.Position,
+          this.positions.forEach((position: Position) => {
+            this.positionsList.push({
+              value: position.Id,
+              title: position.Position,
+            })
           })
-        })
 
-        const newSettings = {
-          delete: {
-            confirmDelete: true,
-          },
-          add: {
-            addButtonContent: 'Add',
-            confirmCreate: true,
-          },
-          edit: {
-            confirmSave: true,
-          },
-          columns: {
-            No: {
-              title: 'No',
-              filter: false,
-              editable: false,
-              addable: false,
+          const newSettings = {
+            delete: {
+              confirmDelete: true,
             },
-            Id: {
-              title: 'ID',
-              hide: true,
+            add: {
+              addButtonContent: 'Add',
+              confirmCreate: true,
             },
-            Position: {
-              title: 'Position',
-              filter: false,
-              type: 'html',
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.positionsList,
+            edit: {
+              confirmSave: true,
+            },
+            columns: {
+              No: {
+                title: 'No',
+                filter: false,
+                editable: false,
+                addable: false,
+              },
+              Id: {
+                title: 'ID',
+                hide: true,
+              },
+              Position: {
+                title: 'Position',
+                filter: false,
+                type: 'html',
+                editor: {
+                  type: 'list',
+                  config: {
+                    selectText: 'Select...',
+                    list: this.positionsList,
+                  },
                 },
               },
-            },
-            DateEnd: {
-              title: 'End Date',
-              type: 'custom',
-              renderComponent: SmartTableDatepickerRenderComponent,
-              filter: false,
-              editor: {
+              DateEnd: {
+                title: 'End Date',
                 type: 'custom',
-                component: SmartTableDatepickerComponent,
-                pickerType: 'calendar',
-                timePicker: false,
-                format: 'dd/MM/yyyy',
-              },
-            },
-            HullNo: {
-              title: 'Vessel Name',
-              filter: false,
-              type: 'html',
-              editor: {
-                type: 'list',
-                config: {
-                  selectText: 'Select...',
-                  list: this.vesselsList,
+                renderComponent: SmartTableDatepickerRenderComponent,
+                filter: false,
+                editor: {
+                  type: 'custom',
+                  component: SmartTableDatepickerComponent,
+                  pickerType: 'calendar',
+                  timePicker: false,
+                  format: 'dd/MM/yyyy',
                 },
               },
+              HullNo: {
+                title: 'Vessel Type',
+                filter: false,
+                type: 'html',
+                editor: {
+                  type: 'list',
+                  config: {
+                    selectText: 'Select...',
+                    list: this.vesselsList,
+                  },
+                },
+              },
+              Qualification: {
+                title: 'Qualification',
+                filter: false,
+              },
             },
-            Qualification: {
-              title: 'Qualification',
-              filter: false,
+            actions: {
+              add: true,
+              position: 'right',
             },
-          },
-          actions: {
-            add: true,
-            position: 'right',
-          },
-        }
-        this.settings = Object.assign(newSettings)
-      },
-      (err) => alert('Failed to load positions')
-    )
+          }
+          this.settings = Object.assign(newSettings)
+        },
+        (err) => alert('Failed to load positions')
+      )
   }
 
   settings = {
@@ -271,7 +272,7 @@ export class OpenVacancyComponent {
         },
       },
       HullNo: {
-        title: 'Vessel Name',
+        title: 'Vessel Type',
         filter: false,
         type: 'html',
         editor: {
@@ -318,20 +319,16 @@ export class OpenVacancyComponent {
 
   onSaveConfirm(event) {
     if (!this.isValid(event)) return
-    
-    // get the position name and convert it to id when saving
-    let positionName = event.newData.Position
-    let positionId = this.mapPositionNametoId(event.newData.Position)
 
     if (window.confirm('Are you sure you want to save?')) {
-      event.newData.Position = positionId
+      event.confirm.resolve(event.newData)
+
       const subscription = this.service
         .updateOpenVacancy(JSON.stringify(event.newData))
         .subscribe((res: any) => {
           if (res.Id == null) {
             alert('Failed to update open vacancy')
           } else {
-            event.newData.Position = positionName
             event.confirm.resolve(event.newData)
           }
           subscription.unsubscribe()
@@ -341,30 +338,16 @@ export class OpenVacancyComponent {
     }
   }
 
-  mapPositionNametoId(name) {
-    for(var i = 0; i < this.positions.length; i++) {
-      var item = this.positions[i]
-      if(item.Position == name) 
-      {
-        return item.Id
-      }
-    }
-  }
-
   onCreateConfirm(event) {
     if (!this.isValid(event)) return
-
-    // convert name to id when saving
-    let positionId = this.mapPositionNametoId(event.newData.Position)
 
     if (
       window.confirm(`Are you sure you want to add ${event.newData.Position}?`)
     ) {
-
       const subscription = this.service
         .addOpenVacancy(
           JSON.stringify({
-            Position: positionId,
+            Position: event.newData.Position,
             DateEnd: event.newData.DateEnd,
             HullNo: event.newData.HullNo,
             Qualification: event.newData.Qualification,
@@ -378,7 +361,7 @@ export class OpenVacancyComponent {
             event.newData.Id = res.Id
             this.openVacancies.push(event.newData)
             event.confirm.resolve(event.newData)
-            //location.reload();
+            location.reload();
           }
           subscription.unsubscribe()
         })
@@ -397,7 +380,7 @@ export class OpenVacancyComponent {
       return false
     }
     if (event.newData.VesselType === '') {
-      window.alert('Please specify vessel name')
+      window.alert('Please specify vessel type')
       return false
     }
     if (event.newData.Qualification === '') {

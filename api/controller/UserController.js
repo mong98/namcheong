@@ -145,7 +145,8 @@ class UserController {
                 
                 const pool = await poolPromise
                 const result = await pool.request()
-                .input('Password', sql.VarChar , req.body.new_password)
+                .input('newPassword', sql.VarChar , req.body.new_password)
+                .input('Password', sql.VarChar , req.body.password)
                 .input('LoginEmail', sql.VarChar, req.body.email)
                 .query(queries.updatePasswordUser)
 
