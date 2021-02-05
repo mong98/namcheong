@@ -778,7 +778,10 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
 					if (this.activatedRoute.snapshot.queryParamMap.get('psid')) {
             this.applicantapply.PositionID = this.activatedRoute.snapshot.queryParamMap.get('psid');
             this.getDocumentChecklist()
-          }												   
+          }	else {
+            this.applicantapply.PositionID = this.defaultPositionID
+            this.getDocumentChecklist()
+          }											   
           this._refreshApplicantApplyData()
         }
       },
