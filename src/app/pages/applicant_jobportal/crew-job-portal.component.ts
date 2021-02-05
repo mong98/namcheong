@@ -173,6 +173,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
     this.userEmail = localStorage.getItem("user_email")
     this.applicantLoginEmail = this.activatedRoute.snapshot.params.LoginEmail
     this.defaultStatus = this.activatedRoute.snapshot.queryParamMap.get('status');
+    if(this.defaultStatus != 2){
+      this.defaultStatus = 1
+    }
     this.applicant.ApplyID = this.activatedRoute.snapshot.queryParamMap.get('ApplyID');
     console.log(this.applicant.ApplyID)
     if (this.activatedRoute.snapshot.queryParamMap.get('psid')) {
@@ -686,8 +689,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       return ''
     }
 
-    let selected = this.genderlist2.find(data => data.value == value)
-    return selected.title
+    // let selected = this.genderlist2.find(data => data.value == value)
+    // return selected.title
+    return this.genderlist2.title
   }
 
   findRelationshipById(value:string) {
@@ -695,8 +699,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       return ''
     }
 
-    let selected = this.relationshiplist.find(data => data.value == value)
-    return selected.title
+    // let selected = this.relationshiplist.find(data => data.value == value)
+    // return selected.title
+    this.relationshiplist.title
   }
 
   findYesNoById(value:string) {
@@ -704,8 +709,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       return ''
     }
     
-    let selected = this.yesno.find(data => data.value == value)
-    return selected.title
+    // let selected = this.yesno.find(data => data.value == value)
+    // return selected.title
+    this.yesno.title
   }
   // Added by Hakim on 4 Feb 2021 - End
 
@@ -1541,17 +1547,20 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       // stop the save
       return
     }*/
+    console.log(this.addNew);
 
     if (window.confirm('Do you really want to submit?')) {
       this.onSaveValueMapping()
       this.onConfirmValueMapping()
       console.log("go in onsubmit")
       //this.onSaveSanitize()
-      if(this.addNew) {
+      //if(this.addNew) {
+        if(this.defaultStatus == 1){
         console.log("go in add application")
        
         // temp. add login email
-        this.applicant.AddNew = this.addNew
+        //this.applicant.AddNew = this.addNew
+        this.applicant.AddNew = true
         this.applicant.LoginEmail = localStorage.getItem("user_email")
         console.log("login email created: ", this.applicant.LoginEmail)
         // add new application submit
@@ -1595,12 +1604,12 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
           })
       }
       else {
-        console.log("go in update")
+        console.log("go in add")
         //if(this.applicantapply != null && this.applicantapply.LoginEmail != null) {
         // find a way to save/update data
         // submit existing application
 																	  
-        const subscription = this.applicationService.updateApplicationSubmit(
+        const subscription = this.applicationService.addApplicationSubmit(
           JSON.stringify(this.applicant))
           .subscribe((res: any) => {
             console.log('res');

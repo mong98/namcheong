@@ -75,7 +75,12 @@ export class ApplicationStatusComponent implements OnInit {
         let dtUpdate = new Date(status.DtApplication).toLocaleString("en-US")
         let dtSubmit = new Date(status.SubmitDt).toLocaleString("en-US")
         let vacancy = this.allVacancies.filter(v => v.PSId == status.PositionID)
+
+        console.log('allVacancies')
+        console.log(this.allVacancies)
       
+        console.log('status')
+        console.log(status)
         return {
           Id: status.Id,
           PositionID: status.PositionID,

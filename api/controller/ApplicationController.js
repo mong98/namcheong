@@ -777,9 +777,11 @@ class ApplicationController {
   async addApplication(req, isSubmit) {
     var queryStr = queries.addApplication.join(' ')
     //console.log("queryStr: ", queryStr, " LoginEmail: ", req.body.LoginEmail)
+    console.log('isSubmit')
+    console.log(isSubmit)
     var result = ''
-    const pool = await poolPromise
-    if(isSubmit) {
+    const pool = await poolPromise 
+    if(isSubmit == true) {
       result = await pool
         .request()
         .input('Position', sql.VarChar, req.body.Position)
