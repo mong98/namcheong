@@ -234,18 +234,28 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   private getVacancies() {
     this._subscription = this.vacancyService.getAllOpenVacancies().subscribe(
       (result: any[]) => {
-        this._refreshVacancyData(result),
-        console.log("result in here")
+        //this._refreshVacancyData(result),
+        this._checkVacancyDate(result)
       },
       (err) => alert('Failed to load vacancies')
     )
   }
 
+  private _checkVacancyDate(result: any[]) {
+    var actualResult = [];
+    result.forEach(function(item){
+      var g1 = new Date(); 
+      var g2 = new Date(item.DateEnd);
+      if (g2 >= g1) {
+        actualResult.push(item)
+      }
+    });
+
+    this._refreshVacancyData(actualResult)
+  }
+
   private _refreshVacancyData(result: any[]) {
-    console.log("refreshVacancy");
-    
     this.allVacancies = result.map((openvacancy: OpenVacancy) => {
-      console.log(openvacancy)
       return {
         Id: openvacancy.Id,
         PSId: openvacancy.PSId,
@@ -1203,7 +1213,12 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
   }
 
   _refreshPositionData() {
+
+    console.log("refresh position")
+    console.log(this.positions)
+
     this.positions.map((item: Position) => {
+
       return {
         Id: item.Id,
         Position: item.Position
