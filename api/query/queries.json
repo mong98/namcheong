@@ -19,7 +19,7 @@
     "addContactLists" : "INSERT INTO [JobPortal].[dbo].[ContactUs] ( [Name], [Email], [ContactNo], [Message], [Status], [SubmitDate], [UpdatedDate], [UpdatedBy], [Remark]) VALUES (@Name, @Email, @ContactNo, @Message, 'New', GETDATE(), GETDATE(), @Name, NULL)",
 
     "getPosition" : "SELECT [Id], [Position] FROM [JobPortal].[dbo].[Position]",
-    "addPosition" :"INSERT INTO [JobPortal].[dbo].[Position] ([Position], [CreatedDate]) VALUES (@Position, GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
+    "addPosition" :"INSERT INTO [JobPortal].[dbo].[Position] ([Position], [CreatedBy], [CreatedDate]) VALUES (@Position, @CreatedBy, GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
     "deletePosition" : "DELETE FROM [JobPortal].[dbo].[Position] WHERE [Id] = @Id",
     "updatePosition" : "UPDATE [JobPortal].[dbo].[Position] SET [Position] = @Position, [UpdatedDate] = GETDATE() WHERE [Id] = @Id",
 
@@ -88,8 +88,9 @@
     "updateOpenVacancy" : "UPDATE [JobPortal].[dbo].[OpenVacancy] SET [Position] = @Position, [DateEnd] = @DateEnd, [HullNo] = @HullNo, [Qualification] = @Qualification WHERE [Id] = @Id",
 
     "getDocumentCheckList" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile], [TypeCompetencyChk], [GradeChk], [IssuingAuthorityChk] FROM [JobPortal].[dbo].[PositionDocument] ORDER BY CAST(DocumentID as int)",
-    "getDocumentCheckListById" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile], [TypeCompetencyChk], [GradeChk], [IssuingAuthorityChk] FROM [JobPortal].[dbo].[PositionDocument] WHERE [PositionId] = @Id ORDER BY CAST(DocumentID as int)",
+    "getDocumentCheckListById" : "SELECT [Document], [PositionID], [DocumentID], [DocNo], [Chk], [DtIssue], [DtExpiry], [DocType], [DocFile], [TypeCompetencyChk], [GradeChk], [IssuingAuthorityChk] FROM [JobPortal].[dbo].[PositionDocument] WHERE [PositionID] = @Id ORDER BY CAST(DocumentID as int)",
     "updateDocumentCheckList" : "UPDATE [JobPortal].[dbo].[PositionDocument] SET [DocNo] = @DocNo, [Chk] = @Chk, [DtIssue] = @DtIssue, [DtExpiry] = @DtExpiry, [DocType] = @DocType, [DocFile] = @DocFile, TypeCompetencyChk = @TypeCompetencyChk, GradeChk = @GradeChk, IssuingAuthorityChk = @IssuingAuthorityChk, [UpdatedDate] = GETDATE() WHERE [PositionID] = @PositionID AND [DocumentID] = @DocumentID",
+    "deleteDocumentCheckListByPositionId" : "DELETE FROM [JobPortal].[dbo].[PositionDocument] WHERE [PositionID] = @PositionId",
 
     "getManagerList": [
 		"SELECT DISTINCT UsersTbl.[UserID], UsersTbl.[FirstName], UsersTbl.[LastName], UsersTbl.[Email], UsersTbl.[SuperiorID] ",

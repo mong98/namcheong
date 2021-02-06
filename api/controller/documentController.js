@@ -33,6 +33,43 @@ class DocumentController {
           .input('document',sql.VarChar , req.body.Document)
           .query(queries.addDocument)
           console.log("addDocument result: ", result.recordset[0].Id);
+
+          // Added by Hakim on 5 Feb 2021 - Start
+          // Add document into position document
+          const result2= await pool.request()
+          .query(queries.getPosition)
+          console.log("addDocument result: ", result2.rowsAffected)
+          let positions = result2.recordset
+          let queries_addPositionDocument = ''
+          for(let i = 0; i < positions.length; i++) {
+            let query = 'INSERT INTO [JobPortal].[dbo].[PositionDocument] ' +
+            '(Position, Document, PositionID, DocumentID, DocNo, Chk, DtIssue, DtExpiry, DocType, DocFile, GradeChk, IssuingAuthorityChk, TypeCompetencyChk) VALUES '
+
+            query += '('
+            query += `'${positions[i].Position}',`
+            query += `'${req.body.Document}',`
+            query += `'${positions[i].Id}',`
+            query += `'${result.recordset[0].Id}',`
+            query += `'N',`
+            query += `'N',`
+            query += `'N',`
+            query += `'N',`
+            query += `'N',`
+            query += `'N',`
+            query += `'N',`
+            query += `'N',`
+            query += `'N'`
+            query += ') '
+
+            queries_addPositionDocument += query
+          }
+
+          const result3 = await pool
+            .request()
+            .query(queries_addPositionDocument)
+          console.log("addPosition addDocument result: ", result3.rowsAffected.length);
+          // Added by Hakim on 5 Feb 2021 - End
+
           res.json(result.recordset[0])
           // uncomment this for stored procedure,
           // run the Document.sql in sql server to create stored proc
@@ -66,7 +103,18 @@ class DocumentController {
           .input('Document',sql.VarChar , req.body.Document)
           //.input('UpdatedBy',sql.VarChar , "Kevin Ng")
           .query(queries.updateDocument)
-          res.json(result)
+
+          // Added by Hakim on 6 Feb 2021 - Start
+          // Update data in PositionDocument Table
+          var updateDocumentCheckListStr =
+          `UPDATE [JobPortal].[dbo].[PositionDocument] SET [Document]='${req.body.Document}' WHERE [DocumentID] = '${req.body.Id}'`
+
+          const result2 = await pool
+            .request()
+            .query(updateDocumentCheckListStr)
+          console.log("updateDocument result: ", result2.rowsAffected[0].length);
+          // Added by Hakim on 6 Feb 2021 - End
+          res.json(req.body)
         } else {
           res.send('All fields are required!')
         }
