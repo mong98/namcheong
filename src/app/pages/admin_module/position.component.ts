@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { PositionService } from '../../services/position.service'
+import { UserIdConfigService } from '../../services/useridconfigure.service' // Added by Hakim on 5 Feb 2021
 import { LocalDataSource } from 'ng2-smart-table'
 
 import { Injectable } from '@angular/core'
@@ -18,14 +19,16 @@ import { Position } from '../../interfaces/position'
 
 export class PositionComponent implements OnInit, OnDestroy {
   positions: any = []
+  adminDetails: any = {} // Added by Hakim on 5 Feb 2021
   _subscription: Subscription
 
   public source = new LocalDataSource()
 
-  constructor(private service: PositionService) { }
+  constructor(private service: PositionService, private serviceUserConfigure: UserIdConfigService) { }
 
   ngOnInit(): void {
     this.getPositions()
+    this.getAdminId()
   }
 
   ngOnDestroy(): void {
@@ -43,6 +46,21 @@ export class PositionComponent implements OnInit, OnDestroy {
       (err) => alert('Failed to load positions')
     )
   }
+
+  // Added by Hakim on 5 Feb 2021 - Start
+  getAdminId() {
+    this.serviceUserConfigure
+      .getAdminDetails(localStorage.getItem('adminUsername'))
+      .subscribe(
+        (result: any) => {
+          if(result.length != 0){
+            this.adminDetails = result[0]
+          }
+        },
+        (err) => alert('Failed to load admin details')
+      )
+  }
+  // Added by Hakim on 5 Feb 2021 - End
 
   settings = {
     delete: {
@@ -114,7 +132,10 @@ export class PositionComponent implements OnInit, OnDestroy {
   onCreateConfirm(event) {
     if (window.confirm(`Are you sure you want to add ${event.newData.Position}?`)) {
       const subscription = this.service.addPosition(
-        JSON.stringify({ Position: event.newData.Position })
+        JSON.stringify({ 
+          Position: event.newData.Position,
+          CreatedBy: this.adminDetails.Id
+        })
       ).subscribe((res: any) => {
         if (res.Id == null) {
           alert(`Failed to create ${event.newData.Position}`)

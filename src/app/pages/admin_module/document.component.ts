@@ -81,6 +81,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
         if (res.Id == null) {
           alert(`Failed to delete ${event.data.Document}`)
         } else {
+          alert('Successfully delete document')
           this.documents = this.documents.filter(a => a.Id !== event.data.Id)
           this._refreshData()
           event.confirm.resolve(event.newData)
@@ -102,6 +103,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
           if (res.Id == null) {
             alert('Failed to update document')
           } else {
+            alert('Successfully update document')
             event.confirm.resolve(event.newData)
           }
           subscription.unsubscribe()
@@ -119,6 +121,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
         if (res.Id == null) {
           alert(`Failed to create ${event.newData.Document}`)
         } else {
+          alert('Successfully create document')
           event.newData.No = this.documents.length + 1
           event.newData.Id = res.Id
           this.documents.push(event.newData)
