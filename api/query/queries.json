@@ -400,6 +400,7 @@
                                 , "(Position, PositionID, DtApplication, LoginEmail, Status, SubmitFlag, SubmitBy, SubmitDt) "
                                 , "VALUES (@Position, @PositionID, getdate(), @LoginEmail, @Status, @SubmitFlag, @SubmitBy, @SubmitDt); SELECT SCOPE_IDENTITY() AS [Id]"],
     "updateApplication" : "UPDATE [JobPortal].[dbo].ApplicantApply SET Position=@Position, DtApplication=getdate(), Status='New', SubmitFlag='N' WHERE [LoginEmail]=@LoginEmail AND PositionID=@PositionID AND Id = @ApplyID",
+    "updateApplicationFlag" : "UPDATE [JobPortal].[dbo].ApplicantApply SET Position=@Position, DtApplication=getdate(), Status='New', SubmitFlag=@SubmitFlag WHERE [LoginEmail]=@LoginEmail AND PositionID=@PositionID AND Id = @ApplyID",
     "registerApplicant" : "INSERT INTO [Applicant] (LoginEmail, Name, Password, Status, DtCreated) VALUES (@LoginEmail, @Name, @Password, 'Active', GetDate())",
     
     "getApplicantMedicalReportQuestion" : "SELECT * FROM [dbo].[ApplicantMedicalQuestion]",

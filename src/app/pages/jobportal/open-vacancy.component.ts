@@ -64,11 +64,13 @@ export class OpenVacancyComponent {
     this._vesselSubscription = this.imoNoService.getAllVessels().subscribe(
       (result: any) => {
         this.vessels = result
+        console.log("check vessel")
+        console.log(result)
 
         this.vessels.forEach((vessel: any) => {
           this.vesselsList.push({
-            value: vessel.VesselName,
-            title: vessel.VesselName,
+            value: vessel.VesselType,
+            title: vessel.VesselType,
           })
         })
 
@@ -120,7 +122,7 @@ export class OpenVacancyComponent {
               },
             },
             HullNo: {
-              title: 'Vessel Name',
+              title: 'Vessel Type',
               filter: false,
               type: 'html',
               editor: {
@@ -207,7 +209,7 @@ export class OpenVacancyComponent {
               },
             },
             HullNo: {
-              title: 'Vessel Name',
+              title: 'Vessel Type',
               filter: false,
               type: 'html',
               editor: {
@@ -273,7 +275,7 @@ export class OpenVacancyComponent {
         },
       },
       HullNo: {
-        title: 'Vessel Name',
+        title: 'Vessel Type',
         filter: false,
         type: 'html',
         editor: {
@@ -399,7 +401,7 @@ export class OpenVacancyComponent {
       return false
     }
     if (event.newData.VesselType === '') {
-      window.alert('Please specify vessel name')
+      window.alert('Please specify vessel type')
       return false
     }
     if (event.newData.Qualification === '') {

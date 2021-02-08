@@ -13,13 +13,17 @@ export class ApplicationService {
   constructor(private service: BaseService) { }
 
   updateApplicationSaveAsDraft(data: any) {
+    // console.log("service updateApplicationSaveAsDraft")
+    // console.log(this._entity)
+    // console.log(data)
     return this.service.update(this._entity, data)
   }
 
   updateApplicationSubmit(data: any) {
-    // console.log("check service")
+    // console.log("service updateApplicationSubmit")
+    // console.log(this._entity)
+    // console.log(this._secondaryEntity)
     // console.log(data)
-   
     return this.service.updateSecondaryEntity(this._entity,this._secondaryEntity, data)
   }
 
@@ -32,6 +36,9 @@ export class ApplicationService {
   }
 
   addApplicationSaveAsDraft(data: any) {
+    // console.log("service addApplicationSaveAsDraft")
+    // console.log(this._entity)
+    // console.log(this._save_secondaryEntity)
     return this.service.addSecondaryEntity(this._entity, this._save_secondaryEntity, data)
   }
 

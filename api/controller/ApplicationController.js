@@ -7,7 +7,7 @@ class ApplicationController {
   // update the applicant tbl
   async updateApplicant(req) {
     console.log('req for update')
-    console.log(req);
+    //console.log(req);
     var queryStr2 = queries.saveAsDraftApplication.join(' ')
     //console.log("queryStr2: ", queryStr2, " LoginEmail2: ", req.body.LoginEmail)
     const pool = await poolPromise
@@ -375,6 +375,24 @@ class ApplicationController {
     return result2
   }
 
+  async updateApplicationFlag(req, isSubmit) {
+    let flag = 'N'
+    if (isSubmit) {
+      flag = 'Y'
+    }
+
+    const pool = await poolPromise
+    const result2 = await pool
+    .request()
+    .input('Position', sql.VarChar, req.body.Position)
+    .input('LoginEmail', sql.VarChar, req.body.LoginEmail)
+    .input('PositionID', sql.VarChar, req.body.PositionID)
+    .input('ApplyID', sql.VarChar, req.body.ApplyID)
+    .input('SubmitFlag', sql.VarChar, flag)
+    .query(queries.updateApplicationFlag)
+    return result2
+  }
+
   async deleteApplicantDocument(req, ApplyID) {
     const pool = await poolPromise
     const result3 = await pool
@@ -558,9 +576,18 @@ class ApplicationController {
 
   async saveAsDraftApplication(req, res) {
     try {
+      console.log("go in saveAsDraftApplication")
       ////console.log('saveAsDraftApplication: ', req.body)
       if (req.body.LoginEmail != null) {
         const pool = await poolPromise
+
+        if (req.body.Draft === 'yes' && !req.body.ApplyID) {
+          console.log("save as draft")
+          // add new application without submit, is a draft application
+          var isSubmit = false
+          const result = await module.exports.addApplication(req, isSubmit) 
+        }
+
         // update the applicant tbl
         const result = await module.exports.updateApplicant(req)
         ////console.log('addApplicationSaveAsDraft result: ', result)
@@ -719,7 +746,7 @@ class ApplicationController {
         const pool = await poolPromise
 
         console.log('submitApplication');
-        console.log(req.body);
+        //console.log(req.body);
         //const result = await module.exports.addApplication(req, isSubmit) 
         //console.log('addApplicationSubmit result: ', result)
 
@@ -731,17 +758,22 @@ class ApplicationController {
           // update the applicant tbl 
           //console.log("come in update submit")
           const result2 = await module.exports.updateApplicantSubmit(req)
-          console.log('updateApplicantSubmit result: ', result2)
+          //console.log('updateApplicantSubmit result: ', result2)
 
           // get applicant by login email & apply pos. from ApplicantApply tbl
           const result3 = await module.exports.getApplicantByLoginEmailApplyId(req, ApplyID)
-          console.log('selectApplicantApply result3: ', result3)
+          //console.log('selectApplicantApply result3: ', result3)
           //console.log("check before")
           
 
           // record found in applicantapply
           if(result3 != null && result3.recordset[0] != '' &&
               result3.recordset[0] !=  null) {
+
+            // delete applicant documents first, before add
+            // TODO: check if needed to delete documents for same pos.
+            const resultdelete = await module.exports.deleteApplicantDocument(req, ApplyID)
+            ////console.log('deleteApplicantDocument result3: ', result3)
             
             // add applicant documents
             const result4 = await module.exports.addApplicantDocument(req, res, ApplyID)
@@ -754,7 +786,7 @@ class ApplicationController {
             const result7 = await module.exports.updateApplicantMedicalReportAnswerById(req, ApplyID)
             //console.log('updateApplicantMedicalReportAnswerById result7: ', result7)
 
-            const result8 = await module.exports.updateApplication(req)
+            const result8 = await module.exports.updateApplicationFlag(req, isSubmit)
 
             // Updated by Hakim on 19 Jan 2021 - start
             // To solve issue of sending response two times
@@ -777,11 +809,12 @@ class ApplicationController {
   async addApplication(req, isSubmit) {
     var queryStr = queries.addApplication.join(' ')
     //console.log("queryStr: ", queryStr, " LoginEmail: ", req.body.LoginEmail)
-    console.log('isSubmit')
-    console.log(isSubmit)
+    // console.log('isSubmit')
+    // console.log(isSubmit)
     var result = ''
     const pool = await poolPromise 
-    if(isSubmit == true) {
+    if(isSubmit) {
+      // console.log("submit true")
       result = await pool
         .request()
         .input('Position', sql.VarChar, req.body.Position)
@@ -794,6 +827,7 @@ class ApplicationController {
         .query(queryStr)
     }
     else {
+      // console.log("submit false")
       result = await pool
         .request()
         .input('Position', sql.VarChar, req.body.Position)
@@ -891,7 +925,7 @@ class ApplicationController {
 
   async  addApplicationSaveAsDraft(req, res) {
     try {
-      //console.log('addApplicationSaveAsDraft: ', req.body)
+      console.log('addApplicationSaveAsDraft')
       if (req.body.Position != null && req.body.LoginEmail != null
         && req.body.AddNew != null) {
         var isSubmit = false

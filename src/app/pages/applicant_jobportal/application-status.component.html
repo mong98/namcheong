@@ -17,7 +17,7 @@
     <td>
       {{ status.Status }}
       <button nbButton ngDefaultControl
-      *ngIf="status.Status == 'New' || status.Status == 'Review'"
+      *ngIf="status.Status == 'New' || status.Status == 'Review' || status.SubmitFlag === 'Draft'"
       type="button" status="primary" 
       (click)="navigatePage(status.VacancyID,status.PositionID,status.Id)" id="{{status.VacancyID}}">
         Update

@@ -73,7 +73,14 @@ export class ApplicationStatusComponent implements OnInit {
       this.allStatus = result.map((status: ApplicationStatus) => {
 
         let dtUpdate = new Date(status.DtApplication).toLocaleString("en-US")
-        let dtSubmit = new Date(status.SubmitDt).toLocaleString("en-US")
+        let dtSubmit
+
+        if (status.SubmitDt) {
+          dtSubmit = new Date(status.SubmitDt).toLocaleString("en-US")
+        } else {
+          dtSubmit = ''
+        }
+        
         let vacancy = this.allVacancies.filter(v => v.PSId == status.PositionID)
 
         console.log('allVacancies')
@@ -87,8 +94,9 @@ export class ApplicationStatusComponent implements OnInit {
           VacancyID: vacancy[0].Id ? vacancy[0].Id : '',
           Position: status.Position,
           DateUpdate: dtUpdate,
-          DateSubmit: dtSubmit, // Added by Hakim on 19 Jan 2021
-          Status: status.Status
+          DateSubmit: dtSubmit ? dtSubmit : 'N/A', // Added by Hakim on 19 Jan 2021
+          Status: status.SubmitFlag === "N" ?  'Draft' : status.Status,
+          SubmitFlag: status.SubmitFlag === "N" ?  'Draft' : ''
         }
       })
       console.log('All Status!')

@@ -689,9 +689,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       return ''
     }
 
-    // let selected = this.genderlist2.find(data => data.value == value)
-    // return selected.title
-    return this.genderlist2.title
+    let selected = this.genderlist2.find(data => data.value == value)
+    return selected.title
+    //return this.genderlist2.title
   }
 
   findRelationshipById(value:string) {
@@ -699,9 +699,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       return ''
     }
 
-    // let selected = this.relationshiplist.find(data => data.value == value)
-    // return selected.title
-    this.relationshiplist.title
+    let selected = this.relationshiplist.find(data => data.value == value)
+    return selected.title
+    //this.relationshiplist.title
   }
 
   findYesNoById(value:string) {
@@ -709,9 +709,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       return ''
     }
     
-    // let selected = this.yesno.find(data => data.value == value)
-    // return selected.title
-    this.yesno.title
+    let selected = this.yesno.find(data => data.value == value)
+    return selected.title
+    // this.yesno.title
   }
   // Added by Hakim on 4 Feb 2021 - End
 
@@ -987,6 +987,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
 
   _refreshApplicantMedicalReportQuestionData() {
     this.medicalReportQuestion.map((item: ApplicantMedicalQuestion) => {
+      // console.log("_refreshApplicantMedicalReportQuestionData")
+      // console.log(item)
+
       return {
         Id: item.Id,
         Type: item.Type,
@@ -1015,6 +1018,9 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
 
   _refreshApplicantMedicalReportAnswerData() {
     this.medicalReportAnswer.map((item: ApplicantMedicalAnswer) => {
+      // console.log("_refreshApplicantMedicalReportAnswerData")
+      // console.log(item)
+
       return {
         Id: item.Id,
         Type: item.Type,
@@ -1424,6 +1430,8 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       return
     }*/
 
+    console.log("go in save as draft")
+
     if (window.confirm('Do you really want to save as draft?')) {
       this.onSaveValueMapping()
       //this.onSaveSanitize()
@@ -1441,12 +1449,16 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
               alert('Save as Draft New Record Successful')
               // upload file & update filepath
               this.onSaveFile()
+              this.router.navigateByUrl('/pages/applicant_jobportal/dashboard-applicant')
             }
             //subscription.unsubscribe()
           })
       }
       else {
-         // find a way to save/update data
+        // find a way to save/update data
+        this.applicant.Draft = 'yes'
+        this.applicant.ApplyID = this.activatedRoute.snapshot.queryParamMap.get('ApplyID');
+        //console.log(this.applicant)
         const subscription = this.applicationService.updateApplicationSaveAsDraft(
           JSON.stringify(this.applicant))
           .subscribe((res: any) => {
@@ -1457,6 +1469,7 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
               console.log("saveSuccess: ", this.saveSuccess, " this.signature: ", this.signature)
               // upload file & update filepath
               this.onSaveFile()
+              this.router.navigateByUrl('/pages/applicant_jobportal/dashboard-applicant')
             }
             //subscription.unsubscribe()
           })
@@ -1506,19 +1519,25 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       return
     }
 
-    const dialogRef = this.dialog.open(DialogContentExampleDialog, {
-      width: '100%', // Update by Hakim on 19 Jan 2021
-      panelClass: 'custom-dialog'
-    });
+    if (isSubmit) {
+      const dialogRef = this.dialog.open(DialogContentExampleDialog, {
+        width: '100%', // Update by Hakim on 19 Jan 2021
+        panelClass: 'custom-dialog'
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+        if(result == true) {
+          this.openPasswordDialog(event, isSubmit)
+        }else{
+          // alert("Please check any missing fields! There is an error!")
+        }
+      });
+    } else {
+      this.onSaveAsDraft(event)
+    }
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      if(result == true) {
-        this.openPasswordDialog(event, isSubmit)
-      }else{
-        // alert("Please check any missing fields! There is an error!")
-      }
-    });
+    
   }
 
   openPasswordDialog(event, isSubmit) {
@@ -1558,9 +1577,8 @@ export class CrewJobPortalComponent implements OnInit, OnDestroy {
       console.log("go in onsubmit")
       //this.onSaveSanitize()
       //if(this.addNew) {
-        if(this.defaultStatus == 1){
+      if (this.defaultStatus == 1) {
         console.log("go in add application")
-       
         // temp. add login email
         //this.applicant.AddNew = this.addNew
         this.applicant.AddNew = true
