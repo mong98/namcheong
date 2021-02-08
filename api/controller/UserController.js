@@ -380,11 +380,9 @@ class UserController {
                 }, "anystring", {expiresIn: 3600})
                 // res.status(200).json({token})
                 //res.json({"token" : token})
-<<<<<<< Updated upstream
-                res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email});
-=======
+
                 res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email,"UserID": userData.UserID[0],"AccessModule":userAccessModule}); // Comment by Hakim on 3 Feb 2021
->>>>>>> Stashed changes
+
               } else {
                 //res.json({"token" : null, "error": 'Password not correct'});
                 //console.log("Password not correct")
