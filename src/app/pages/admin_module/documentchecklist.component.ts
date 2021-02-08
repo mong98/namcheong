@@ -78,6 +78,10 @@ export class DocumentCheckListComponent {
         title: 'Position',
         hide: true
       },
+      PositionID: {
+        title: 'PositionID',
+        hide: true
+      },
       No: {
         title: 'No',
         filter: false,
@@ -182,7 +186,7 @@ export class DocumentCheckListComponent {
       const subscription = this.service.updateDocumentChecklist(
         this.selectedPosition, JSON.stringify(
           (await this.source.getAll())
-            .filter(d => d.Position === this.selectedPosition)
+            .filter(d => d.PositionID === this.selectedPosition)
             .map((item: any) => {
               return {
                 DocumentID: item.Id,
@@ -224,7 +228,8 @@ export class DocumentCheckListComponent {
           return {
             No: index + 1,
             Id: item.DocumentID,
-            Position: item.PositionID,
+            Position: item.Position,
+            PositionID: item.PositionID,
             Name: item.Document,
             TypeCompetencyChk: item.TypeCompetencyChk, // Added by Hakim on 27 Jan 2021
             DocNo: item.DocNo,
