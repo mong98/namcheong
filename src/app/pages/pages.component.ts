@@ -33,6 +33,7 @@ export class PagesComponent {
     || !this.router.url.includes('/pages/dashboard-applicant')
     && !this.router.url.includes('/pages/applicant_jobportal/')) {
       this.menu = MENU_ITEMS
+      
     }
   }
 

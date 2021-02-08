@@ -354,6 +354,20 @@ class UserController {
 
           var userData = result.recordset[0];
           if (userData) {
+
+            let resultAdmin = await pool.request()
+            .input('Id', sql.VarChar, userData.UserName)
+            .query(queries.getAdminDetails)
+
+            let resultAccessModule = await pool.request()
+            .input('UserConfigureID', sql.SmallInt, resultAdmin.recordset[0].Id)
+            .query(queries.getUserIdConfigureById)
+
+            let userAccessModule = resultAccessModule.recordset;
+
+            console.log('userAccessModule')
+            console.log(resultAccessModule);
+
             const validPassword = await bcrypt.compare(req.body.password, userData.Password);
             
             if (!validPassword) {
@@ -366,7 +380,11 @@ class UserController {
                 }, "anystring", {expiresIn: 3600})
                 // res.status(200).json({token})
                 //res.json({"token" : token})
+<<<<<<< Updated upstream
                 res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email});
+=======
+                res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email,"UserID": userData.UserID[0],"AccessModule":userAccessModule}); // Comment by Hakim on 3 Feb 2021
+>>>>>>> Stashed changes
               } else {
                 //res.json({"token" : null, "error": 'Password not correct'});
                 //console.log("Password not correct")
@@ -380,7 +398,7 @@ class UserController {
               // res.status(200).json({token})
               //console.log("token: ", token)
               //res.json({"token" : token})
-              res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.LoginEmail});
+              res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.LoginEmail,"UserID": userData.UserID[0],"AccessModule":userAccessModule});
               // res.header("auth-token", token).json({
               //   error: null,
               //   data: {

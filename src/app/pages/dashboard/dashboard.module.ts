@@ -8,4 +8,6 @@ import { DashboardComponent } from './dashboard.component'
   imports: [NbCardModule, ThemeModule],
   declarations: [DashboardComponent],
 })
-export class DashboardModule {}
+export class DashboardModule {
+
+}

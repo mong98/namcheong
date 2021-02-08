@@ -60,9 +60,10 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
       .subscribe(
         (result: any) => {
           console.log("result: ", result, " email: ", this.email)
+          console.log('UserID',localStorage.getItem('admin_userID'))
           this.router.navigate(['/pages/dashboard/'], { queryParams: { email: this.email }})
           localStorage.setItem('adminUsername',this.username);
-          localStorage.setItem('adminEmail',this.email);
+
         },
         (err: any) => {
           this.login_error = 'Could not authenticate'

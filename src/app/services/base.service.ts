@@ -61,14 +61,18 @@ export class BaseService {
   loginAdmin(email: string, username: string, password: string) {
     this.constructHttpOptions()
     return this.httpClient
-    .post<{token: string, name: string, email: string}>(`${this.apiServer}` + '/users/login_admin',
+    .post<{token: string, name: string, email: string,UserID:string,AccessModule:any}>(`${this.apiServer}` + '/users/login_admin',
     {email: email, username: username, password: password}, this.httpOptions)
     .pipe(
       map(result => {
+        console.log('Admin Login')
+        console.log(result);
         if(result.token) {
           localStorage.setItem('admin_access_token', result.token);
           localStorage.setItem('admin_user_name', result.name);
           localStorage.setItem('admin_user_email', result.email);
+          localStorage.setItem('admin_userID', result.UserID);
+          localStorage.setItem('admin_accessModule', JSON.stringify(result.AccessModule));
           return true;
         }
         return false
