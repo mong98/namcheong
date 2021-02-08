@@ -42,7 +42,7 @@
   <div class="col">
     <button nbButton
       status="primary" ngDefaultControl
-      *ngIf="userName != null"
+      *ngIf="!isCreate"
       (click)="onSavePasswordConfirm()">
       Update Password
     </button>
