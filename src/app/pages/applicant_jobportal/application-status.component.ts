@@ -89,7 +89,7 @@ export class ApplicationStatusComponent implements OnInit {
       
         console.log('status')
         console.log(status)
-<<<<<<< Updated upstream
+
         return {
           Id: status.Id,
           PositionID: status.PositionID,
@@ -100,19 +100,18 @@ export class ApplicationStatusComponent implements OnInit {
           Status: status.SubmitFlag === "N" ?  'Draft' : status.Status,
           SubmitFlag: status.SubmitFlag === "N" ?  'Draft' : ''
         }
-=======
+
       
-          return {
-            Id: status.Id,
-            PositionID: status.PositionID,
-            VacancyID: vacancy[0].Id ? vacancy[0].Id : '',
-            Position: status.Position,
-            DateUpdate: dtUpdate,
-            DateSubmit: dtSubmit, // Added by Hakim on 19 Jan 2021
-            Status: status.Status
-          }
-      
->>>>>>> Stashed changes
+          // return {
+          //   Id: status.Id,
+          //   PositionID: status.PositionID,
+          //   VacancyID: vacancy[0].Id ? vacancy[0].Id : '',
+          //   Position: status.Position,
+          //   DateUpdate: dtUpdate,
+          //   DateSubmit: dtSubmit, // Added by Hakim on 19 Jan 2021
+          //   Status: status.Status
+          // }
+
       })
       console.log('All Status!')
       console.log(this.allStatus);
