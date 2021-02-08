@@ -182,7 +182,7 @@ export class DocumentCheckListComponent {
       const subscription = this.service.updateDocumentChecklist(
         this.selectedPosition, JSON.stringify(
           (await this.source.getAll())
-            .filter(d => d.PositionID === this.selectedPosition)
+            .filter(d => d.Position === this.selectedPosition)
             .map((item: any) => {
               return {
                 DocumentID: item.Id,
