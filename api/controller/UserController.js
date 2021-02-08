@@ -165,39 +165,63 @@ class UserController {
       try {
         //console.log("updatePasswordAdmin: ", req.body);
         if(req.body.password != null && req.body.username != null) {
+            let isNewDB = false
             const pool = await poolPromise
-            const result = await pool.request()
+            let result = await pool.request()
               .input('UserName',sql.VarChar , req.body.username)
               .input('Password',sql.VarChar, req.body.password)
               .query(queries.getAdmin)
 
-              //console.log(result.recordset)
-            
-              if (result.recordset.length == 0 ) {
+            // Added by Hakim on 8 Feb 2021 - Start
+            // Check user in new db
+            const resultNewDB = await pool.request()
+              .input('UserName',sql.VarChar , req.body.username)
+              .input('Password',sql.VarChar, req.body.password)
+              .query(queries.getAdmin2)
+            if (resultNewDB.recordset.length != 0) {
+              result = resultNewDB
+              isNewDB = true
+            }
+            // Added by Hakim on 8 Feb 2021 - Start
+            let user = result.recordset[0]
+            if (result.recordset.length == 0 ) {
+              res.status(400).send('Password Incorrect?!')
+            } else {
+              
+              // Added by Hakim on 8 Feb 2021 - Start
+              let validPassword = await bcrypt.compare(req.body.password, user.Password)
+              if (!validPassword) {
                 res.status(400).send('Password Incorrect?!')
-              } else {
-                //const salt = await bcrypt.genSalt(10);
-                //req.body.password = await bcrypt.hash(req.body.password, salt)
-                
-                const pool = await poolPromise
-                const result = await pool.request()
-                .input('Password', sql.VarChar , req.body.new_password)
-                .input('UserName', sql.VarChar, req.body.username)
-                .query(queries.updatePasswordAdmin)
-
-                var recordUser = result.rowsAffected[0];
-
-                if (recordUser) {
-                  const token = jwt.sign({
-                    name: recordUser.UserName,
-                    id: recordUser.UserID,
-                  }, "anystring", {expiresIn: 3600})
-                  // res.status(200).json({token})
-                  res.status(200).send({"token" : token, "name": recordUser.UserName, "email": recordUser.LoginEmail});
-                } else {
-                  res.status(400).send('Failed to change password!')
-                }
               }
+
+              const salt = await bcrypt.genSalt(10);
+              let new_password = await bcrypt.hash(req.body.new_password, salt)
+
+              let query = queries.updatePasswordAdmin
+              if(isNewDB) {
+                query = queries.updatePasswordAdmin2
+              }
+              // Added by Hakim on 8 Feb 2021 - End
+              
+              const pool = await poolPromise
+              const result = await pool.request()
+              .input('Password', sql.VarChar , new_password) // Update by Hakim on 8 Feb 2021
+              .input('UserName', sql.VarChar, req.body.username)
+              .query(query)
+
+              var recordUser = result.rowsAffected[0];
+
+              if (recordUser) {
+                const token = jwt.sign({
+                  name: recordUser.UserName,
+                  id: recordUser.UserID,
+                }, "anystring", {expiresIn: 3600})
+                // res.status(200).json({token})
+                res.status(200).send({"token" : token, "name": recordUser.UserName, "email": recordUser.LoginEmail});
+              } else {
+                res.status(400).send('Failed to change password!')
+              }
+            }
         } else {
           res.status(400).send('Please fill all the details!')
         }
@@ -342,7 +366,7 @@ class UserController {
                 }, "anystring", {expiresIn: 3600})
                 // res.status(200).json({token})
                 //res.json({"token" : token})
-                res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email}); // Comment by Hakim on 3 Feb 2021
+                res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email});
               } else {
                 //res.json({"token" : null, "error": 'Password not correct'});
                 //console.log("Password not correct")
