@@ -178,31 +178,32 @@ class UserController {
               .input('UserName',sql.VarChar , req.body.username)
               .input('Password',sql.VarChar, req.body.password)
               .query(queries.getAdmin2)
-            if (resultNewDB.recordset.length != 0) {
+            if (resultNewDB.recordset.length != 0 && resultNewDB.recordset[0].Password != null) {
               result = resultNewDB
               isNewDB = true
             }
             // Added by Hakim on 8 Feb 2021 - Start
+			
             let user = result.recordset[0]
             if (result.recordset.length == 0 ) {
               res.status(400).send('Password Incorrect?!')
             } else {
               
               // Added by Hakim on 8 Feb 2021 - Start
-              let validPassword = await bcrypt.compare(req.body.password, user.Password)
-              if (!validPassword) {
-                res.status(400).send('Password Incorrect?!')
-              }
-
-              const salt = await bcrypt.genSalt(10);
-              let new_password = await bcrypt.hash(req.body.new_password, salt)
-
               let query = queries.updatePasswordAdmin
-              if(isNewDB) {
+              let new_password = req.body.new_password
+              if (isNewDB) {
+                let validPassword = await bcrypt.compare(req.body.password, user.Password)
+                if (!validPassword) {
+                res.status(400).send('Password Incorrect?!')
+                }
+                
+                const salt = await bcrypt.genSalt(10);
+                new_password = await bcrypt.hash(req.body.new_password, salt)
                 query = queries.updatePasswordAdmin2
               }
               // Added by Hakim on 8 Feb 2021 - End
-              
+
               const pool = await poolPromise
               const result = await pool.request()
               .input('Password', sql.VarChar , new_password) // Update by Hakim on 8 Feb 2021
@@ -380,9 +381,7 @@ class UserController {
                 }, "anystring", {expiresIn: 3600})
                 // res.status(200).json({token})
                 //res.json({"token" : token})
-
                 res.status(200).send({"token" : token, "name": userData.UserName, "email": userData.Email,"UserID": userData.UserID[0],"AccessModule":userAccessModule}); // Comment by Hakim on 3 Feb 2021
-
               } else {
                 //res.json({"token" : null, "error": 'Password not correct'});
                 //console.log("Password not correct")
