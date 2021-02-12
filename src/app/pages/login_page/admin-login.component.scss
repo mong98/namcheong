@@ -4,7 +4,7 @@ body {
   width: 100%;
 }
 
-body {
+.form-signin-parent {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
@@ -16,7 +16,7 @@ body {
 
 .form-signin {
   width: 100%;
-  max-width: 330px;
+  max-width: 400px;
   padding: 15px;
   margin: auto;
 }
@@ -29,6 +29,8 @@ body {
   height: auto;
   padding: 10px;
   font-size: 16px;
+  border-color: rgb(0, 156, 166);
+  border-width: 2px;
 }
 .form-signin .form-control:focus {
   z-index: 2;
@@ -37,14 +39,14 @@ body {
   outline: 0 none;
 }
 .form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+  // margin-bottom: -1px;
+  // border-bottom-right-radius: 0;
+  // border-bottom-left-radius: 0;
 }
 .form-signin input[type="password"] {
   margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  // border-top-left-radius: 0;
+  // border-top-right-radius: 0;
 }
 
 .btn-theme {
@@ -56,13 +58,18 @@ body {
 
 .bg {
     /* The image used */
-    background-image: url('/assets/images/Main1.jpg');
-    
+    background-image: url('/assets/images/Main1.png');
+    background-color: rgba(0, 0, 0, 1);
     /* Full height */
     height: 100%; 
   
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
-    // background-size: cover;
+    background-size: cover;
+}
+
+.header {
+  color: rgb(64, 64, 64);
+  text-shadow: 1px 1px 2px #000000;
 }

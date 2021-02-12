@@ -10,13 +10,40 @@
     <!--<link type="text/css" rel="Stylesheet" href="\JobPortal\job\css\job.css" />-->
   </head>
 
-  <body class="row bg text-center">
-    <div class="d-sm-none d-md-block col-md-4">
+  <body class="bg">
+
+    <div class="container">
+      <div class="row pt-5">
+        <h1 class="header"><b>WELCOME TO SKOM e-CREW ONLINE <br>JOB APPLICATION</b></h1>
+      </div>
+      <div class="row">
+        <div class="col">
+          <form class="form-signin" (ngSubmit)="loginAdmin()">
+            <h1 class="h4 mb-2">LOGIN</h1>
+            <label for="txtUserID" class="sr-only">Email</label>
+            <input type="email" class="form-control mb-2" name="txtUserID" id="txtUserID" aria-describedby="emailHelp" placeholder="User ID" [(ngModel)]="username" />
+            <label for="txtPassword" class="sr-only">Password</label>
+            <input type="password" class="form-control" name="txtPassword" id="txtPassword" placeholder="Password" [(ngModel)]="password" />
+            <div class="alert alert-danger" *ngIf="login_error">
+              {{login_error}}
+            </div>
+            <div class="mb-3 text-center">
+              <button type="submit" class="btn btn-theme">Login</button>
+              <a class="ml-3" href="forgot-password" style="color:#000000"><u><i>Forgot Password</i></u></a>
+            </div>
+          </form>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+    </div>
+
+    <!-- Old -->
+    <!-- <div class="d-sm-none d-md-block col-md-4">
     </div>      
     <div class="col-sm-12 col-md-4 border border-dark rounded-lg" style="background-color: rgba(255, 255, 255, 1); padding-left: 0px;padding-right: 15px;">
       <form class="pt-5 pb-5 form-signin" (ngSubmit)="loginAdmin()">
         <img class="" src="/assets/images/SKOM-logo.png" width="200" />
-        <h1 class="h4 mb-3 font-weight-normal">Admin sign in</h1>
         <label for="txtUserID" class="sr-only">Email</label>
         <input type="email" class="form-control" name="txtUserID" id="txtUserID" aria-describedby="emailHelp" placeholder="Username" [(ngModel)]="username" />
         <label for="txtPassword" class="sr-only">Password</label>
@@ -28,7 +55,7 @@
       </form>
     </div>
     <div class="d-sm-none d-md-block col-sm-2 col-md-4">
-    </div>
+    </div> -->
   </body>
   </nb-layout-column>
 </nb-layout>

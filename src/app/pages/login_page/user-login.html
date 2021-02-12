@@ -10,64 +10,51 @@
       <!--<link type="text/css" rel="Stylesheet" href="\JobPortal\job\css\job.css" />-->
     </head>
 
-    <body class="row">
-        <div class="col-sm-12 col-md-8 bg form-signin-parent">
-          <div class="container">
-            <div class="jumbotron text-white bg-dark">
-              <div class="container">
-                <h1 class="display-4 font-italic text-white">WELCOME TO SKOM e-CREW ONLINE JOB APPLICATION</h1>
-                <p class="font-weight-bolder text-white">SKOM is looking for dedicated, skilled and experienced talents with passion in the offshore marine. We offer competitive package, training and new fleet environment which allow you to excel in your career. Submit your application now and be part of the team to deliver possibilities.</p>
-                <hr class="my-4">
-                <form (ngSubmit)="registerUser()">
-                  <h1 class="h4 mb-3 font-weight-normal text-white">Register with us</h1>
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label for="firstName">Full name</label>
-                      <input type="text" class="form-control" name="txtRgstFullname" id="txtRgstFullname" placeholder="" [(ngModel)]="register_username" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label for="lastName">Email</label>
-                      <input type="text" class="form-control" name="txtRgstEmail" id="txtRgstEmail" placeholder="" [(ngModel)]="register_email" required>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label for="firstName">Password</label>
-                      <input type="password" class="form-control" name="txtRgstPassword" id="txtRgstPassword" placeholder="" [(ngModel)]="register_password" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label for="lastName">Confirm password</label>
-                      <input type="password" class="form-control" name="txtRgstConfirmPassword" id="txtRgstConfirmPassword" placeholder="" [(ngModel)]="register_retyped_password" required>
-                    </div>
-                  </div>
-                  <div class="alert alert-danger" *ngIf="register_error">
-                    {{register_error}}
-                  </div>
-                  <button type="submit" class="btn btn-theme">REGISTER</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>      
-
-        <div class="col-sm-12 col-md-4 text-center form-signin-parent" style="background-color: rgba(255, 255, 255, 1); padding-left: 0px;padding-right: 15px;">
-          <form class="pt-5 pb-5 form-signin" (ngSubmit)="loginUser()">
-            <img class="" src="/assets/images/SKOM-logo.png" width="200" />
-            <h1 class="h4 mb-3 font-weight-normal">Please sign in</h1>
-            <label for="txtUserID" class="sr-only">Email</label>
-            <input type="email" class="form-control" name="txtUserID" id="txtUserID" aria-describedby="emailHelp" placeholder="Email Address" [(ngModel)]="email" />
-            <label for="txtPassword" class="sr-only">Password</label>
-            <input type="password" class="form-control" name="txtPassword" id="txtPassword" placeholder="Password" [(ngModel)]="password" />
-            <div class="mb-3">
-              <a href="forgot-password" style="color:#000000"><u><i>Forgot Password</i></u></a>
-            </div>
-            <div class="alert alert-danger" *ngIf="login_error">
-              {{login_error}}
-            </div>
-            <button type="submit" class="btn btn-theme btn-lg btn-block">LOGIN</button>
-          </form>
+    <body class="bg">
+      <div class="container">
+        <div class="row pt-5">
+          <h1 class="header"><b>WELCOME TO SKOM e-CREW ONLINE <br>JOB APPLICATION</b></h1>
+          <p class="text">SKOM is looking for dedicated, skilled and experienced talents with passion in the offshore marine. We offer competitive package, training and new fleet environment which allow you to excel in your career. Submit your application now and be part of the team to deliver possibilities.</p>
         </div>
-
+        <div class="row">
+          <div class="col">
+            <form class="form-signin" (ngSubmit)="loginUser()">
+              <h1 class="h4 mb-2">LOGIN</h1>
+              <label for="txtUserID" class="sr-only">Email</label>
+              <input type="email" class="form-control mb-2" name="txtUserID" id="txtUserID" aria-describedby="emailHelp" placeholder="Email" [(ngModel)]="email" />
+              <label for="txtPassword" class="sr-only">Password</label>
+              <input type="password" class="form-control" name="txtPassword" id="txtPassword" placeholder="Password" [(ngModel)]="password" />
+              <div class="alert alert-danger" *ngIf="login_error">
+                {{login_error}}
+              </div>
+              <div class="mb-3 text-center">
+                <button type="submit" class="btn btn-theme">Login</button>
+                <a class="ml-3" href="forgot-password" style="color:#000000"><u><i>Forgot Password</i></u></a>
+              </div>
+            </form>
+          </div>
+          <div class="col">
+            <form class="form-signin" (ngSubmit)="registerUser()">
+              <h1 class="h4 mb-2">REGISTER A NEW ACCOUNT</h1>
+              <label for="txtRgstEmail" class="sr-only">Email</label>
+              <input type="email" class="form-control mb-2" name="txtRgstEmail" id="txtRgstEmail" aria-describedby="emailHelp" placeholder="Email" [(ngModel)]="register_email" />
+              <label for="txtRgstFullname" class="sr-only">Name</label>
+              <input type="email" class="form-control mb-2" name="txtRgstFullname" id="txtRgstFullname" aria-describedby="emailHelp" placeholder="Name" [(ngModel)]="register_username" />
+              <label for="txtRgstPassword" class="sr-only">Password</label>
+              <input type="password" class="form-control mb-2" name="txtRgstPassword" id="txtRgstPassword" placeholder="Password" [(ngModel)]="register_password" />
+              <label for="txtRgstConfirmPassword" class="sr-only">Re-type Password</label>
+              <input type="password" class="form-control mb-2" name="txtRgstConfirmPassword" id="txtRgstConfirmPassword" placeholder="Re-type Password" [(ngModel)]="register_retyped_password" />
+              <div class="alert alert-danger" *ngIf="register_error">
+                {{register_error}}
+              </div>
+              <div class="mb-3 text-center">
+                <button type="submit" class="btn btn-theme">Register</button>
+                <a class="ml-3" href="./contact-us" style="color:#000000"><u><i>Contact Us</i></u></a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </body>
   </nb-layout-column>
 </nb-layout>

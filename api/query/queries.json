@@ -84,8 +84,8 @@
     "updatePortOfRegistry" : "UPDATE [JobPortal].[dbo].[SystemTable] SET [TableField] = @PortOfRegistry WHERE [Id] = @Id",
 
     "getAppliedOpenVacancy":"SELECT * FROM [JobPortal].[dbo].[ApplicantApply] WHERE [LoginEmail] = @LoginEmail",
-    "getOpenVacancy" : "SELECT [OV].[Id], [OV].[DateEnd], [OV].[HullNo], [OV].[Qualification], [PS].[Id] AS PSId, [PS].[Position] FROM [JobPortal].[dbo].[OpenVacancy] AS [OV] INNER JOIN [JobPortal].[dbo].[Position] AS [PS] ON [OV].[Position] = [PS].[Id]",
-    "addOpenVacancy" :"INSERT INTO [JobPortal].[dbo].[OpenVacancy] ([Position], [DateEnd], [HullNo], [Qualification]) VALUES (@Position, @DateEnd, @HullNo, @Qualification); SELECT SCOPE_IDENTITY() AS [Id]",
+    "getOpenVacancy" : "SELECT [OV].[Id], [OV].[DateEnd], [OV].[CreatedDate], [OV].[HullNo], [OV].[Qualification], [PS].[Id] AS PSId, [PS].[Position] FROM [JobPortal].[dbo].[OpenVacancy] AS [OV] INNER JOIN [JobPortal].[dbo].[Position] AS [PS] ON [OV].[Position] = [PS].[Id] ORDER BY [DateEnd] ASC",
+    "addOpenVacancy" :"INSERT INTO [JobPortal].[dbo].[OpenVacancy] ([Position], [DateEnd], [HullNo], [Qualification], [CreatedDate]) VALUES (@Position, @DateEnd, @HullNo, @Qualification, GETDATE()); SELECT SCOPE_IDENTITY() AS [Id]",
     "deleteOpenVacancy" : "DELETE FROM [JobPortal].[dbo].[OpenVacancy] WHERE [Id] = @Id",
     "updateOpenVacancy" : "UPDATE [JobPortal].[dbo].[OpenVacancy] SET [Position] = @Position, [DateEnd] = @DateEnd, [HullNo] = @HullNo, [Qualification] = @Qualification WHERE [Id] = @Id",
 
@@ -127,8 +127,8 @@
 
     "getMatrixField" : "SELECT DISTINCT [Item], [ItemDesc] FROM MatrixItem ORDER BY [ItemDesc]",
     "getNameById" : "SELECT * FROM [JobPortal].[dbo].[SystemTable] WHERE id=@id",
-    "getApplicantApply" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE ApplyStatus='Offered'",
-    "getApplicant" : "SELECT [Id], [ApplyPosition], [ApplyPositionID], [LoginEmail], [Name], [MiddleName], [LastName], [ApplyDtApplication], [ApplyStatus] FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE SubmitFlag='Y'",
+    "getApplicantApply" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE ApplyStatus='Offered' ORDER BY [ApplyDtApplication] DESC",
+    "getApplicant" : "SELECT [Id], [ApplyPosition], [ApplyPositionID], [LoginEmail], [Name], [MiddleName], [LastName], [ApplyDtApplication], [ApplyStatus] FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE SubmitFlag='Y' ORDER BY [ApplyDtApplication] DESC",
     "getCurrency": "SELECT [Id], [TableField] AS [Currency] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Currency' ORDER BY SeqNo",
     "getApplicantStatus": "SELECT [Id], [TableField] AS [ApplicantStatus] FROM [JobPortal].[dbo].[SystemTable] WHERE TableName='Applicant Status' ORDER BY SeqNo",
     "getApplicantById" : "SELECT * FROM v_ApplicantApply WHERE Id=@Id",
