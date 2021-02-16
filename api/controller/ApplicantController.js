@@ -421,6 +421,11 @@ class ApplicantController {
           .input('AllowanceRemarks', sql.VarChar, req.body.AllowanceRemarks) // Added by Hakim on 27 Jan 2021
           .input('TypesofAllowance', sql.VarChar, req.body.TypesofAllowance)
           .input(
+            'RepatriationHomePort',
+            sql.VarChar,
+            req.body.RepatriationHomePort
+          ) // Added by Hakim on 16 Feb 2021
+          .input(
             'ContractPeriodFromInMth',
             sql.VarChar,
             req.body.ContractPeriodFromInMth
