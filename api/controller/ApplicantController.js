@@ -413,7 +413,8 @@ class ApplicantController {
           .request()
           .input('Id', sql.SmallInt, req.body.Id)
           .input('ApplyPosition', sql.VarChar, req.body.ApplyPosition)
-          .input('DailyRate', sql.VarChar, req.body.DailyRate)
+          // .input('DailyRate', sql.VarChar, req.body.DailyRate) // Comment by Hakim on 16 Feb 2021
+          .input('DailyRate', sql.VarChar, req.body.Salary) // Added by Hakim on 16 Feb 2021
           .input('StandbyRate', sql.VarChar, req.body.StandbyRate)
           .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021
           .input('Allowance', sql.VarChar, req.body.Allowance)
@@ -485,7 +486,8 @@ class ApplicantController {
           .request()
           .input('Id', sql.SmallInt, req.body.Id)
           .input('OfferPosition', sql.VarChar, req.body.OfferPosition)
-          .input('DailyRate', sql.VarChar, req.body.DailyRate)
+          // .input('DailyRate', sql.VarChar, req.body.DailyRate) // Comment by Hakim on 16 Feb 2021
+          .input('DailyRate', sql.VarChar, req.body.Salary) // Added by Hakim on 16 Feb 2021
           .input('StandbyRate', sql.VarChar, req.body.StandbyRate)
           .input('StandbyAllowance', sql.VarChar, req.body.StandbyAllowance) // Added by Hakim on 25 Jan 2021
           .input('Allowance', sql.VarChar, req.body.Allowance)
