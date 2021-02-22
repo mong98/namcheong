@@ -807,8 +807,8 @@
 <!-- Added by Hakim on 26 Jan 2021 -->
 
 	
-<div class="form-group" style="margin-top: 3%">
-  <table class="table table-striped table-bordered table-responsive">
+<div class="table-responsive" style="margin-top: 3%">
+  <table class="table table-striped table-bordered">
     <tbody>
       <tr>
         <th scope="col">Nos</th>
@@ -833,17 +833,19 @@
               </option>
             </select>
           </td> -->
-          <!-- Added by Hakim on 14 Jan 2021 - Start -->
-          <td scope="col" *ngIf="applicant_document.TypeCompetencyChk == 'Y'">
+          <!-- Updated by Hakim on 22 Feb 2021 - Start -->
+          <td scope="col">
             <select class="custom-select mb-2 mr-sm-2" id="competency"
+            *ngIf="applicant_document.TypeCompetencyChk == 'Y'"
             [(ngModel)]="applicant_document.Competency">
               <option *ngFor="let type of certTypeList; let i = index" value="{{ type.value }}">
                 {{ type.value }}
               </option>
             </select>
           </td>
-          <!-- Added by Hakim on 14 Jan 2021 - End -->
-          <td scope="col"><input class="form-control mb-2 mr-sm-2" type="text"
+          <!-- Updated by Hakim on 22 Feb 2021 - End -->
+          <td scope="col">
+            <input class="form-control mb-2 mr-sm-2" type="text"
             *ngIf="applicant_document.DocNo == 'Y'"
             [(ngModel)]="applicant_document.ApplicantDocNo">
           </td>
@@ -860,7 +862,7 @@
             </select>
             <!-- Added by Hakim on 14 Jan 2021 - End -->
           </td>
-          <td scope="col" *ngIf="applicant_document.IssuingAuthorityChk == 'Y'">
+          <td scope="col">
             <select class="custom-select mb-2 mr-sm-2" id="issuingauthority"
             *ngIf="applicant_document.IssuingAuthorityChk == 'Y'"
             [(ngModel)]="applicant_document.IssuingAuthority">
