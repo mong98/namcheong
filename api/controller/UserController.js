@@ -161,7 +161,7 @@ class UserController {
                 tls: { ciphers: 'SSLv3' },
                 auth: {
                   user: "e-crew@skom.com.my",
-                  pass: "Bur59525"
+                  pass: ""
                 }
               });
 
