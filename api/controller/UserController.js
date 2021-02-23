@@ -80,7 +80,7 @@ class UserController {
     }
 
     async forgotPassword(req, res) {
-      try {
+      try { 
         if (req.body.email) {
           const pool = await poolPromise
           const result = await pool.request()
@@ -98,9 +98,9 @@ class UserController {
           
             if (userEmailExist) {
               //send email
-              sgMail.setApiKey(
-                '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'
-              )
+              // sgMail.setApiKey(
+              //   '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'
+              // )
               let htmlText =
                 'Dear ' +
                 result.recordset[0].Name +
@@ -109,47 +109,104 @@ class UserController {
                 '<br /><br />' +
                 '<strong>Temporary password: <strong>' + password + '<br />' 
 
-              const msg = {
-                //to: 'desmond@wiserobot.com',
-                to: result.recordset[0].LoginEmail, // Change to your recipient
-                from: 'desomond17@gmail.com', // Change to your verified sender
-                subject: '[TEST]: SKOM eCrew Job Portal Password Reset',
-                text: 'SKOM eCrew Job Portal Password Reset',
-                html: htmlText,
-              }
-              sgMail
-                .send(msg)
-                .then(() => {
-                  sendEmail = true
-                  //console.log('Forgot Password Email sent to ' + result.recordset[0].LoginEmail)
-                })
-                .then(() => {
-                  if (sendEmail) {
-                    //const pool = await poolPromise
-                    const result1 = pool.request()
-                    .input('Password', sql.VarChar , password)
-                    .input('LoginEmail', sql.VarChar, req.body.email)
-                    .query(queries.forgotPasswordUser)
+              // const msg = {
+              //   //to: 'desmond@wiserobot.com',
+              //   to: result.recordset[0].LoginEmail, // Change to your recipient
+              //   from: 'hakim@wiserobot.com', // Change to your verified sender
+              //   subject: '[TEST]: SKOM eCrew Job Portal Password Reset',
+              //   text: 'SKOM eCrew Job Portal Password Reset',
+              //   html: htmlText,
+              // }
+              // sgMail
+              //   .send(msg)
+              //   .then(() => {
+              //     sendEmail = true
+              //     //console.log('Forgot Password Email sent to ' + result.recordset[0].LoginEmail)
+              //   })
+              //   .then(() => {
+                  // if (sendEmail) {
+                  //   //const pool = await poolPromise
+                  //   const result1 = pool.request()
+                  //   .input('Password', sql.VarChar , password)
+                  //   .input('LoginEmail', sql.VarChar, req.body.email)
+                  //   .query(queries.forgotPasswordUser)
 
-                    result1.then(function(data) {
-                      var recordUser = data.rowsAffected[0];
+                  //   result1.then(function(data) {
+                  //     var recordUser = data.rowsAffected[0];
 
-                      if (recordUser) {
-                        res.status(200).send({message: 'Reset Password successfully. Please check your email!'});
-                      } else {
-                        res.status(400).send('Failed to reset password!')
-                      }
-                    })
+                  //     if (recordUser) {
+                  //       res.status(200).send({message: 'Reset Password successfully. Please check your email!'});
+                  //     } else {
+                  //       res.status(400).send('Failed to reset password!')
+                  //     }
+                  //   })
                     
-                  } else {
-                    res.status(400).send('Failed to send email!')
-                  }
-                })
-                .catch((error) => {
-                  console.error(error)
-                  res.status(500)
-                  res.send(error.message)
-                })
+                  // } else {
+                  //   res.status(400).send('Failed to send email!')
+                  // }
+              //   })
+              //   .catch((error) => {
+              //     console.error(error)
+              //     res.status(500)
+              //     res.send(error.message)
+              //   })
+
+              // Added by Hakim on 22 Feb 2021 - Start
+              var nodemailer = require('nodemailer')
+              let transporter = nodemailer.createTransport({
+                pool: false,
+                host: "smtp.office365.com",
+                port: 587,
+                secureConnection: false,
+                tls: { ciphers: 'SSLv3' },
+                auth: {
+                  user: "e-crew@skom.com.my",
+                  pass: "Bur59525"
+                }
+              });
+
+              // let transporter = nodemailer.createTransport({
+              //   sendmail: true,
+              //   newline: 'windows',
+              //   path: '/usr/lib/sendmail'
+              // })
+
+              transporter.verify(function (error, success) {
+                if (error) {
+                  console.log(error)
+                } else {
+                  console.log("Server ready to send email")
+                }
+              })
+
+              transporter.sendMail({
+                from: 'e-crew@skom.com.my',
+                to:  result.recordset[0].LoginEmail,
+                subject: '[TEST]: SKOM eCrew Job Portal Password Reset',
+                html: htmlText
+              }, 
+              function(err, info) {
+                if (!err) {
+                  //const pool = await poolPromise
+                  const result1 = pool.request()
+                  .input('Password', sql.VarChar , password)
+                  .input('LoginEmail', sql.VarChar, req.body.email)
+                  .query(queries.forgotPasswordUser)
+
+                  result1.then(function(data) {
+                    var recordUser = data.rowsAffected[0];
+
+                    if (recordUser) {
+                      res.status(200).send({message: 'Reset Password successfully. Please check your email!'});
+                    } else {
+                      res.status(400).send('Failed to reset password!')
+                    }
+                  })
+                } else {
+                  res.status(400).send('Failed to send email!')
+                }
+              })
+			        // Added by Hakim on 22 Feb 2021 - End
               
             } else {
               res.status(400).send('Email not exist!')
