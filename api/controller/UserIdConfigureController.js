@@ -44,8 +44,20 @@ class UserIdConfigureController {
       var queryStr = queries.getManagerList.join(' ')
       const pool = await poolPromise
       const result = await pool.request().query(queryStr)
-      console.log(result.recordset)
-      res.json(result.recordset)
+      // console.log(result.recordset)
+      // Added by Hakim on 25 Feb 2021 - Start
+      // Filter manager
+      let managerList = result.recordset
+      let managerListFiltered = []
+      if (result != null) {
+        managerListFiltered = managerList.filter((manager) => {
+          if (manager.Email == 'shahru.hassan@skom.com.my' || manager.Email == 'woonping.kay@skom.com.my') {
+            return manager
+          }
+        })
+      }
+      // Added by Hakim on 25 Feb 2021 - End
+      res.json(managerListFiltered)
     } catch (error) {
       res.status(500)
       res.send(error.message)
@@ -241,19 +253,16 @@ class UserIdConfigureController {
         updateUserIdConfigureUser +=
           "[UserName] = '" + values[0].UserName + "', "
         updateUserIdConfigureUser +=
-          "[ManagerId] = '" + values[0].ManagerId + "', "
+          "[ManagerId] = '" + (values[0].ManagerId ? values[0].ManagerId : "") + "', "
         updateUserIdConfigureUser +=
-          "[ManagerName] = '" + values[0].ManagerName + "', "
+          "[ManagerName] = '" + (values[0].ManagerName ? values[0].ManagerName : "") + "', "
         updateUserIdConfigureUser +=
           "[UpdatedBy] = '" + values[0].UpdatedBy + "' " // Added by Hakim on 3 Feb 2021
         updateUserIdConfigureUser += 'WHERE [Id] = ' + values[0].UserConfigureID
         queries_updateAccessModuleUser += updateUserIdConfigureUser
-        queries_updateAccessModuleUser += ';'
+        queries_updateAccessModuleUser += '; '
         if (success_val) {
-          console.log(
-            'queries_updateAccessModuleUser: ',
-            queries_updateAccessModuleUser
-          )
+		  console.log(queries_updateAccessModuleUser)
           const result = await pool
             .request()
             .query(queries_updateAccessModuleUser)
@@ -263,6 +272,7 @@ class UserIdConfigureController {
         }
       }
     } catch (error) {
+	  console.log(error)
       res.status(500)
       res.send(error.message)
     }

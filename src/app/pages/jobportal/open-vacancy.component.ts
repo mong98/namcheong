@@ -68,10 +68,21 @@ export class OpenVacancyComponent {
         console.log(result)
 
         this.vessels.forEach((vessel: any) => {
-          this.vesselsList.push({
-            value: vessel.VesselType,
-            title: vessel.VesselType,
+          // Added by Hakim on 25 Feb 2021 - Start
+          // To prevent duplication
+          // Check if vessel existed in list
+          let vesselFound = this.vesselsList.filter((data) => {
+            if (data.value == vessel.VesselType) {
+              return data;
+            }
           })
+          if (vesselFound.length == 0) {
+            this.vesselsList.push({
+              value: vessel.VesselType,
+              title: vessel.VesselType,
+            })
+          }
+          // Added by Hakim on 25 Feb 2021 - End
         })
 
         const newSettings = {
