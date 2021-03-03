@@ -24,6 +24,8 @@ export class ApplicantComponent implements OnInit, OnDestroy {
   exportData: any[] = []
   applicantStatus: any = []
   name: string = ''
+  middlename: string = ''
+  lastname: string = ''
   status: string = ''
   _applicantSubscription: Subscription
   _positionSubscription: Subscription
@@ -161,8 +163,20 @@ export class ApplicantComponent implements OnInit, OnDestroy {
       else if (dateTo !== '') {
         filterCond = this.filterDate(new Date(1900, 1, 1), dateToObject, date)
       }
+
+      if (this.applicants[i].MiddleName == null) {
+        this.applicants[i].MiddleName = ''
+      }
+
+      if (this.applicants[i].LastName == null) {
+        this.applicants[i].LastName = ''
+      }
+
       if ((position === '19' || position === '' || (position !== '' && this.applicants[i].ApplyPositionID == position)) && filterCond
-        && (this.name == '' || this.applicants[i].Name.toLowerCase().indexOf(this.name.toLowerCase()) > -1) && (this.status == '' || this.applicants[i].ApplyStatus == this.status)) {
+        && (this.name == '' || this.applicants[i].Name.toLowerCase().indexOf(this.name.toLowerCase()) > -1)
+        && (this.middlename == '' || this.applicants[i].MiddleName.toLowerCase().indexOf(this.middlename.toLowerCase()) > -1)
+        && (this.lastname == '' || this.applicants[i].LastName.toLowerCase().indexOf(this.lastname.toLowerCase()) > -1)
+        && (this.status == '' || this.applicants[i].ApplyStatus == this.status)) {
         retval.push(this.applicants[i])
       }
     }
