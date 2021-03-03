@@ -5,7 +5,7 @@ import { Component } from '@angular/core'
   styleUrls: ['./footer.component.scss'],
   template: `
     <span class="created-by"
-      >Copyright Nam Cheong Limited, Malaysia &copy; <b><a href="" target="_blank"></a>2020</b>
+      >Copyright SKOM, Malaysia &copy; <b><a href="" target="_blank"></a>2020</b>
     </span>
   `,
 })

@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>()
   public readonly materialTheme$: Observable<boolean>
   userPictureOnly: boolean = false
+  txtheader: string
   user: any
   user_name: string
   isUser: boolean = false
@@ -85,10 +86,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if(localStorage.getItem('access_token') != null) {
       this.isUser = true
       this.user_name = localStorage.getItem('user_name');
+      this.txtheader = 'Crew Job Portal'
     }
     else if(localStorage.getItem('admin_access_token') != null) {
       this.isUser = false
       this.user_name = localStorage.getItem('admin_user_name');
+      this.txtheader = 'SKOM e-Crew Admin Online Job Portal'
     }
 
     this.currentTheme = this.themeService.currentTheme
