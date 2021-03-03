@@ -2178,9 +2178,9 @@ class GenerationController {
               ConfirmDt = '-'
             }
             if (applicantApply.TypesofAllowance != null) {
-              OtherAllowance = applicantApply.TypesofAllowance
+              AllowanceRemark = applicantApply.TypesofAllowance
             } else {
-              OtherAllowance = '-'
+              AllowanceRemark = '-'
             }
             if (applicantApply.Currency != null) {
               Currency = applicantApply.Currency
@@ -2220,9 +2220,9 @@ class GenerationController {
               SalaryRemark = '-'
             }
             if (applicantApply.AllowanceRemarks != null) {
-              AllowanceRemark = applicantApply.AllowanceRemarks
+              OtherAllowance = applicantApply.AllowanceRemarks
             } else {
-              AllowanceRemark = '-'
+              OtherAllowance = '-'
             }
             if (applicantApply.RepatriationHomePort != null) {
               RepatriationHomePort = applicantApply.RepatriationHomePort

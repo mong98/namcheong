@@ -698,7 +698,14 @@
       <tr>
         <th scope="col">Allowance</th>
         <td scope="col">
-          <input type="text" class="form-control mb-2 mr-sm-2" id="wagesAllowance" [(ngModel)]="applicant.AllowanceRemarks" placeholder="Remarks Allowance" />
+          <select #allowance_type class="custom-select mb-2 mr-sm-2" id="allowance_type" [(ngModel)]="applicant.applicant_dropdown.AllowanceId">
+            <option selected value="19">Choose...</option>
+            <option
+              *ngFor="let allowance of allowances; let i = index"
+              value="{{ allowance.Id }}">
+              {{ allowance.Allowance }}
+            </option>
+          </select>
         </td>
         <td scope="col">
           <input type="text" class="form-control mb-2 mr-sm-2" id="amountAllowance" [(ngModel)]="applicant.Allowance" placeholder="Amount Allowance" />
@@ -722,14 +729,7 @@
       <tr>
         <th scope="col">Others applicable allowance</th>
         <td scope="col">
-          <select #allowance_type class="custom-select mb-2 mr-sm-2" id="allowance_type" [(ngModel)]="applicant.applicant_dropdown.AllowanceId">
-            <option selected value="19">Choose...</option>
-            <option
-              *ngFor="let allowance of allowances; let i = index"
-              value="{{ allowance.Id }}">
-              {{ allowance.Allowance }}
-            </option>
-          </select>
+          <input type="text" class="form-control mb-2 mr-sm-2" id="wagesAllowance" [(ngModel)]="applicant.AllowanceRemarks" placeholder="Remarks Allowance" />
         </td>
         <td scope="col">
           <input type="text" class="form-control mb-2 mr-sm-2" id="salary" [(ngModel)]="applicant.OtherAllowance" />
