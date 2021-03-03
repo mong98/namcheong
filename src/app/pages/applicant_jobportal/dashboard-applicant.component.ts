@@ -77,5 +77,11 @@ export class DashboardApplicantComponent implements OnInit {
         } 
     })
 
+    // Sort
+    this.allVacancies.sort(function(a, b){
+      if(a.Position < b.Position) { return -1; }
+      if(a.Position > b.Position) { return 1; }
+      return 0;
+    })
   }
 }
