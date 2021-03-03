@@ -127,6 +127,7 @@ export class MatrixComponent implements OnDestroy, OnInit {
       return
     }
 
+    this.tableHeader = []
     this.newTableDetails = {}
     this.newTableDetails.dict = []
     this.newTableDetails.horizontal = [] // Added by Hakim on 29 Jan 2021
