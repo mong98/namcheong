@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { MatrixService } from '../../services/matrix.service'
 import { MatrixTemplateService } from '../../services/matrix-template.service'
 import { VesselNameService } from '../../services/vessel-name.service'
-import { VesselService } from '../../services/vessel.service'
 import { MatrixDataService } from '../../services/matrix-data.service'
+import { ApplicantService } from '../../services/applicant.service'
 import * as XLSX from 'xlsx'
 import { Subscription } from 'rxjs'
 
@@ -14,10 +14,12 @@ import { Subscription } from 'rxjs'
 export class MatrixComponent implements OnDestroy, OnInit {
   matrixTemplates = []
   vessels = []
+  genders = []
   newTableDetails: any
   vesselName = ""
   selectedTemplate: any
   selectedDate: any
+  selectedDate2: any
   selectedFormat = 'Horizontal' // Default to Horizontal
   hasSearch = false // Used to denote whether first search has occurred
   formats = ['Horizontal', 'Vertical']
@@ -26,20 +28,24 @@ export class MatrixComponent implements OnDestroy, OnInit {
   private _matrixSubscription: Subscription
   private _matrixTemplateSubscription: Subscription
   private _vesselNameSubscription: Subscription
+  private _genderSubscription: Subscription
 
   constructor(
     private matrixService: MatrixService,
     private matrixTemplateService: MatrixTemplateService,
     private vesselNameService: VesselNameService,
-    private matrixDataService: MatrixDataService
+    private matrixDataService: MatrixDataService,
+    private applicantService: ApplicantService,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.newTableDetails = {}
     this.newTableDetails.dict = []
     this.newTableDetails.horizontal = [] // Added by Hakim on 29 Jan 2021
     this.newTableDetails.arr = [] // Added by Hakim on 29 Jan 2021
+
+    await this.getGender()
 
     this._matrixSubscription = this.matrixService.getMatrix().subscribe(
       (result: any) => {
@@ -95,6 +101,18 @@ export class MatrixComponent implements OnDestroy, OnInit {
     }
   }
 
+  getGender() {
+    return new Promise((resolve, reject) => {
+      this._genderSubscription = this.applicantService.getGender().subscribe(
+        (result: any) => {
+          this.genders = result
+          return resolve(true)
+        },
+        (err) => { console.log(err); return resolve(false); }
+      )
+    })
+  }
+
   exportToExcel() {
 
     if (this.selectedFormat == 'Horizontal') {
@@ -115,7 +133,11 @@ export class MatrixComponent implements OnDestroy, OnInit {
 
   alert() {
     if (!this.selectedDate) {
-      alert('Please select a date period')
+      alert('Please select a date range period')
+      return
+    }
+    if (!this.selectedDate2) {
+      alert('Please select a date range period')
       return
     }
     if (!this.selectedTemplate) {
@@ -133,8 +155,9 @@ export class MatrixComponent implements OnDestroy, OnInit {
     this.newTableDetails.horizontal = [] // Added by Hakim on 29 Jan 2021
     this.newTableDetails.arr = [] // Added by Hakim on 29 Jan 2021
     this.hasSearch = true
+    let selectedDateRange = this.selectedDate + "/" + this.selectedDate2
 
-    const subscription = this.matrixDataService.getMatrixData(this.selectedDate, this.vesselName).subscribe(
+    const subscription = this.matrixDataService.getMatrixData(selectedDateRange, this.vesselName).subscribe(
       (result: any) => {
         console.log("check matrix data")
         console.log(result)
@@ -153,48 +176,108 @@ export class MatrixComponent implements OnDestroy, OnInit {
           // Added by Hakim on 28 Jan 2021 - Start
           let selectedDateFormat1 = ''
           let selectedDateFormat2 = ''
+          var itemKey = selectedMatrix.Item
+          var itemHeader = selectedMatrix.ItemDesc
           if (selectedMatrix.Item != null) {
             selectedDateFormat1 = selectedMatrix.Item.find(data => data == 'DateFormat1')
             selectedDateFormat2 = selectedMatrix.Item.find(data => data == 'DateFormat2')
+
+            if (i == 0) {
+
+              if (itemKey.indexOf('DateFormat1') >= 0) {
+                itemKey.splice(itemKey.indexOf('DateFormat1'), 1);
+              } else if (itemKey.indexOf('DateFormat2') >= 0) {
+                itemKey.splice(itemKey.indexOf('DateFormat2'), 1);
+              }
+
+              if (itemHeader.indexOf('Date Format dd/mm/yyyy') >= 0) {
+                itemHeader.splice(itemHeader.indexOf('Date Format dd/mm/yyyy'), 1);
+              } else if (itemHeader.indexOf('Date Format mm/dd/yyyy') >= 0) {
+                itemHeader.splice(itemHeader.indexOf('Date Format mm/dd/yyyy'), 1);
+              }
+
+              this.tableHeader = itemHeader
+            }
           }
 
           let dictHorizontal = {}
           let arrHorizontal = []
           // Added by Hakim on 28 Jan 2021 - End
 
-          for (let key in matrixData) {
-            var index = selectedMatrix.Item.indexOf(key)
-            if (index >= 0) {
-              // Added by Hakim on 28 Jan 2021 - Start
-              // Change date format
-              if (matrixData[key] != null) {
-                let dataNumber = Number(matrixData[key])
-                let dataDate = new Date(matrixData[key])
-                if (dataDate.getDate() != null && !dataNumber && !isNaN(dataDate.getDate())) {
-                  if (selectedDateFormat2 != null) {
-                    matrixData[key] = (dataDate.getMonth()+1) + '/' + dataDate.getDate() + '/' + dataDate.getFullYear()
-                  } else {
-                    matrixData[key] = dataDate.getDate() + '/' + (dataDate.getMonth()+1) + '/' + dataDate.getFullYear()
-                  }
+          for (let i = 0; i < selectedMatrix.Item.length; i++) {
+            let key = selectedMatrix.Item[i]
+            let value = matrixData[key]
+
+            // Change date format
+            if (value != null) {
+              let dataNumber = Number(value)
+              let dataDate = new Date(value)
+              if (dataDate.getDate() != null && !dataNumber && !isNaN(dataDate.getDate())) {
+                if (selectedDateFormat2 != null) {
+                  value = (dataDate.getMonth()+1) + '/' + dataDate.getDate() + '/' + dataDate.getFullYear()
+                } else {
+                  value = dataDate.getDate() + '/' + (dataDate.getMonth()+1) + '/' + dataDate.getFullYear()
                 }
               }
-              // Added by Hakim on 28 Jan 2021 - End
-
-              this.newTableDetails.dict.push({
-                "key": selectedMatrix.ItemDesc[index],
-                "value": matrixData[key]
-              })
-
-              arrHorizontal.push(matrixData[key]) // Added by Hakim on 29 Jan 2021
-              dictHorizontal[key] = matrixData[key] // Added by Hakim on 29 Jan 2021
-
-              // Added by Hakim on 29 Jan 2021 - Start
-              if (i == 0) {
-                this.tableHeader.push(selectedMatrix.ItemDesc[index],)
-              }
-              // Added by Hakim on 29 Jan 2021 - End
             }
+
+            // Set gender
+            if (key == "Gender" && this.genders.length > 0) {
+              let gender = this.genders.filter((gender) => { return gender.Id == matrixData[key] })
+              value = gender.length > 0 ? gender[0].Gender : ''
+            }
+
+            this.newTableDetails.dict.push({
+              "key": selectedMatrix.ItemDesc[i],
+              "value": value
+            })
+
+            arrHorizontal.push(value)
+            dictHorizontal[key] = value
           }
+
+          // for (let key in matrixData) {
+          //   var index = selectedMatrix.Item.indexOf(key)
+          //   if (index >= 0) {
+          //     // Added by Hakim on 28 Jan 2021 - Start
+          //     // Change date format
+          //     if (matrixData[key] != null) {
+          //       let dataNumber = Number(matrixData[key])
+          //       let dataDate = new Date(matrixData[key])
+          //       if (dataDate.getDate() != null && !dataNumber && !isNaN(dataDate.getDate())) {
+          //         if (selectedDateFormat2 != null) {
+          //           matrixData[key] = (dataDate.getMonth()+1) + '/' + dataDate.getDate() + '/' + dataDate.getFullYear()
+          //         } else {
+          //           matrixData[key] = dataDate.getDate() + '/' + (dataDate.getMonth()+1) + '/' + dataDate.getFullYear()
+          //         }
+          //       }
+          //     }
+          //     // Added by Hakim on 28 Jan 2021 - End
+
+          //     // Added by Hakim on 3 March 2021 - Start
+          //     // Set gender
+          //     if (key == "Gender" && this.genders.length > 0) {
+          //       let gender = this.genders.filter((gender) => { return gender.Id == matrixData[key] })
+          //       matrixData[key] = gender.length > 0 ? gender[0].Gender : ''
+          //     }
+          //     // Added by Hakim on 3 March 2021 - End
+
+          //     this.newTableDetails.dict.push({
+          //       "key": selectedMatrix.ItemDesc[index],
+          //       "value": matrixData[key]
+          //     })
+
+          //     arrHorizontal[index] = matrixData[key]
+          //     // arrHorizontal.push(matrixData[key]) // Added by Hakim on 29 Jan 2021
+          //     dictHorizontal[key] = matrixData[key] // Added by Hakim on 29 Jan 2021
+
+          //     // Added by Hakim on 29 Jan 2021 - Start
+          //     // if (i == 0) {
+          //       // this.tableHeader.push(selectedMatrix.ItemDesc[index],)
+          //     // }
+          //     // Added by Hakim on 29 Jan 2021 - End
+          //   }
+          // }
           this.newTableDetails.arr.push(arrHorizontal) // Added by Hakim on 29 Jan 2021
           this.newTableDetails.horizontal.push(dictHorizontal) // Added by Hakim on 29 Jan 2021
         }

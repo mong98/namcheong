@@ -11,6 +11,7 @@ class MatrixDataController {
         .request()
         .input('VesselName', sql.VarChar, req.params.VesselName)
         .input('ContractDate', sql.DateTime, req.params.ContractPeriodFrom)
+        .input('ContractDate2', sql.DateTime, req.params.ContractPeriodFrom2)
         .query(queries.getMatrixData)
       console.log(result.recordset)
       res.json(result.recordset)

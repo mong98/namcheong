@@ -58,17 +58,31 @@
 </div>
 <div class="row">
   <div class="col">
-    <label for="">Contract Date Period</label>
+    <label for="">Contract Start Date</label>
   </div>
 
   <div class="col">
-    <input
-      type="date"
-      class="form-control mb-2 mr-sm-2"
-      id="contract_data_period"
-      [(ngModel)]="selectedDate"
-    />
+    <div class="row">
+      <div class="col">
+        <input
+          type="date"
+          class="form-control mb-2 mr-sm-2"
+          id="contract_data_period"
+          [(ngModel)]="selectedDate"
+        />
+      </div>
+      <p class="text-center">_</p>
+      <div class="col">
+        <input
+          type="date"
+          class="form-control mb-2 mr-sm-2"
+          id="contract_data_period2"
+          [(ngModel)]="selectedDate2"
+        />
+      </div>
+    </div>
   </div>
+
 </div>
 <div class="form-group">
   <div class="d-flex justify-content-center">
@@ -103,7 +117,7 @@
   No data found
 </h6>
 <div class="form-group" *ngIf="selectedFormat === 'Vertical'">
-  <table class="table bg-info table-bordered">
+  <table class="table bg-white table-bordered table-hover">
     <tbody>
       <tr *ngFor="let dict of newTableDetails.dict; let i = index">
         <th>{{ dict.key }}</th>
@@ -113,20 +127,20 @@
   </table>
 </div>
 <div class="form-group" *ngIf="selectedFormat === 'Horizontal'">
-  <table class="table bg-info table-bordered">
-    <tbody>
-      <!-- Update by Hakim on 29 Jan 2021 - Start -->
+  <table class="table bg-white table-bordered table-hover">
+    <thead>
       <tr>
         <th *ngFor="let header of tableHeader; let i = index">
           {{ header }}
         </th>
       </tr>
+    </thead>
+    <tbody>
       <tr *ngFor="let data of newTableDetails.arr" >
         <td *ngFor="let value of data; let i = index">
           {{ value }}
         </td>
       </tr>
-      <!-- Update by Hakim on 29 Jan 2021 - End -->
     </tbody>
   </table>
 </div>

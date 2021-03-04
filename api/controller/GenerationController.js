@@ -455,7 +455,7 @@ class GenerationController {
 
           fs.writeFileSync(
             path.resolve(
-              '../src/assets/UserDoc/' +
+              '../dist/assets/UserDoc/' +
                 checkApplicant.recordset[0].Position +
                 '_' +
                 applicant.LoginEmail +
@@ -1290,7 +1290,7 @@ class GenerationController {
 
             if (applicant.FileName != null) {
               //profileImage = applicant.FilePath + applicant.FileName;
-              profileImage = '../src/assets/UserDoc/' + applicant.FileName
+              profileImage = '../dist/assets/UserDoc/' + applicant.FileName
 
               //console.log("check profile image")
               ////console.log(profileImage)
@@ -1418,18 +1418,18 @@ class GenerationController {
           if (admin !== null && admin != []) {
             if (admin.Signature != null) {
               SignatureExecutive = path.resolve(
-                '../src/assets/UserDoc/' + admin.Signature
+                '../dist/assets/UserDoc/' + admin.Signature
               )
 
               //watermark
               const ORIGINAL_IMAGE = SignatureExecutive
 
-              const LOGO = '../src/assets/images/logoTesting.png'
+              const LOGO = '../dist/assets/images/SKOM-logo-lite.png'
 
               const LOGO_MARGIN_PERCENTAGE = 5
 
               const FILENAME =
-                '../src/assets/images/Signatures/' + admin.Signature
+                '../dist/assets/images/Signatures/' + admin.Signature
 
               const main = async () => {
                 const [image, logo] = await Promise.all([
@@ -1465,18 +1465,18 @@ class GenerationController {
             }
             if (admin.SignatureAdmin != null) {
               SignatureManager = path.resolve(
-                '../src/assets/UserDoc/' + admin.SignatureAdmin
+                '../dist/assets/UserDoc/' + admin.SignatureAdmin
               )
 
               //watermark
               const ORIGINAL_IMAGE = SignatureManager
 
-              const LOGO = '../src/assets/images/logoTesting.png'
+              const LOGO = '../dist/assets/images/SKOM-logo-lite.png'
 
               const LOGO_MARGIN_PERCENTAGE = 5
 
               const FILENAME =
-                '../src/assets/images/Signatures/' + admin.SignatureAdmin
+                '../dist/assets/images/Signatures/' + admin.SignatureAdmin
 
               const main = async () => {
                 const [image, logo] = await Promise.all([
@@ -1520,6 +1520,8 @@ class GenerationController {
             } else {
               SignatureManagerName = '-'
             }
+
+			console.log("SignatureManager: ", SignatureManager, " watermarkSignatureAdmin: ", watermarkSignatureAdmin)
 
             if (SignatureExecutive != null && SignatureExecutive != '') {
               var today = new Date()
@@ -1902,7 +1904,7 @@ class GenerationController {
 
             fs.writeFileSync(
               path.resolve(
-                '../src/assets/UserDoc/' +
+                '../dist/assets/UserDoc/' +
                   checkApplicant.recordset[0].Position +
                   '_' +
                   applicant.LoginEmail +
@@ -2501,18 +2503,18 @@ class GenerationController {
           if (admin != null || admin != []) {
             if (admin.Signature != null) {
               SignatureExecutive = path.resolve(
-                '../src/assets/UserDoc/' + admin.Signature
+                '../dist/assets/UserDoc/' + admin.Signature
               )
 
               //watermark
               const ORIGINAL_IMAGE = SignatureExecutive
 
-              const LOGO = '../src/assets/images/logoTesting.png'
+              const LOGO = '../dist/assets/images/SKOM-logo-lite.png'
 
               const LOGO_MARGIN_PERCENTAGE = 5
 
               const FILENAME =
-                '../src/assets/images/Signatures/' + admin.Signature
+                '../dist/assets/images/Signatures/' + admin.Signature
 
               const main = async () => {
                 const [image, logo] = await Promise.all([
@@ -2548,17 +2550,17 @@ class GenerationController {
             }
             if (admin.SignatureAdmin != null) {
               SignatureManager = path.resolve(
-                '../src/assets/UserDoc/' + admin.SignatureAdmin
+                '../dist/assets/UserDoc/' + admin.SignatureAdmin
               )
               //watermark
               const ORIGINAL_IMAGE = SignatureManager
 
-              const LOGO = '../src/assets/images/logoTesting.png'
+              const LOGO = '../dist/assets/images/SKOM-logo-lite.png'
 
               const LOGO_MARGIN_PERCENTAGE = 5
 
               const FILENAME =
-                '../src/assets/images/Signatures/' + admin.SignatureAdmin
+                '../dist/assets/images/Signatures/' + admin.SignatureAdmin
 
               const main = async () => {
                 const [image, logo] = await Promise.all([
@@ -2761,7 +2763,7 @@ class GenerationController {
 
             fs.writeFileSync(
               path.resolve(
-                '../src/assets/UserDoc/' +
+                '../dist/assets/UserDoc/' +
                   checkApplicant.recordset[0].Position +
                   '_' +
                   applicant.LoginEmail +
