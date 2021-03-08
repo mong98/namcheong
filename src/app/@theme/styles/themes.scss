@@ -22,6 +22,8 @@ $nb-themes: nb-register-theme(
     slide-out-background: #f7f9fc,
     slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
     slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+    font-family-primary: unquote('"Roboto", sans-serif'),
+    font-family-secondary: unquote('"Roboto", sans-serif')
   ),
   default,
   default
@@ -43,6 +45,8 @@ $nb-themes: nb-register-theme(
     slide-out-background: #252547,
     slide-out-shadow-color: 2px 0 3px #29157a,
     slide-out-shadow-color-rtl: -2px 0 3px #29157a,
+    font-family-primary: unquote('"Roboto", sans-serif'),
+    font-family-secondary: unquote('"Roboto", sans-serif')
   ),
   cosmic,
   cosmic
@@ -64,6 +68,8 @@ $nb-themes: nb-register-theme(
     slide-out-background: linear-gradient(270deg, #edf1f7 0%, #e4e9f2 100%),
     slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
     slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+    font-family-primary: unquote('"Roboto", sans-serif'),
+    font-family-secondary: unquote('"Roboto", sans-serif')
   ),
   corporate,
   corporate
@@ -85,6 +91,8 @@ $nb-themes: nb-register-theme(
     slide-out-background: linear-gradient(270deg, #222b45 0%, #151a30 100%),
     slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
     slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+    font-family-primary: unquote('"Roboto", sans-serif'),
+    font-family-secondary: unquote('"Roboto", sans-serif')
   ),
   dark,
   dark
@@ -107,6 +115,8 @@ $nb-themes: nb-register-theme(
     slide-out-background: linear-gradient(270deg, #e0e0e0 0%, #ebebeb 100%),
     slide-out-shadow-color: 0 4px 14px 0 #ebebeb,
     slide-out-shadow-color-rtl: 0 4px 14px 0 #ebebeb,
+    font-family-primary: unquote('"Roboto", sans-serif'),
+    font-family-secondary: unquote('"Roboto", sans-serif')
   ),
   material-light,
   material-light
@@ -129,6 +139,8 @@ $nb-themes: nb-register-theme(
     slide-out-background: linear-gradient(270deg, #1f1f1f 0%, #292929 100%),
     slide-out-shadow-color: 0 4px 14px 0 #292929,
     slide-out-shadow-color-rtl: 0 4px 14px 0 #292929,
+    font-family-primary: unquote('"Roboto", sans-serif'),
+    font-family-secondary: unquote('"Roboto", sans-serif')
   ),
   material-dark,
   material-dark

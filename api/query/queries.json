@@ -121,7 +121,10 @@
     "removeMatrix" : "DELETE FROM [JobPortal].[dbo].[Matrix] WHERE [Matrix] = @MatrixName",
     "getVesselName": "SELECT [VesselName], [VesselCode] FROM [JobPortal].[dbo].[IMONo]",
     "getMatrixTemplate" : "SELECT DISTINCT * FROM [JobPortal].[dbo].[MatrixDetail] M1 INNER JOIN (SELECT DISTINCT SeqNo FROM MatrixDetail )M2 on M1.SeqNo = M2.SeqNo ORDER BY M1.Matrix, M1.SeqNo",
-    "getMatrixData" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE [NameofVessel]=@VesselName AND [ContractPeriodFrom] BETWEEN @ContractDate AND @ContractDate2" ,
+    "getMatrixData" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply]",
+    "getMatrixDataByVessel" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE [NameofVessel]=@VesselName",
+    "getMatrixDataByDate" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE [ContractPeriodFrom] BETWEEN @ContractDate AND @ContractDate2",
+    "getMatrixDataByVesselAndDate" : "SELECT * FROM [JobPortal].[dbo].[v_ApplicantApply] WHERE [NameofVessel]=@VesselName AND [ContractPeriodFrom] BETWEEN @ContractDate AND @ContractDate2",
     "addMatrixTemplate" : "INSERT INTO [JobPortal].[dbo].[MatrixDetail] ([Matrix], [Item], [ItemDesc], [SeqNo]) VALUES (@MatrixName, @Item, @ItemDesc, @SeqNo)",
     "removeMatrixTemplate" : "DELETE FROM [JobPortal].[dbo].[MatrixDetail] WHERE [Matrix] = @MatrixName",
 

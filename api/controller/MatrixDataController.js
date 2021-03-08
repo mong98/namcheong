@@ -7,12 +7,31 @@ class MatrixDataController {
   async getMatrixData(req, res) {
     try {
       const pool = await poolPromise
-      const result = await pool
+      let result
+      if (req.params.VesselName == 'All' && req.params.ContractPeriodFrom == ' ' && req.params.ContractPeriodFrom2 == ' ') {
+        result = await pool
+        .request()
+        .query(queries.getMatrixData)
+      } else if (req.params.VesselName == 'All') {
+        result = await pool
+        .request()
+        .input('ContractDate', sql.DateTime, req.params.ContractPeriodFrom)
+        .input('ContractDate2', sql.DateTime, req.params.ContractPeriodFrom2)
+        .query(queries.getMatrixDataByDate)
+      } else if (req.params.ContractPeriodFrom == ' ' && req.params.ContractPeriodFrom2 == ' ') {
+        result = await pool
+        .request()
+        .input('VesselName', sql.VarChar, req.params.VesselName)
+        .query(queries.getMatrixDataByVessel)
+      } else {
+        result = await pool
         .request()
         .input('VesselName', sql.VarChar, req.params.VesselName)
         .input('ContractDate', sql.DateTime, req.params.ContractPeriodFrom)
         .input('ContractDate2', sql.DateTime, req.params.ContractPeriodFrom2)
-        .query(queries.getMatrixData)
+        .query(queries.getMatrixDataByVesselAndDate)
+      }
+      
       console.log(result.recordset)
       res.json(result.recordset)
       // uncomment this for stored procedure,

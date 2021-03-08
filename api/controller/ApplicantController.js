@@ -557,10 +557,10 @@ class ApplicantController {
           //added 20/1/2021
           const extend = '.pdf'
           let enterPath = path.resolve(
-            '../src/assets/UserDoc/' + applicantApply.recordset[0].FileSEA
+            '../dist/assets/UserDoc/' + applicantApply.recordset[0].FileSEA
           )
           const outputPath = path.resolve(
-            '../src/assets/UserDoc/' +
+            '../dist/assets/UserDoc/' +
               applicantApply.recordset[0].FileSEA.replace('.docx', extend)
           )
 
@@ -615,46 +615,47 @@ class ApplicantController {
           //   sgMail.setApiKey(
           //     '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'
           //   )
-          //   let htmlText =
-          //     '<strong>Dear <strong>' +
-          //     applicant.recordset[0].Name +
-          //     '<br />' +
-          //     '<strong>Thank you for your application.<strong>' +
-          //     '<br />' +
-          //     '<strong>We are pleased to make the following offer of employment.<strong>' +
-          //     '<br />' +
-          //     '· [Rank] > ' +
-          //     applicantApply.recordset[0].OfferPosition +
-          //     '<br />' +
-          //     '· [Vessel Name] > ' +
-          //     applicantApply.recordset[0].NameofVessel +
-          //     '<br />' +
-          //     '· [Daily Rate] > ' +
-          //     applicantApply.recordset[0].DailyRate +
-          //     '<br />' +
-          //     '· [Standby Allowance] > ' +
-          //     applicantApply.recordset[0].StandbyAllowance +
-          //     '<br />' +
-          //     '· [Other Allowance] > ' +
-          //     applicantApply.recordset[0].OtherAllowance +
-          //     '<br />' +
-          //     '· [Contract Period] > ' +
-          //     applicantApply.recordset[0].ContractPeriodFromInMth +
-          //     '	/month – this may subject to your final acceptance and sign on date.' +
-          //     '<br />' +
-          //     'Please acknowledge your acceptance of the above offer and email signed SEA to ' +
-          //     applicant.recordset[0].LoginEmail +
-          //     '<br />' +
-          //     'Should you need further clarification, please contact ' +
-          //     AdminName +
-          //     ' ' +
-          //     AdminLastName +
-          //     ' at ' +
-          //     AdminEmail +
-          //     '<br />' +
-          //     'SKOM Sdn. Bhd.' +
-          //     '<br />' +
-          //     'This is a computer generated message and no signature is required.'
+
+          let htmlText =
+            '<strong>Dear <strong>' +
+            (applicant.recordset[0].Name ? applicant.recordset[0].Name : '') +
+            '<br />' +
+            '<strong>Thank you for your application.<strong>' +
+            '<br />' +
+            '<strong>We are pleased to make the following offer of employment.<strong>' +
+            '<br />' +
+            '· [Rank] > ' +
+            (applicantApply.recordset[0].OfferPosition ? applicantApply.recordset[0].OfferPosition : '') +
+            '<br />' +
+            '· [Vessel Name] > ' +
+            (applicantApply.recordset[0].NameofVessel ? applicantApply.recordset[0].NameofVessel : '') +
+            '<br />' +
+            '· [Daily Rate] > ' +
+            (applicantApply.recordset[0].DailyRate ? applicantApply.recordset[0].DailyRate : '') +
+            '<br />' +
+            '· [Standby Allowance] > ' +
+            (applicantApply.recordset[0].StandbyAllowance ? applicantApply.recordset[0].StandbyAllowance : '') +
+            '<br />' +
+            '· [Other Allowance] > ' +
+            (applicantApply.recordset[0].OtherAllowance ? applicantApply.recordset[0].OtherAllowance : '') +
+            '<br />' +
+            '· [Contract Period] > ' +
+            (applicantApply.recordset[0].ContractPeriodFromInMth ? applicantApply.recordset[0].ContractPeriodFromInMth : '') +
+            '	/month – this may subject to your final acceptance and sign on date.' +
+            '<br />' +
+            'Please acknowledge your acceptance of the above offer and email signed SEA to ' +
+            (applicant.recordset[0].LoginEmail ? applicant.recordset[0].LoginEmail : '') +
+            '<br />' +
+            'Should you need further clarification, please contact ' +
+            (AdminName ? AdminName : '') +
+            ' ' +
+            (AdminLastName ? AdminLastName : '') +
+            ' at ' +
+            (AdminEmail ? AdminEmail : '') +
+            '<br />' +
+            'SKOM Sdn. Bhd.' +
+            '<br />' +
+            'This is a computer generated message and no signature is required.'
 
           //   const msg = {
           //     to: 'desmond@wiserobot.com',
@@ -687,14 +688,63 @@ class ApplicantController {
           //   res.status(400)
           //   res.send("Email Can't be sent!")
           // }
+
+          // Added by Hakim on 5 March 2021 - Start
+          var nodemailer = require('nodemailer')
+          let transporter = nodemailer.createTransport({
+            pool: false,
+            host: "smtp.office365.com",
+            port: 587,
+            secureConnection: false,
+            tls: { ciphers: 'SSLv3' },
+            auth: {
+              user: "e-crew@skom.com.my",
+              pass: ""
+            }
+          });
+
+          // let transporter = nodemailer.createTransport({
+          //   sendmail: true,
+          //   newline: 'windows',
+          //   path: '/usr/lib/sendmail'
+          // })
+
+          transporter.verify(function (error, success) {
+            if (error) {
+              console.log(error)
+            } else {
+              console.log("Server ready to send email")
+            }
+          })
+
+          transporter.sendMail({
+            from: 'e-crew@skom.com.my',
+            to:  'hakim@wiserobot.com',//applicant.recordset[0].LoginEmail,
+            subject: '[TEST]: SKOM eCrew Job Portal',
+            html: htmlText,
+            attachments: [
+              {
+                filename: Filename,
+                content: fs.createReadStream(outputPath)
+              }
+            ]
+          }, 
+          function(err, info) {
+            if (!err) {
+              res.json({ Id: req.body.Id })
+            } else {
+              res.status(400).send('Failed to send email!')
+            }
+          })
+          // Added by Hakim on 5 March 2021 - End
           console.log('3 File is Generated inside userDoc folder!')
         }
-
-        res.json({ Id: req.body.Id })
       } else {
         res.send('All fields are required!')
       }
     } catch (error) {
+	  console.log('Hakim')
+	  console.log(error)
       res.status(500)
       res.send(error)
     }

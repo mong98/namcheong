@@ -80,7 +80,8 @@ export class MatrixComponent implements OnDestroy, OnInit {
 
     this._vesselNameSubscription = this.vesselNameService.getVesselName().subscribe(
       (result: any) => {
-        this.vessels = result,
+        this.vessels = [{ VesselCode:'All', VesselName:'All'}]
+        this.vessels = this.vessels.concat(result),
         console.log("check vessels")
         console.log(this.vessels)
         
@@ -132,20 +133,15 @@ export class MatrixComponent implements OnDestroy, OnInit {
   }
 
   alert() {
-    if (!this.selectedDate) {
-      alert('Please select a date range period')
-      return
-    }
-    if (!this.selectedDate2) {
-      alert('Please select a date range period')
-      return
-    }
     if (!this.selectedTemplate) {
       alert('Please select a matrix template')
       return
     }
     if (!this.vesselName) {
-      alert('Please select a vessel')
+      this.vesselName = 'All'
+    }
+    if (!this.selectedDate || !this.selectedDate2) {
+      alert('Please select a date range period')
       return
     }
 
@@ -155,7 +151,7 @@ export class MatrixComponent implements OnDestroy, OnInit {
     this.newTableDetails.horizontal = [] // Added by Hakim on 29 Jan 2021
     this.newTableDetails.arr = [] // Added by Hakim on 29 Jan 2021
     this.hasSearch = true
-    let selectedDateRange = this.selectedDate + "/" + this.selectedDate2
+    let selectedDateRange = (this.selectedDate ? this.selectedDate : ' ')  + "/" + (this.selectedDate2 ? this.selectedDate2 : ' ')
 
     const subscription = this.matrixDataService.getMatrixData(selectedDateRange, this.vesselName).subscribe(
       (result: any) => {
@@ -204,15 +200,16 @@ export class MatrixComponent implements OnDestroy, OnInit {
           let arrHorizontal = []
           // Added by Hakim on 28 Jan 2021 - End
 
-          for (let i = 0; i < selectedMatrix.Item.length; i++) {
-            let key = selectedMatrix.Item[i]
+          for (let j = 0; j < selectedMatrix.Item.length; j++) {
+            let keyDesc = selectedMatrix.ItemDesc[j]
+            let key = selectedMatrix.Item[j]
             let value = matrixData[key]
 
             // Change date format
             if (value != null) {
-              let dataNumber = Number(value)
               let dataDate = new Date(value)
-              if (dataDate.getDate() != null && !dataNumber && !isNaN(dataDate.getDate())) {
+              let isDateKey = keyDesc.toLowerCase().search('date')
+              if (dataDate.getDate() != null && isDateKey >= 0 && !isNaN(dataDate.getDate())) {
                 if (selectedDateFormat2 != null) {
                   value = (dataDate.getMonth()+1) + '/' + dataDate.getDate() + '/' + dataDate.getFullYear()
                 } else {
@@ -228,7 +225,7 @@ export class MatrixComponent implements OnDestroy, OnInit {
             }
 
             this.newTableDetails.dict.push({
-              "key": selectedMatrix.ItemDesc[i],
+              "key": keyDesc,
               "value": value
             })
 

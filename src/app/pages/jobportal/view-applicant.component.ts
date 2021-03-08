@@ -240,7 +240,7 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
         this.positions = result
         this._refreshPositionData()
       },
-      (err) => alert('Failed to load positions')
+      (err) => { console.log(err); alert('Failed to load positions') }
     )
   }
 
@@ -1034,13 +1034,14 @@ export class ViewApplicantComponent implements OnInit, OnDestroy {
           if (res.Id == null) {
             alert('Failed to confirm applicant')
           } else {
-            alert('Confirm Record Successful, email Sent to the Applicant!')
-            //event.confirm.resolve(event.newData)
+            alert('Confirm Record Successful, email sent to the applicant email, ' + this.applicant.LoginEmail)
+            this.router.navigate(['pages/jobportal/applicant'])
           }
           subscription.unsubscribe()
-        },(error)=>{alert(error);
-          console.log(error)})
-        this.router.navigate(['pages/jobportal/applicant'])
+        },(error)=>{
+          alert('Failed to confirm applicant')
+          console.log(error)
+        })
       }
       
     } else {
